@@ -1,0 +1,6 @@
+*.whl
+*.log
+wheels/
+.venv/
+env_uv/
+__pycache__/
