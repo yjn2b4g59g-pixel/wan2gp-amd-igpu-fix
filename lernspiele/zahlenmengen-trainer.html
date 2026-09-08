@@ -1,0 +1,674 @@
+<title>Zahlenmengen-Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Familjen+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#F6F8FC; --card:#FFFFFF; --ink:#151B2D; --muted:#5B6684;
+  --line:#D6DDEC; --line-soft:#E6EBF6; --grid:rgba(42,75,215,.075);
+  --accent:#2A4BD7; --accent-ink:#1B36A8; --accent-soft:#E5EAFB;
+  --ok:#0E7A59; --ok-soft:#E0F2EB;
+  --bad:#C0273A; --bad-soft:#FAE5E8;
+  --n1:#FFFFFF; --n2:#F3F6FD; --n3:#EBF0FB; --n4:#E2E9F8; --n5:#D9E2F5;
+  --shadow:0 1px 2px rgba(21,27,45,.05), 0 12px 28px -18px rgba(21,27,45,.35);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D1120; --card:#151A2B; --ink:#E7ECF8; --muted:#98A3C0;
+    --line:#2A3149; --line-soft:#212739; --grid:rgba(138,162,255,.07);
+    --accent:#8DA3FF; --accent-ink:#B6C4FF; --accent-soft:#212B4C;
+    --ok:#5CCCA3; --ok-soft:#14302A;
+    --bad:#FF8492; --bad-soft:#331B21;
+    --n1:#151A2B; --n2:#1A2033; --n3:#1F263C; --n4:#252D47; --n5:#2B3453;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 30px -18px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D1120; --card:#151A2B; --ink:#E7ECF8; --muted:#98A3C0;
+  --line:#2A3149; --line-soft:#212739; --grid:rgba(138,162,255,.07);
+  --accent:#8DA3FF; --accent-ink:#B6C4FF; --accent-soft:#212B4C;
+  --ok:#5CCCA3; --ok-soft:#14302A;
+  --bad:#FF8492; --bad-soft:#331B21;
+  --n1:#151A2B; --n2:#1A2033; --n3:#1F263C; --n4:#252D47; --n5:#2B3453;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 30px -18px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; color:var(--ink);
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:26px 26px;
+  font-family:"Familjen Grotesk","Segoe UI",system-ui,sans-serif;
+  font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px; margin:0 auto; padding:26px 18px 64px; display:flex; flex-direction:column; gap:20px}
+
+/* ---------- Kopf ---------- */
+header{display:flex; flex-direction:column; gap:6px}
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+h1{font-family:"Fraunces","Iowan Old Style",Georgia,serif; font-weight:800; font-size:clamp(1.9rem,6vw,2.6rem); line-height:1.05; margin:0; text-wrap:balance; letter-spacing:-.015em}
+.lede{margin:0; color:var(--muted); max-width:56ch}
+.konvention{
+  font-size:.86rem; color:var(--muted); border-left:2px solid var(--accent);
+  padding:2px 0 2px 12px; margin-top:4px;
+}
+.konvention b{color:var(--ink); font-weight:600}
+
+/* ---------- Leiste ---------- */
+.leiste{display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between}
+.modi{display:flex; gap:6px; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:4px}
+.modi button{
+  font:inherit; font-size:.85rem; font-weight:500; color:var(--muted);
+  background:none; border:0; border-radius:999px; padding:5px 12px; cursor:pointer;
+}
+.modi button[aria-pressed="true"]{background:var(--accent); color:#fff}
+.werte{display:flex; gap:16px; font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.78rem; color:var(--muted); font-variant-numeric:tabular-nums}
+.werte b{display:block; font-size:1.05rem; color:var(--ink); font-weight:500; line-height:1.2}
+.werte span{letter-spacing:.06em; text-transform:uppercase; font-size:.66rem}
+.werte .hot b{color:var(--accent)}
+
+/* ---------- Aufgabe ---------- */
+.tafel{
+  background:var(--card); border:1px solid var(--line); border-radius:16px;
+  box-shadow:var(--shadow); overflow:hidden;
+}
+.zahlfeld{
+  padding:34px 22px 30px; text-align:center; border-bottom:1px solid var(--line-soft);
+  display:flex; flex-direction:column; gap:8px; align-items:center;
+  background:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:26px 26px;
+}
+.frage{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.72rem; letter-spacing:.13em; text-transform:uppercase; color:var(--muted)}
+.zahl{
+  font-family:"Fraunces","Iowan Old Style",Georgia,serif; font-weight:600;
+  font-size:clamp(2.6rem,11vw,4.2rem); line-height:1.15; letter-spacing:-.01em;
+}
+.notiz{font-size:.85rem; color:var(--muted)}
+.aussage{
+  font-family:"Fraunces","Iowan Old Style",Georgia,serif; font-weight:400;
+  font-size:clamp(1.25rem,4.4vw,1.7rem); line-height:1.3; max-width:30ch; text-wrap:balance;
+}
+
+/* Mathe-Satz */
+.frac{display:inline-flex; flex-direction:column; vertical-align:-.42em; font-size:.6em; line-height:1.08; text-align:center}
+.frac em{font-style:normal; padding:0 .3em}
+.frac em:first-child{border-bottom:.085em solid currentColor; padding-bottom:.04em}
+.rad{border-top:.06em solid currentColor; padding:.06em .14em 0 .1em; margin-left:-.06em}
+.rep{border-top:.07em solid currentColor; padding-top:.02em}
+
+/* ---------- Diagramm ---------- */
+.diagramm{padding:14px}
+.hinweis{font-size:.8rem; color:var(--muted); padding:0 4px 10px; text-align:center}
+.ring{border:1.5px solid var(--line); border-radius:12px; padding:7px; display:flex; flex-direction:column; gap:7px}
+.r-R{background:var(--n1)} .r-Q{background:var(--n2)} .r-Z{background:var(--n3)} .r-N0{background:var(--n4)} .r-N{background:var(--n5)}
+.r-I{background:var(--n2)}
+.split{display:flex; gap:8px; flex-wrap:wrap; align-items:stretch}
+.r-Q{flex:1 1 300px} .r-I{flex:1 1 190px}
+.lab{
+  font:inherit; text-align:left; width:100%; cursor:pointer;
+  background:transparent; border:0; border-radius:8px; padding:7px 9px;
+  display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:10px;
+  color:var(--ink); transition:background .12s ease;
+}
+.lab:hover{background:var(--accent-soft)}
+.lab:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+.sym{font-family:"Fraunces",Georgia,serif; font-size:1.25rem; font-weight:600; min-width:2.1ch; text-align:center}
+.txt{display:flex; flex-direction:column; line-height:1.2}
+.nm{font-weight:600; font-size:.94rem}
+.bsp{font-size:.76rem; color:var(--muted); font-family:"IBM Plex Mono",ui-monospace,monospace}
+.mk{
+  width:22px; height:22px; border-radius:6px; border:1.5px solid var(--line);
+  background:var(--card); display:grid; place-items:center; font-size:.82rem; font-weight:700;
+  color:transparent; flex:none;
+}
+.ring.sel{border-color:var(--accent)}
+.ring.sel>.lab{background:var(--accent-soft)}
+.ring.sel>.lab .mk{background:var(--accent); border-color:var(--accent); color:#fff}
+.ring.sel>.lab .nm{color:var(--accent-ink)}
+.ring.ok{border-color:var(--ok)}
+.ring.ok>.lab{background:var(--ok-soft)}
+.ring.ok>.lab .mk{background:var(--ok); border-color:var(--ok); color:#fff}
+.ring.falsch{border-color:var(--bad)}
+.ring.falsch>.lab{background:var(--bad-soft)}
+.ring.falsch>.lab .mk{background:var(--bad); border-color:var(--bad); color:#fff}
+.ring.fehlt{border-color:var(--bad); border-style:dashed}
+.ring.fehlt>.lab .mk{border-color:var(--bad); color:var(--bad); background:var(--bad-soft)}
+.diagramm.gesperrt .lab{cursor:default; pointer-events:none}
+
+/* ---------- Wahr/Falsch ---------- */
+.wf{padding:16px; display:flex; gap:10px}
+.wf button{
+  flex:1; font:inherit; font-weight:600; font-size:1rem; cursor:pointer;
+  padding:16px 12px; border-radius:12px; border:1.5px solid var(--line); background:var(--card); color:var(--ink);
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+}
+.wf button:hover{border-color:var(--accent); background:var(--accent-soft)}
+.wf button:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.wf button small{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.68rem; color:var(--muted); font-weight:400}
+.wf button.ok{border-color:var(--ok); background:var(--ok-soft)}
+.wf button.falsch{border-color:var(--bad); background:var(--bad-soft)}
+.wf.gesperrt button{pointer-events:none}
+
+/* ---------- Fuß der Tafel ---------- */
+.aktion{padding:0 16px 16px; display:flex; flex-direction:column; gap:12px}
+.echo{border-radius:12px; padding:13px 15px; display:flex; flex-direction:column; gap:5px; border:1px solid var(--line)}
+.echo.gut{background:var(--ok-soft); border-color:var(--ok)}
+.echo.schlecht{background:var(--bad-soft); border-color:var(--bad)}
+.echo h2{margin:0; font-size:1rem; font-family:"Familjen Grotesk",sans-serif; font-weight:700; letter-spacing:.01em}
+.echo.gut h2{color:var(--ok)} .echo.schlecht h2{color:var(--bad)}
+.echo p{margin:0; font-size:.92rem}
+.echo .loesung{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.82rem; color:var(--muted)}
+.knopf{
+  font:inherit; font-weight:600; font-size:1rem; cursor:pointer; border:0; border-radius:11px;
+  padding:14px 20px; background:var(--accent); color:#fff; width:100%;
+}
+.knopf:hover{background:var(--accent-ink)}
+.knopf:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+.knopf.stumm{background:transparent; color:var(--muted); border:1.5px solid var(--line); font-weight:500}
+.knopf.stumm:hover{background:var(--accent-soft); color:var(--ink)}
+.tasten{text-align:center; font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.7rem; color:var(--muted)}
+
+/* ---------- Spickzettel & Fuß ---------- */
+details{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:0 16px}
+summary{cursor:pointer; padding:13px 0; font-weight:600; font-size:.94rem; list-style:none; display:flex; justify-content:space-between; align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+"; font-family:"IBM Plex Mono",monospace; color:var(--muted); font-size:1.1rem}
+details[open] summary::after{content:"−"}
+.kette{padding:0 0 16px; display:flex; flex-direction:column; gap:9px}
+.kette div{display:grid; grid-template-columns:4.2ch 1fr; gap:12px; align-items:baseline; font-size:.9rem}
+.kette b{font-family:"Fraunces",Georgia,serif; font-size:1.1rem}
+.kette span{color:var(--muted)}
+.kette code{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.84rem; color:var(--ink)}
+.schwach{display:flex; flex-wrap:wrap; gap:7px; padding:0 0 16px}
+.schwach span{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.76rem; color:var(--muted);
+  border:1px solid var(--line); border-radius:999px; padding:3px 10px; font-variant-numeric:tabular-nums;
+}
+.schwach span.heiss{border-color:var(--bad); color:var(--bad)}
+footer{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; font-size:.8rem; color:var(--muted)}
+footer button{font:inherit; font-size:.8rem; background:none; border:0; color:var(--muted); text-decoration:underline; cursor:pointer; padding:4px}
+footer button:hover{color:var(--bad)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Übung · Zahlenmengen</p>
+    <h1>Zahlenmengen-Trainer</h1>
+    <p class="lede">Unbegrenzt viele Aufgaben. Was du falsch hast, kommt von allein wieder — solange, bis es zweimal hintereinander sitzt.</p>
+    <p class="konvention">Hier gilt: <b>ℕ = {1, 2, 3, …}</b> ohne Null, <b>ℕ₀ = {0, 1, 2, …}</b> mit Null.</p>
+  </header>
+
+  <div class="leiste">
+    <div class="modi" role="group" aria-label="Aufgabenart">
+      <button type="button" data-modus="mix" aria-pressed="true">Gemischt</button>
+      <button type="button" data-modus="zuordnen" aria-pressed="false">Mengen zuordnen</button>
+      <button type="button" data-modus="wf" aria-pressed="false">Wahr oder falsch</button>
+    </div>
+    <div class="werte">
+      <div class="hot"><b id="w-serie">0</b><span>Serie</span></div>
+      <div><b id="w-quote">–</b><span>Quote</span></div>
+      <div><b id="w-total">0</b><span>Aufgaben</span></div>
+      <div><b id="w-queue">0</b><span>Wiedervorlage</span></div>
+    </div>
+  </div>
+
+  <section class="tafel">
+    <div class="zahlfeld">
+      <p class="frage" id="frageText">In welchen Mengen liegt diese Zahl?</p>
+      <div class="zahl" id="zahl">7</div>
+      <p class="notiz" id="notiz" hidden></p>
+      <p class="aussage" id="aussage" hidden></p>
+    </div>
+
+    <div class="diagramm" id="diagramm">
+      <p class="hinweis">Wähle <b>alle</b> Mengen, in denen die Zahl liegt. Liegt sie in keiner, lass alles frei.</p>
+      <div class="ring r-R" data-set="R">
+        <button type="button" class="lab" data-set="R">
+          <span class="sym">ℝ</span>
+          <span class="txt"><span class="nm">Reelle Zahlen</span><span class="bsp">alles auf dem Zahlenstrahl</span></span>
+          <span class="mk">✓</span>
+        </button>
+        <div class="split">
+          <div class="ring r-Q" data-set="Q">
+            <button type="button" class="lab" data-set="Q">
+              <span class="sym">ℚ</span>
+              <span class="txt"><span class="nm">Rationale Zahlen</span><span class="bsp">als Bruch a/b schreibbar</span></span>
+              <span class="mk">✓</span>
+            </button>
+            <div class="ring r-Z" data-set="Z">
+              <button type="button" class="lab" data-set="Z">
+                <span class="sym">ℤ</span>
+                <span class="txt"><span class="nm">Ganze Zahlen</span><span class="bsp">…, −2, −1, 0, 1, 2, …</span></span>
+                <span class="mk">✓</span>
+              </button>
+              <div class="ring r-N0" data-set="N0">
+                <button type="button" class="lab" data-set="N0">
+                  <span class="sym">ℕ₀</span>
+                  <span class="txt"><span class="nm">Natürliche Zahlen mit Null</span><span class="bsp">0, 1, 2, 3, …</span></span>
+                  <span class="mk">✓</span>
+                </button>
+                <div class="ring r-N" data-set="N">
+                  <button type="button" class="lab" data-set="N">
+                    <span class="sym">ℕ</span>
+                    <span class="txt"><span class="nm">Natürliche Zahlen</span><span class="bsp">1, 2, 3, …</span></span>
+                    <span class="mk">✓</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ring r-I" data-set="I">
+            <button type="button" class="lab" data-set="I">
+              <span class="sym">ℝ∖ℚ</span>
+              <span class="txt"><span class="nm">Irrationale Zahlen</span><span class="bsp">√2, π, e — kein Bruch</span></span>
+              <span class="mk">✓</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wf" id="wf" hidden>
+      <button type="button" data-wf="1">Stimmt<small>Taste W</small></button>
+      <button type="button" data-wf="0">Stimmt nicht<small>Taste F</small></button>
+    </div>
+
+    <div class="aktion">
+      <div class="echo" id="echo" hidden>
+        <h2 id="echoTitel"></h2>
+        <p id="echoText"></p>
+        <p class="loesung" id="echoLoesung"></p>
+      </div>
+      <button type="button" class="knopf" id="haupt">Prüfen</button>
+      <p class="tasten" id="tasten">Tasten: 1 ℕ · 2 ℕ₀ · 3 ℤ · 4 ℚ · 5 ℝ∖ℚ · 6 ℝ · Enter prüfen</p>
+    </div>
+  </section>
+
+  <details>
+    <summary>Spickzettel: die Kette der Mengen</summary>
+    <div class="kette">
+      <div><b>ℕ</b><span>Zählzahlen ab 1. <code>1, 2, 3, 42</code></span></div>
+      <div><b>ℕ₀</b><span>dasselbe, plus die Null. <code>0, 1, 2, 3</code></span></div>
+      <div><b>ℤ</b><span>dazu die negativen ganzen Zahlen. <code>−7, 0, 12</code></span></div>
+      <div><b>ℚ</b><span>alles, was als Bruch ganzer Zahlen geht — auch abbrechende und periodische Dezimalzahlen. <code>3/4, −0,25, 0,3̅, 5</code></span></div>
+      <div><b>ℝ∖ℚ</b><span>irrational: unendlich viele Nachkommastellen ohne Periode. <code>√2, π, e</code></span></div>
+      <div><b>ℝ</b><span>ℚ und ℝ∖ℚ zusammen, lückenlos. Jede reelle Zahl ist entweder rational oder irrational — nie beides.</span></div>
+    </div>
+    <div class="schwach" id="schwach"></div>
+  </details>
+
+  <footer>
+    <span>Fortschritt bleibt in diesem Browser gespeichert.</span>
+    <button type="button" id="reset">Fortschritt zurücksetzen</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+var ORDNUNG = ["N","N0","Z","Q","I","R"];
+var META = {
+  N:{sym:"ℕ", nam:"natürliche Zahl", pl:"Natürliche Zahlen"},
+  N0:{sym:"ℕ₀", nam:"natürliche Zahl mit Null", pl:"Natürliche Zahlen mit Null"},
+  Z:{sym:"ℤ", nam:"ganze Zahl", pl:"Ganze Zahlen"},
+  Q:{sym:"ℚ", nam:"rationale Zahl", pl:"Rationale Zahlen"},
+  I:{sym:"ℝ∖ℚ", nam:"irrationale Zahl", pl:"Irrationale Zahlen"},
+  R:{sym:"ℝ", nam:"reelle Zahl", pl:"Reelle Zahlen"}
+};
+
+/* ---------- Mathe-Satz ---------- */
+function br(a,b){return '<span class="frac"><em>'+a+'</em><em>'+b+'</em></span>';}
+function wz(x){return '√<span class="rad">'+x+'</span>';}
+function kw(x){return '<span style="font-size:.78em;vertical-align:.35em">3</span>√<span class="rad">'+x+'</span>';}
+function pe(vor,rep){return vor+'<span class="rep">'+rep+'</span>';}
+function m(s){return s ? s.split(" ") : [];}
+
+/* ---------- Aufgabenpool ---------- */
+function A(d,s,w,n){return {typ:"zuordnen", zeige:d, mengen:m(s), warum:w, notiz:n||null};}
+
+var POOL = [
+  A("7","N N0 Z Q R","7 ist eine positive ganze Zahl. Sie liegt in ℕ — und damit automatisch in jeder Menge darüber."),
+  A("0","N0 Z Q R","Die Null gehört hier nicht zu ℕ, aber zu ℕ₀. Und sie ist ganz und rational: 0 = 0/1."),
+  A("−4","Z Q R","Negative ganze Zahlen liegen in ℤ, nicht in ℕ oder ℕ₀. Als −4/1 sind sie auch rational."),
+  A("−17","Z Q R","Ganz, aber negativ: ℤ ja, ℕ₀ nein."),
+  A("1","N N0 Z Q R","Die kleinste natürliche Zahl in dieser Vereinbarung."),
+  A("1000","N N0 Z Q R","Groß ändert nichts: positive ganze Zahl, also ℕ."),
+  A(br(3,4),"Q R","Ein Bruch aus ganzen Zahlen ist rational. 3 lässt sich nicht durch 4 teilen, also nicht ganz."),
+  A("−"+br(2,5),"Q R","−0,4 als Bruch: rational, aber weder ganz noch natürlich."),
+  A(br(5,2),"Q R","5/2 = 2,5. Ein Bruch, der nicht aufgeht — rational, nicht ganz."),
+  A(br(12,4),"N N0 Z Q R","Achtung, Bruchstrich täuscht: 12/4 = 3. Das ist eine natürliche Zahl."),
+  A(br(0,7),"N0 Z Q R","0/7 = 0. Also ℕ₀, aber nicht ℕ."),
+  A("0,25","Q R","Abbrechende Dezimalzahl, also 0,25 = 1/4 → rational."),
+  A("−0,75","Q R","−0,75 = −3/4. Abbrechend heißt immer rational."),
+  A("0,125","Q R","0,125 = 1/8."),
+  A("3,14","Q R","Das ist nur die Näherung für π, aber als Zahl abbrechend — und damit rational."),
+  A(br(22,7),"Q R","Die berühmte π-Näherung. Ein Bruch bleibt ein Bruch: rational."),
+  A(pe("0,","3"),"Q R","0,3̅ = 1/3. Periodisch heißt rational, egal wie lang es weitergeht."),
+  A("−"+pe("0,","3"),"Q R","−0,3̅ = −1/3. Periodisch → rational."),
+  A(pe("0,","9"),"N N0 Z Q R","Sieht falsch aus, ist aber so: 0,9̅ = 1. Dieselbe Zahl, andere Schreibweise — also natürlich."),
+  A("0,101001000…","I R","Unendlich viele Nachkommastellen ohne Periode: irrational."),
+  A(wz(2),"I R","√2 lässt sich nicht als Bruch schreiben. Der Klassiker unter den irrationalen Zahlen."),
+  A(wz(3),"I R","3 ist keine Quadratzahl, also ist √3 irrational."),
+  A(wz(7),"I R","7 ist keine Quadratzahl → √7 irrational."),
+  A(wz(9),"N N0 Z Q R","Wurzel heißt nicht automatisch irrational: √9 = 3."),
+  A(wz(100),"N N0 Z Q R","√100 = 10, eine natürliche Zahl."),
+  A("−"+wz(25),"Z Q R","−√25 = −5. Ganz, aber negativ."),
+  A(wz("0,25"),"Q R","√0,25 = 0,5 = 1/2 → rational."),
+  A(wz("4/9"),"Q R","√(4/9) = 2/3. Wurzel aus einem Bruch von Quadratzahlen bleibt rational."),
+  A(wz(8),"I R","√8 = 2·√2. Der Faktor 2 ändert nichts an der Irrationalität."),
+  A(wz("−9"),"","In ℝ gibt es keine Wurzel aus einer negativen Zahl — dieser Ausdruck steht für keine reelle Zahl. Richtig war also: nichts anklicken."),
+  A(kw(8),"N N0 Z Q R","Die dritte Wurzel aus 8 ist 2."),
+  A("π","I R","π hat unendlich viele Nachkommastellen ohne Periode. Kein Bruch der Welt trifft es genau."),
+  A("2π","I R","Das Doppelte einer irrationalen Zahl bleibt irrational."),
+  A("π²","I R","Auch das Quadrat von π ist irrational."),
+  A("e","I R","Die Eulersche Zahl, 2,71828… — irrational.", "Eulersche Zahl"),
+  A("π − π","N0 Z Q R","Zwei irrationale Zahlen, Ergebnis 0. Rechne erst, ordne dann ein."),
+  A(wz(2)+" · "+wz(2),"N N0 Z Q R","√2 · √2 = 2. Aus zwei irrationalen Zahlen wird hier eine natürliche."),
+  A(wz(2)+" · "+wz(8),"N N0 Z Q R","√2 · √8 = √16 = 4."),
+  A(wz(2)+" − "+wz(2),"N0 Z Q R","Das ergibt 0 — also ℕ₀, aber nicht ℕ."),
+  A(wz(5)+" + 1","I R","Rational plus irrational bleibt irrational."),
+  A(br("1 + "+wz(5),2),"I R","Der Goldene Schnitt, ≈ 1,618… — irrational.", "Goldener Schnitt"),
+  A("π : π","N N0 Z Q R","π geteilt durch π ist 1."),
+  A("|−3|","N N0 Z Q R","Der Betrag von −3 ist 3."),
+  A("2⁻¹","Q R","2⁻¹ = 1/2 = 0,5 → rational, nicht ganz."),
+  A("1,5 · 4","N N0 Z Q R","Ergibt 6. Die Rechnung entscheidet, nicht das Aussehen."),
+  A("−0","N0 Z Q R","−0 ist einfach 0. Also ℕ₀, ℤ, ℚ, ℝ.")
+];
+
+/* ---------- Generator: nie leer ---------- */
+function zz(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+var QUADRATE = [4,9,16,25,36,49,64,81,100,121,144,169,196,225];
+function istQuadrat(n){return QUADRATE.indexOf(n)>=0 || n===1;}
+
+function baueZuordnen(){
+  var r=Math.random(), n, a, b;
+  if(r<0.14){ n=zz(2,999); return A(String(n),"N N0 Z Q R",n+" ist eine positive ganze Zahl — ℕ und alles darüber."); }
+  if(r<0.27){ n=zz(1,499); return A("−"+n,"Z Q R","Negative ganze Zahlen sind ganz und rational, aber nicht natürlich."); }
+  if(r<0.42){
+    b=zz(2,12); a=zz(2,90); while(a%b===0){a=zz(2,90);}
+    var neg=Math.random()<0.35;
+    return A((neg?"−":"")+br(a,b),"Q R",a+" ist nicht durch "+b+" teilbar. Ein Bruch aus ganzen Zahlen ist rational, das Ergebnis hier aber keine ganze Zahl.");
+  }
+  if(r<0.50){
+    b=zz(2,9); var k=zz(2,12); a=b*k;
+    return A(br(a,b),"N N0 Z Q R","Der Bruch geht auf: "+a+"/"+b+" = "+k+". Also eine natürliche Zahl.");
+  }
+  if(r<0.62){
+    var g=zz(1,60), d=zz(1,99); var s=Math.random()<0.3?"−":"";
+    var txt=s+g+","+(d<10?"0"+d:d);
+    return A(txt,"Q R","Eine abbrechende Dezimalzahl lässt sich immer als Bruch schreiben — also rational.");
+  }
+  if(r<0.76){
+    do{ n=zz(2,150); }while(istQuadrat(n));
+    return A(wz(n),"I R",n+" ist keine Quadratzahl. Damit ist √"+n+" irrational: unendlich viele Nachkommastellen ohne Periode.");
+  }
+  if(r<0.84){
+    var q=pick(QUADRATE); var w=Math.round(Math.sqrt(q));
+    return A(wz(q),"N N0 Z Q R","√"+q+" = "+w+". Wurzeln aus Quadratzahlen sind glatt.");
+  }
+  if(r<0.91){
+    var v=zz(1,8), vor=zz(0,9);
+    return A(pe(vor+",",String(v)),"Q R","Periodische Dezimalzahlen sind immer rational — sie lassen sich als Bruch schreiben.");
+  }
+  var pi=pick(["π + 1","π − 3","3π",br("π",2),"π + "+wz(2),"e + 1","2e"]);
+  return A(pi,"I R","π und e sind irrational. Addieren, Subtrahieren oder Multiplizieren mit einer rationalen Zahl (außer 0) ändert das nicht.");
+}
+
+/* ---------- Wahr/Falsch ---------- */
+function W(t,a,w){return {typ:"wf", text:t, antwort:a, warum:w};}
+var SAETZE = [
+  W("Jede natürliche Zahl ist auch eine ganze Zahl.",true,"ℕ liegt vollständig in ℤ. Die Kette ℕ ⊂ ℕ₀ ⊂ ℤ ⊂ ℚ ⊂ ℝ gilt immer."),
+  W("Jede ganze Zahl ist auch eine natürliche Zahl.",false,"−3 ist ganz, aber nicht natürlich. Die Kette gilt nur in eine Richtung."),
+  W("Jede rationale Zahl lässt sich als Bruch aus zwei ganzen Zahlen schreiben.",true,"Genau das ist die Definition von ℚ (Nenner ungleich 0)."),
+  W("Es gibt Zahlen, die gleichzeitig rational und irrational sind.",false,"ℚ und ℝ∖ℚ haben kein einziges gemeinsames Element."),
+  W("Die Null ist eine natürliche Zahl.",false,"Hier gilt ℕ = {1, 2, 3, …}. Die Null steckt erst in ℕ₀. Manche Bücher machen es anders — in dieser Übung nicht."),
+  W("Die Null ist eine ganze Zahl.",true,"0 liegt in ℕ₀, in ℤ, in ℚ und in ℝ."),
+  W("Jede irrationale Zahl ist eine reelle Zahl.",true,"ℝ besteht genau aus ℚ und ℝ∖ℚ."),
+  W("Jede Dezimalzahl mit unendlich vielen Nachkommastellen ist irrational.",false,"0,3̅ hat unendlich viele Stellen und ist trotzdem 1/3. Entscheidend ist die Periode."),
+  W("Jede periodische Dezimalzahl ist rational.",true,"Jede Periode lässt sich in einen Bruch umrechnen."),
+  W("Die Wurzel aus einer natürlichen Zahl ist immer irrational.",false,"√9 = 3. Bei Quadratzahlen kommt eine natürliche Zahl heraus."),
+  W("Zwischen zwei verschiedenen rationalen Zahlen liegt immer noch eine weitere rationale Zahl.",true,"Der Mittelwert zweier Brüche ist wieder ein Bruch. ℚ liegt dicht."),
+  W("Jede reelle Zahl ist entweder rational oder irrational.",true,"Ein Drittes gibt es in ℝ nicht."),
+  W("ℤ ist eine Teilmenge von ℚ.",true,"Jede ganze Zahl n lässt sich als n/1 schreiben."),
+  W("ℚ ist eine Teilmenge von ℤ.",false,"1/2 ist rational, aber nicht ganz."),
+  W("Die Summe zweier irrationaler Zahlen ist immer irrational.",false,"√2 + (−√2) = 0. Das Ergebnis ist sogar eine ganze Zahl."),
+  W("Das Produkt zweier rationaler Zahlen ist immer rational.",true,"Bruch mal Bruch ergibt wieder einen Bruch."),
+  W("−5 liegt in ℕ₀.",false,"ℕ₀ enthält nur 0 und die positiven ganzen Zahlen."),
+  W("π ist rational, weil man dafür 22/7 schreiben kann.",false,"22/7 ist nur eine Näherung, nicht π selbst. π ist irrational."),
+  W("In ℝ gibt es eine Wurzel aus −4.",false,"Quadrate sind nie negativ. In ℝ ist √(−4) nicht definiert."),
+  W("Jede natürliche Zahl mit Null ist auch eine rationale Zahl.",true,"ℕ₀ ⊂ ℚ, zum Beispiel 0 = 0/1."),
+  W("Es gibt eine größte natürliche Zahl.",false,"Zu jeder Zahl n gibt es n + 1. ℕ hört nie auf."),
+  W("Jede abbrechende Dezimalzahl ist rational.",true,"0,375 = 375/1000. Abbrechend heißt immer Bruch.")
+];
+
+function baueWF(){
+  if(Math.random()<0.5) return pick(SAETZE);
+  var it; var schutz=0;
+  do{ it = Math.random()<0.55 ? pick(POOL) : baueZuordnen(); schutz++; }while(it.mengen.length===0 && schutz<12);
+  if(it.mengen.length===0) return pick(SAETZE);
+  var k = pick(ORDNUNG);
+  var stimmt = it.mengen.indexOf(k)>=0;
+  var liste = it.mengen.map(function(x){return META[x].sym;}).join(", ");
+  return {
+    typ:"wf",
+    text:"„"+it.zeige+"“ ist eine "+META[k].nam+".",
+    antwort:stimmt,
+    warum: it.warum+" Die Zahl liegt in: "+liste+"."
+  };
+}
+
+/* ---------- Zustand ---------- */
+var KEY="zmt-v1";
+var st={total:0, richtig:0, serie:0, best:0, zaehler:0, fehler:{}, queue:[]};
+function laden(){
+  try{
+    var roh=localStorage.getItem(KEY);
+    if(roh){
+      var o=JSON.parse(roh);
+      if(o && typeof o==="object"){
+        for(var k in st){ if(o[k]!==undefined && o[k]!==null) st[k]=o[k]; }
+      }
+    }
+  }catch(e){}
+  if(!st.fehler || typeof st.fehler!=="object") st.fehler={};
+  if(!Array.isArray(st.queue)) st.queue=[];
+}
+function sichern(){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+
+var modus="mix";
+var aktuell=null, ausQueue=null, gewaehlt={}, geprueft=false, letzte=[];
+
+/* ---------- DOM ---------- */
+var $=function(id){return document.getElementById(id);};
+var elZahl=$("zahl"), elNotiz=$("notiz"), elAussage=$("aussage"), elFrage=$("frageText");
+var elDia=$("diagramm"), elWF=$("wf"), elEcho=$("echo"), elTitel=$("echoTitel"),
+    elText=$("echoText"), elLoes=$("echoLoesung"), elHaupt=$("haupt"), elTasten=$("tasten");
+
+function neueAufgabe(){
+  st.zaehler++;
+  var faellig=-1;
+  for(var i=0;i<st.queue.length;i++){ if(st.queue[i].due<=st.zaehler){ faellig=i; break; } }
+  if(faellig>=0 && Math.random()<0.85){
+    ausQueue = st.queue.splice(faellig,1)[0];
+    aktuell = ausQueue.q;
+  }else{
+    ausQueue=null;
+    var versuch=0;
+    do{
+      var m = (modus==="mix") ? (Math.random()<0.62?"zuordnen":"wf") : modus;
+      aktuell = (m==="wf") ? baueWF() : (Math.random()<0.55 ? pick(POOL) : baueZuordnen());
+      versuch++;
+    }while(letzte.indexOf(kennung(aktuell))>=0 && versuch<25);
+  }
+  letzte.push(kennung(aktuell)); if(letzte.length>7) letzte.shift();
+  gewaehlt={}; geprueft=false;
+  zeichnen();
+}
+function kennung(q){ return q.typ==="wf" ? "T:"+q.text : "Z:"+q.zeige; }
+
+function zeichnen(){
+  var wf = aktuell.typ==="wf";
+  elDia.hidden=wf; elWF.hidden=!wf;
+  elZahl.hidden=wf; elAussage.hidden=!wf;
+  elNotiz.hidden = wf || !aktuell.notiz;
+  if(wf){
+    elFrage.textContent="Stimmt diese Aussage?";
+    elAussage.textContent=aktuell.text;
+    elTasten.textContent="Tasten: W stimmt · F stimmt nicht · Enter weiter";
+  }else{
+    elFrage.textContent="In welchen Mengen liegt diese Zahl?";
+    elZahl.innerHTML=aktuell.zeige;
+    if(aktuell.notiz) elNotiz.textContent=aktuell.notiz;
+    elTasten.textContent="Tasten: 1 ℕ · 2 ℕ₀ · 3 ℤ · 4 ℚ · 5 ℝ∖ℚ · 6 ℝ · Enter prüfen";
+  }
+  elDia.classList.remove("gesperrt");
+  elWF.classList.remove("gesperrt");
+  var ringe=elDia.querySelectorAll(".ring");
+  for(var i=0;i<ringe.length;i++) ringe[i].className="ring r-"+ringe[i].getAttribute("data-set");
+  var wfb=elWF.querySelectorAll("button");
+  for(var j=0;j<wfb.length;j++) wfb[j].className="";
+  elEcho.hidden=true;
+  elHaupt.hidden=wf;
+  elHaupt.textContent="Prüfen";
+  werteZeigen();
+}
+
+function ringSchalten(k){
+  if(geprueft || aktuell.typ==="wf") return;
+  gewaehlt[k]=!gewaehlt[k];
+  var r=elDia.querySelector('.ring[data-set="'+k+'"]');
+  r.classList.toggle("sel", !!gewaehlt[k]);
+}
+
+function pruefen(){
+  if(geprueft) { neueAufgabe(); return; }
+  var soll=aktuell.mengen, ok=true;
+  for(var i=0;i<ORDNUNG.length;i++){
+    var k=ORDNUNG[i];
+    var muss=soll.indexOf(k)>=0, hat=!!gewaehlt[k];
+    if(muss!==hat){ ok=false; st.fehler[k]=(st.fehler[k]||0)+1; }
+    var r=elDia.querySelector('.ring[data-set="'+k+'"]');
+    r.classList.remove("sel");
+    if(muss && hat) r.classList.add("ok");
+    else if(muss && !hat) r.classList.add("fehlt");
+    else if(!muss && hat) r.classList.add("falsch");
+  }
+  elDia.classList.add("gesperrt");
+  abschluss(ok, soll.length ? "Richtig wäre: "+soll.map(function(x){return META[x].sym;}).join("  ") : "Richtig wäre: keine dieser Mengen.");
+}
+
+function wfPruefen(wert){
+  if(geprueft) return;
+  var ok = (wert===aktuell.antwort);
+  var b=elWF.querySelectorAll("button");
+  for(var i=0;i<b.length;i++){
+    var v = b[i].getAttribute("data-wf")==="1";
+    if(v===aktuell.antwort) b[i].className="ok";
+    else if(v===wert) b[i].className="falsch";
+  }
+  elWF.classList.add("gesperrt");
+  abschluss(ok, "Richtig ist: "+(aktuell.antwort?"stimmt":"stimmt nicht"));
+}
+
+function abschluss(ok, loesung){
+  geprueft=true;
+  st.total++;
+  if(ok){ st.richtig++; st.serie++; if(st.serie>st.best) st.best=st.serie; }
+  else { st.serie=0; }
+
+  if(ok){
+    if(ausQueue){
+      ausQueue.rest--;
+      if(ausQueue.rest>0){ ausQueue.due=st.zaehler+zz(4,7); st.queue.push(ausQueue); }
+    }
+  }else{
+    var e = ausQueue || {q:aktuell, rest:2, due:0};
+    e.rest=2; e.due=st.zaehler+zz(2,4);
+    st.queue.push(e);
+    if(st.queue.length>60) st.queue.shift();
+  }
+
+  elEcho.hidden=false;
+  elEcho.className="echo "+(ok?"gut":"schlecht");
+  elTitel.textContent = ok ? pick(["Richtig.","Sitzt.","Genau so.","Passt."]) : "Noch nicht.";
+  elText.textContent = aktuell.warum;
+  elLoes.textContent = ok ? "" : loesung;
+  elLoes.hidden = ok;
+  elHaupt.hidden=false;
+  elHaupt.textContent="Weiter";
+  elHaupt.focus();
+  sichern(); werteZeigen();
+}
+
+function werteZeigen(){
+  $("w-serie").textContent=st.serie;
+  $("w-total").textContent=st.total;
+  $("w-queue").textContent=st.queue.length;
+  $("w-quote").textContent = st.total ? Math.round(st.richtig/st.total*100)+"%" : "–";
+  var sw=$("schwach"), h="";
+  var max=0;
+  for(var i=0;i<ORDNUNG.length;i++){ var f=st.fehler[ORDNUNG[i]]||0; if(f>max) max=f; }
+  for(var j=0;j<ORDNUNG.length;j++){
+    var k=ORDNUNG[j], n=st.fehler[k]||0;
+    var heiss = (n>0 && n>=max && max>=3) ? " class=\"heiss\"" : "";
+    h += "<span"+heiss+">"+META[k].sym+" · "+n+" Fehler</span>";
+  }
+  sw.innerHTML=h;
+}
+
+/* ---------- Ereignisse ---------- */
+elDia.addEventListener("click", function(ev){
+  var b=ev.target.closest(".lab"); if(!b) return;
+  ringSchalten(b.getAttribute("data-set"));
+});
+elWF.addEventListener("click", function(ev){
+  var b=ev.target.closest("button"); if(!b) return;
+  wfPruefen(b.getAttribute("data-wf")==="1");
+});
+elHaupt.addEventListener("click", function(){
+  if(geprueft) neueAufgabe(); else if(aktuell.typ!=="wf") pruefen();
+});
+document.querySelector(".modi").addEventListener("click", function(ev){
+  var b=ev.target.closest("button"); if(!b) return;
+  modus=b.getAttribute("data-modus");
+  var alle=this.querySelectorAll("button");
+  for(var i=0;i<alle.length;i++) alle[i].setAttribute("aria-pressed", alle[i]===b ? "true":"false");
+  neueAufgabe();
+});
+$("reset").addEventListener("click", function(){
+  if(!confirm("Serie, Quote und Wiedervorlage löschen?")) return;
+  st={total:0, richtig:0, serie:0, best:0, zaehler:0, fehler:{}, queue:[]};
+  sichern(); neueAufgabe();
+});
+document.addEventListener("keydown", function(ev){
+  if(ev.metaKey||ev.ctrlKey||ev.altKey) return;
+  var t=ev.target.tagName;
+  if(t==="INPUT"||t==="TEXTAREA") return;
+  var k=ev.key.toLowerCase();
+  if(k==="enter"){
+    ev.preventDefault();
+    if(geprueft) neueAufgabe();
+    else if(aktuell.typ!=="wf") pruefen();
+    return;
+  }
+  if(aktuell.typ==="wf"){
+    if(geprueft) return;
+    if(k==="w"){ ev.preventDefault(); wfPruefen(true); }
+    if(k==="f"){ ev.preventDefault(); wfPruefen(false); }
+    return;
+  }
+  var idx="123456".indexOf(k);
+  if(idx>=0 && !geprueft){ ev.preventDefault(); ringSchalten(ORDNUNG[idx]); }
+});
+
+laden();
+neueAufgabe();
+})();
+</script>
