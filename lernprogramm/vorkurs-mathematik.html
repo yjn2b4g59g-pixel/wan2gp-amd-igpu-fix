@@ -1,0 +1,2082 @@
+<title>Vorkurs Mathematik Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&display=swap">
+<style>
+:root{
+  --paper:#EEF1F5;
+  --surface:#FFFFFF;
+  --surface-2:#F7F9FB;
+  --ink:#111A24;
+  --ink-2:#4E5C6E;
+  --ink-3:#7C8A9B;
+  --line:#D3DAE3;
+  --line-soft:#E4E9EF;
+  --accent:#343CB4;
+  --accent-ink:#2A308F;
+  --accent-soft:#E6E8F8;
+  --good:#0F7A52;
+  --good-soft:#DFF1E8;
+  --bad:#B93225;
+  --bad-soft:#FBE6E3;
+  --grid:rgba(52,60,180,.055);
+  --shadow:0 1px 2px rgba(17,26,36,.05), 0 8px 24px -14px rgba(17,26,36,.28);
+  --ui:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0D1218;
+    --surface:#151D25;
+    --surface-2:#1B242E;
+    --ink:#E7ECF2;
+    --ink-2:#9DACBC;
+    --ink-3:#76869A;
+    --line:#2A3540;
+    --line-soft:#222C36;
+    --accent:#8E94FF;
+    --accent-ink:#AEB3FF;
+    --accent-soft:#212751;
+    --good:#4FCB93;
+    --good-soft:#12312A;
+    --bad:#F58274;
+    --bad-soft:#3A1F1C;
+    --grid:rgba(142,148,255,.06);
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0D1218;
+  --surface:#151D25;
+  --surface-2:#1B242E;
+  --ink:#E7ECF2;
+  --ink-2:#9DACBC;
+  --ink-3:#76869A;
+  --line:#2A3540;
+  --line-soft:#222C36;
+  --accent:#8E94FF;
+  --accent-ink:#AEB3FF;
+  --accent-soft:#212751;
+  --good:#4FCB93;
+  --good-soft:#12312A;
+  --bad:#F58274;
+  --bad-soft:#3A1F1C;
+  --grid:rgba(142,148,255,.06);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--ui);font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;font-size:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* ---------- shell ---------- */
+.app{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:100vh}
+
+/* ---------- rail ---------- */
+.rail{
+  background:var(--surface);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;position:sticky;top:0;height:100vh;
+}
+.rail-head{padding:20px 18px 16px;border-bottom:1px solid var(--line-soft)}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.brand b{color:var(--accent);font-weight:700}
+.rail-title{font-size:19px;font-weight:700;letter-spacing:-.015em;margin:6px 0 2px;text-wrap:balance}
+.rail-sub{font-size:12px;color:var(--ink-3);line-height:1.4}
+.gauge{display:flex;align-items:center;gap:12px;margin-top:14px}
+.gauge svg{flex:none}
+.gauge-txt{font-size:12px;color:var(--ink-2);line-height:1.35}
+.gauge-txt b{display:block;font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums}
+.rail-scroll{overflow-y:auto;flex:1;padding:10px 10px 18px}
+.chap{margin-top:12px}
+.chap:first-child{margin-top:2px}
+.chap-h{display:flex;gap:8px;align-items:baseline;padding:6px 8px 5px;font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.chap-h i{font-style:normal;color:var(--accent);font-variant-numeric:tabular-nums}
+.lrow{
+  display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:9px;
+  width:100%;text-align:left;background:none;border:0;cursor:pointer;
+  padding:7px 8px;border-radius:8px;line-height:1.3;
+}
+.lrow:hover{background:var(--surface-2)}
+.lrow[aria-current="true"]{background:var(--accent-soft)}
+.lrow[aria-current="true"] .lname{color:var(--accent-ink);font-weight:600}
+.mark{
+  width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);
+  display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--ink-3);
+}
+.mark.done{background:var(--good);border-color:var(--good);color:#fff}
+.mark.part{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.lnum{display:none}
+.lname{font-size:13.5px;color:var(--ink-2);min-width:0}
+.lname em{font-style:normal;color:var(--ink-3);font-variant-numeric:tabular-nums;margin-right:6px}
+.lscore{font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums;font-weight:600}
+.rail-foot{border-top:1px solid var(--line-soft);padding:12px 16px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+.ghost{background:none;border:0;color:var(--ink-3);font-size:12px;cursor:pointer;padding:4px 0;text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line)}
+.ghost:hover{color:var(--bad)}
+
+/* ---------- main ---------- */
+.main{
+  min-width:0;padding:34px 40px 90px;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:26px 26px;
+}
+.wrap{max-width:720px;margin:0 auto}
+.crumb{display:flex;align-items:center;gap:10px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.crumb .dot{width:4px;height:4px;border-radius:50%;background:var(--line)}
+h1{font-size:32px;line-height:1.15;letter-spacing:-.025em;margin:8px 0 0;font-weight:700;text-wrap:balance}
+.lead{font-family:var(--serif);font-size:16.5px;color:var(--ink-2);margin:10px 0 0;max-width:62ch}
+
+/* step bar */
+.steps{display:flex;gap:5px;margin:22px 0 20px}
+.steps span{height:4px;flex:1;background:var(--line);border-radius:2px;transition:background .2s}
+.steps span.on{background:var(--accent)}
+.steps span.cur{background:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+
+/* card */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.card-h{padding:16px 24px 14px;border-bottom:1px solid var(--line-soft);display:flex;align-items:baseline;gap:12px}
+.kicker{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums;flex:none}
+.card-h h2{font-size:18px;margin:0;font-weight:600;letter-spacing:-.012em}
+.body{padding:20px 24px 24px;font-family:var(--serif);font-size:16px;line-height:1.62;color:var(--ink)}
+.body p{margin:0 0 13px}
+.body p:last-child{margin-bottom:0}
+.body ul,.body ol{margin:0 0 13px;padding-left:22px}
+.body li{margin-bottom:6px}
+.body b,.body strong{font-weight:600}
+.body a{color:var(--accent)}
+
+/* display formula */
+.disp{
+  margin:16px 0;padding:14px 18px;background:var(--surface-2);
+  border-left:2.5px solid var(--accent);border-radius:0 6px 6px 0;
+  overflow-x:auto;font-size:17px;
+}
+.disp .ln{display:block;padding:5px 0;white-space:nowrap}
+.note{
+  margin:16px 0;padding:12px 16px;border:1px solid var(--line);border-radius:6px;
+  background:var(--surface-2);font-size:14.5px;
+}
+.note .nh{display:block;font-family:var(--ui);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--ink-3);margin-bottom:5px}
+.note.warn{border-color:color-mix(in srgb,var(--bad) 35%,var(--line));background:var(--bad-soft)}
+.note.warn .nh{color:var(--bad)}
+.note.def{border-color:color-mix(in srgb,var(--accent) 35%,var(--line));background:var(--accent-soft)}
+.note.def .nh{color:var(--accent-ink)}
+table.tbl{border-collapse:collapse;font-family:var(--serif);font-size:15px;margin:14px 0;width:100%}
+table.tbl th,table.tbl td{border:1px solid var(--line);padding:6px 10px;text-align:center;white-space:nowrap}
+table.tbl th{background:var(--surface-2);font-family:var(--ui);font-size:12px;font-weight:600;letter-spacing:.02em}
+.scrollx{overflow-x:auto;margin:14px 0}
+.scrollx table.tbl{margin:0}
+
+/* nav */
+.nav{display:flex;gap:10px;align-items:center;margin-top:22px}
+.btn{
+  border:1px solid var(--accent);background:var(--accent);color:#fff;
+  padding:10px 20px;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;
+  transition:filter .15s,transform .05s;
+}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.sec{background:transparent;color:var(--ink-2);border-color:var(--line)}
+.btn.sec:hover{background:var(--surface);color:var(--ink)}
+.spacer{flex:1}
+.hintline{font-size:12.5px;color:var(--ink-3)}
+
+/* ---------- quiz ---------- */
+.qhead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:4px}
+.qmeta{font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-weight:600;font-variant-numeric:tabular-nums}
+.qtext{font-family:var(--serif);font-size:18px;line-height:1.5;margin:0 0 4px}
+.opts{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.opt{
+  display:grid;grid-template-columns:26px 1fr;gap:11px;align-items:start;
+  border:1px solid var(--line);background:var(--surface);border-radius:8px;
+  padding:11px 14px;cursor:pointer;text-align:left;width:100%;
+  font-family:var(--serif);font-size:15.5px;line-height:1.45;
+  transition:border-color .12s,background .12s;
+}
+.opt:hover{border-color:var(--accent)}
+.key{
+  font-family:var(--ui);font-size:11px;font-weight:700;color:var(--ink-3);
+  border:1px solid var(--line);border-radius:5px;height:20px;display:grid;place-items:center;margin-top:2px;
+}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.sel .key{border-color:var(--accent);color:var(--accent-ink)}
+.opt.ok{border-color:var(--good);background:var(--good-soft)}
+.opt.ok .key{border-color:var(--good);color:var(--good)}
+.opt.no{border-color:var(--bad);background:var(--bad-soft)}
+.opt.no .key{border-color:var(--bad);color:var(--bad)}
+.opt[disabled]{cursor:default}
+.freein{
+  display:flex;gap:10px;align-items:center;margin-top:16px;flex-wrap:wrap;
+}
+.freein input{
+  font-family:var(--serif);font-size:17px;padding:10px 14px;border:1px solid var(--line);
+  border-radius:8px;background:var(--surface);color:var(--ink);min-width:220px;
+}
+.freein input:focus{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
+.freein input[disabled]{opacity:.7;background:var(--surface-2)}
+.freein .fmt{font-size:12.5px;color:var(--ink-3)}
+.verdict{
+  margin-top:18px;padding:14px 16px;border-radius:8px;border:1px solid var(--line);
+  font-family:var(--serif);font-size:15px;line-height:1.55;
+}
+.verdict .vh{
+  font-family:var(--ui);font-size:12px;letter-spacing:.09em;text-transform:uppercase;
+  font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:7px;
+}
+.verdict.ok{background:var(--good-soft);border-color:color-mix(in srgb,var(--good) 40%,var(--line))}
+.verdict.ok .vh{color:var(--good)}
+.verdict.no{background:var(--bad-soft);border-color:color-mix(in srgb,var(--bad) 40%,var(--line))}
+.verdict.no .vh{color:var(--bad)}
+
+/* result */
+.result{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;padding:24px}
+.ring{position:relative;width:112px;height:112px;flex:none}
+.ring b{
+  position:absolute;inset:0;display:grid;place-items:center;font-size:26px;font-weight:700;
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em;
+}
+.rtxt h3{margin:0 0 6px;font-size:21px;font-weight:700;letter-spacing:-.015em}
+.rtxt p{margin:0;color:var(--ink-2);font-family:var(--serif);font-size:15.5px}
+.review{border-top:1px solid var(--line-soft);padding:18px 24px 22px}
+.review h4{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px;font-weight:700}
+.ritem{display:grid;grid-template-columns:20px 1fr;gap:11px;padding:9px 0;border-top:1px solid var(--line-soft);font-family:var(--serif);font-size:14.5px;line-height:1.5}
+.ritem:first-of-type{border-top:0}
+.ric{font-family:var(--ui);font-weight:700;font-size:13px;line-height:1.6}
+.ric.ok{color:var(--good)}
+.ric.no{color:var(--bad)}
+.ritem small{display:block;font-family:var(--ui);font-size:12.5px;color:var(--ink-3);margin-top:2px}
+.ritem small b{color:var(--ink-2);font-weight:600}
+
+/* ---------- math ---------- */
+.m{font-family:var(--serif);white-space:nowrap}
+.m i{font-style:italic}
+.m .opn{font-style:normal}
+.m .upr{font-family:var(--ui);font-size:.92em;font-style:normal}
+.m .big{font-size:1.3em;line-height:0;vertical-align:-.16em}
+.m sup,.m sub{font-size:.72em;line-height:0}
+.m sup{vertical-align:.52em}
+.m sub{vertical-align:-.28em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .18em;font-size:.94em;line-height:1.26}
+.frac>span{padding:0 .32em;display:block}
+.fnum{border-bottom:1px solid currentColor;padding-bottom:.06em!important}
+.fden{padding-top:.06em!important}
+.sq{display:inline-block;position:relative;padding-left:.1em}
+.sq>.rd{font-size:1.06em}
+.sq>.rc{border-top:1px solid currentColor;padding:.08em .18em 0 .12em;margin-left:-.06em;display:inline-block}
+.sq>.ix{font-size:.62em;vertical-align:.62em;margin-right:-.42em}
+.ovr{border-top:1px solid currentColor;padding-top:.05em}
+.bnm{display:inline-flex;align-items:center;vertical-align:-.42em;margin:0 .1em}
+.bnm .bp{font-size:1.85em;font-weight:300;line-height:.82}
+.bnm .bcol{display:inline-flex;flex-direction:column;text-align:center;font-size:.92em;line-height:1.12;padding:0 .1em}
+
+/* ---------- responsive ---------- */
+.mobbar{display:none}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .rail{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .rail-scroll{max-height:none}
+  .main{padding:24px 18px 70px}
+  h1{font-size:26px}
+  .body,.card-h{padding-left:17px;padding-right:17px}
+  .result{grid-template-columns:1fr;justify-items:start;gap:16px}
+  .railbox{display:none}
+  .railbox.open{display:block}
+  .mobbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px 12px}
+  .mobbar button{border:1px solid var(--line);background:var(--surface-2);border-radius:7px;padding:7px 12px;font-size:13px;font-weight:600;cursor:pointer}
+}
+</style>
+
+<div class="app">
+  <aside class="rail">
+    <div class="rail-head">
+      <div class="brand">Vorkurs <b>Mathematik</b></div>
+      <div class="rail-title">Schritt für Schritt durchs Skript</div>
+      <div class="rail-sub">FH Aachen &middot; Aerospace &amp; Automotive Engineering &middot; WS 2026/27</div>
+      <div class="gauge">
+        <svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true">
+          <circle cx="23" cy="23" r="19" fill="none" stroke="var(--line)" stroke-width="5"></circle>
+          <circle id="gring" cx="23" cy="23" r="19" fill="none" stroke="var(--accent)" stroke-width="5"
+                  stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="119.4"
+                  transform="rotate(-90 23 23)"></circle>
+        </svg>
+        <div class="gauge-txt"><b id="gnum">0 von 16</b>Lektionen bestanden</div>
+      </div>
+    </div>
+    <div class="mobbar">
+      <span class="qmeta" id="mobnow">Lektion</span>
+      <button id="mobtoggle" type="button">Kursplan</button>
+    </div>
+    <div class="rail-scroll railbox" id="railbox"></div>
+    <div class="rail-foot">
+      <span class="hintline">Fortschritt lokal gespeichert</span>
+      <button class="ghost" id="reset" type="button">Zurücksetzen</button>
+    </div>
+  </aside>
+  <main class="main"><div class="wrap" id="view"></div></main>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   Mini-Formelsatz: eine kleine TeX-Teilmenge -> HTML
+   Variablen kursiv, Zahlen und Operatoren aufrecht (wie im Skript).
+   ============================================================ */
+var SYM = {
+  cdot:"·", times:"×", pm:"±", mp:"∓", div:"÷",
+  le:"≤", ge:"≥", ne:"≠", approx:"≈", equiv:"≡",
+  in:"∈", notin:"∉", subseteq:"⊆", supseteq:"⊇",
+  cap:"∩", cup:"∪", setminus:"\\", emptyset:"∅",
+  Rightarrow:"⇒", Leftarrow:"⇐", Leftrightarrow:"⇔",
+  nRightarrow:"⇏", to:"→", mapsto:"↦", infty:"∞",
+  alpha:"α", beta:"β", gamma:"γ", delta:"δ", lambda:"λ",
+  varphi:"φ", phi:"φ", pi:"π", omega:"ω", Omega:"Ω",
+  sum:"∑", prod:"∏", neg:"¬", land:"∧", lor:"∨",
+  circ:"∘", ldots:"…", dots:"…", cdots:"⋯", forall:"∀", exists:"∃",
+  R:"ℝ", N:"ℕ", Z:"ℤ", Q:"ℚ", C:"ℂ",
+  deg:"°", left:"", right:"", quad:"&ensp;", qquad:"&emsp;",
+  "\\":"<br>"
+};
+var OPS = ["sin","cos","tan","cot","arcsin","arccos","arctan","ln","lg","ld","log","exp","max","min","und","oder","mit","falls"];
+
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function tex(src){
+  var out = "", i = 0, n = src.length;
+
+  function rawGroup(){                     // Inhalt einer {...}-Gruppe als Rohtext
+    if(src[i] !== "{") return src[i++] || "";
+    var d = 0, s = ++i;
+    while(i < n){
+      if(src[i] === "\\"){ i += 2; continue; }
+      if(src[i] === "{") d++;
+      else if(src[i] === "}"){ if(d === 0) break; d--; }
+      i++;
+    }
+    var inner = src.slice(s, i); i++;
+    return inner;
+  }
+  function group(){ return tex(rawGroup()); }
+
+  while(i < n){
+    var c = src[i];
+    if(c === "\\"){
+      i++;
+      var name = "";
+      while(i < n && /[a-zA-Z]/.test(src[i])) name += src[i++];
+      if(!name){
+        var ch = src[i++];
+        if(ch === "\\"){ out += "<br>"; continue; }
+        if(ch === "," || ch === ";" || ch === " "){ out += "&thinsp;"; continue; }
+        out += esc(ch); continue;
+      }
+      if(name === "frac"){
+        var a = group(), b = group();
+        out += '<span class="frac"><span class="fnum">' + a + '</span><span class="fden">' + b + '</span></span>';
+      } else if(name === "sqrt"){
+        var idx = "";
+        if(src[i] === "["){ var e = src.indexOf("]", i); idx = tex(src.slice(i + 1, e)); i = e + 1; }
+        out += '<span class="sq">' + (idx ? '<span class="ix">' + idx + '</span>' : "") +
+               '<span class="rd">√</span><span class="rc">' + group() + '</span></span>';
+      } else if(name === "binom"){
+        var bt = group(), bb = group();
+        out += '<span class="bnm"><span class="bp">(</span><span class="bcol"><span>' + bt +
+               '</span><span>' + bb + '</span></span><span class="bp">)</span></span>';
+      } else if(name === "text"){
+        out += '<span class="upr">' + esc(rawGroup()) + '</span>';
+      } else if(name === "ovr"){
+        out += '<span class="ovr">' + group() + '</span>';
+      } else if(name === "sum" || name === "prod"){
+        out += '<span class="big">' + (name === "sum" ? "∑" : "∏") + "</span>";
+      } else if(OPS.indexOf(name) >= 0){
+        out += '<span class="opn">' + name + '</span>';
+      } else if(SYM.hasOwnProperty(name)){
+        out += SYM[name];
+      } else {
+        out += esc(name);
+      }
+      continue;
+    }
+    if(c === "^" || c === "_"){
+      i++;
+      var t = (c === "^") ? "sup" : "sub";
+      out += "<" + t + ">" + group() + "</" + t + ">";
+      continue;
+    }
+    if(/[a-zA-Z]/.test(c)){ out += "<i>" + c + "</i>"; i++; continue; }
+    if(c === "-"){ out += "−"; i++; continue; }
+    out += esc(c); i++;
+  }
+  return out;
+}
+
+/* $...$ in einem HTML-Fragment ersetzen; @@ trennt Zeilen in .disp */
+function md(s){
+  return String(s).replace(/\$([^$]*)\$/g, function(_, m){
+    return '<span class="m">' + tex(m) + "</span>";
+  });
+}
+function disp(){
+  var lines = Array.prototype.slice.call(arguments);
+  return '<div class="disp">' + lines.map(function(l){
+    return '<span class="ln m">' + tex(l) + "</span>";
+  }).join("") + "</div>";
+}
+window.__tex = tex;
+
+/* ============================================================
+   Kursinhalte — folgen dem Skript Kapitel für Kapitel
+   ============================================================ */
+var r = String.raw, D = disp;
+
+var COURSE = [
+{
+ n:"1", title:"Grundlagen", lessons:[
+
+ /* ---------------------------------------------------------- 1.1 */
+ { id:"1.1", title:"Mengen",
+   lead:"Der Mengenbegriff, die wichtigen Zahlenmengen, Intervalle und die vier Mengenoperationen.",
+   steps:[
+   { h:"Was ist eine Menge?",
+     html: r`<p>Eine <b>Menge</b> ist eine Zusammenfassung unterscheidbarer Objekte zu einem Ganzen. Die Objekte, aus denen eine Menge besteht, heißen <b>Elemente</b> der Menge.</p>
+     <p>Diese Definition ist nicht auf Zahlen beschränkt. Mengen sind zum Beispiel: alle Personen in einem Hörsaal, die möglichen Ergebnisse beim Wurf eines Würfels, alle ungeraden Zahlen. Eine Menge kann endlich viele oder unendlich viele Elemente haben.</p>
+     <div class="note def"><span class="nh">Zwei Darstellungen</span>
+     Ist die Anzahl der Elemente übersichtlich, zählen wir sie alle auf — das nennen wir <b>explizit</b>. Sind es viele oder unendlich viele, geben wir stattdessen eine <b>Charakterisierung</b> an — das nennen wir <b>beschreibend</b>.</div>`
+     + D(r`\text{explizit:}\quad A = \{1, 2, 3, 4, 5, 6\}`,
+         r`\text{beschreibend:}\quad B = \{x; x \text{ ist Studierender der FH Aachen}\}`) },
+
+   { h:"Die wichtigen Zahlenmengen",
+     html: r`<p>Für einige Mengen gibt es feste Symbole. Zum Abzählen dienen die <b>natürlichen Zahlen</b>, mit der Null im Index geschrieben, wenn sie dazugehört:</p>`
+     + D(r`\N = \{1, 2, 3, 4, \ldots\}, \quad \N_0 = \{0, 1, 2, 3, 4, \ldots\}`)
+     + r`<p>Ergänzen wir die negativen Zahlen, erhalten wir die <b>ganzen Zahlen</b>. Alle Zahlen, die als Bruch darstellbar sind, heißen <b>rationale Zahlen</b>:</p>`
+     + D(r`\Z = \{\ldots, -2, -1, 0, 1, 2, \ldots\}, \quad \Q = \{\frac{p}{q}; p, q \in \Z, q \ne 0\}`)
+     + r`<p>Jede Bruchzahl ist eine endliche Dezimalzahl oder eine unendliche Dezimalzahl mit periodischer Ziffernfolge. Die Zahlen mit unendlicher, <b>nicht</b> periodischer Ziffernfolge heißen <b>irrational</b>. Rationale und irrationale Zahlen zusammen bilden die <b>reellen Zahlen</b> $\R$.</p>` },
+
+   { h:"Intervalle",
+     html: r`<p>Wollen wir nur einen Abschnitt der reellen Zahlen beschreiben, benutzen wir <b>Intervalle</b>. Entscheidend ist, ob die Ränder dazugehören:</p>`
+     + D(r`\text{abgeschlossen:}\quad [a, b] = \{x \in \R; a \le x \le b\}`,
+         r`\text{offen:}\quad (a, b) = \{x \in \R; a < x < b\}`,
+         r`\text{halboffen:}\quad [a, b) = \{x \in \R; a \le x < b\}`,
+         r`\text{halboffen:}\quad (a, b] = \{x \in \R; a < x \le b\}`)
+     + r`<p>Für unbeschränkte Abschnitte benutzen wir das Symbol $\infty$:</p>`
+     + D(r`(a, \infty) = \{x \in \R; x > a\}, \quad [a, \infty) = \{x \in \R; x \ge a\}`,
+         r`(-\infty, b) = \{x \in \R; x < b\}, \quad (-\infty, b] = \{x \in \R; x \le b\}`)
+     + r`<div class="note warn"><span class="nh">Achtung</span>
+     $\infty$ und $-\infty$ sind <b>keine</b> reellen Zahlen. Deshalb werden sie nie mit eckigen Klammern geschrieben — $[a, \infty]$ ist falsch.</div>` },
+
+   { h:"Element, Teilmenge, leere Menge",
+     html: r`<p>Gehört ein Element $x$ zur Menge $M$, schreiben wir $x \in M$, andernfalls $x \notin M$. Die Menge, die kein Element enthält, heißt <b>leere Menge</b> und wird mit $\emptyset$ bezeichnet.</p>
+     <div class="note def"><span class="nh">Teilmenge</span>
+     Eine Menge $A$ heißt <b>Teilmenge</b> von $B$, wenn jedes Element von $A$ auch in $B$ liegt. Wir schreiben $A \subseteq B$ oder $B \supseteq A$; $B$ heißt dann <b>Obermenge</b> von $A$.</div>
+     <p>Daraus folgt ein nützliches Kriterium für Gleichheit: Es gilt $A = B$ genau dann, wenn $A \subseteq B$ <b>und</b> $B \subseteq A$.</p>
+     <p>Zwei Mengen, die keine gemeinsamen Elemente haben, heißen <b>disjunkt</b>. Grafisch stellt man solche Zusammenhänge in Venn-Diagrammen dar.</p>` },
+
+   { h:"Die vier Mengenoperationen",
+     html: r`<p>Zwei Mengen lassen sich zu einer neuen Menge verknüpfen:</p>`
+     + D(r`\text{Schnittmenge:}\quad A \cap B = \{x; x \in A \text{ und } x \in B\}`,
+         r`\text{Vereinigung:}\quad A \cup B = \{x; x \in A \text{ oder } x \in B\}`,
+         r`\text{Komplement:}\quad A \setminus B = \{x \in A; x \notin B\}`,
+         r`\text{kartesisches Produkt:}\quad A \times B = \{(a, b); a \in A \text{ und } b \in B\}`)
+     + r`<p>Am Beispiel $A = \{1, 2, 3\}$ und $B = \{3, 4\}$:</p>`
+     + D(r`A \cap B = \{3\}, \quad A \cup B = \{1, 2, 3, 4\}`,
+         r`A \setminus B = \{1, 2\}, \quad B \setminus A = \{4\}`,
+         r`A \times B = \{(1,3), (2,3), (3,3), (1,4), (2,4), (3,4)\}`)
+     + r`<div class="note"><span class="nh">Merke</span>
+     Das Komplement ist nicht symmetrisch: $A \setminus B$ und $B \setminus A$ sind im Allgemeinen verschieden. Beim kartesischen Produkt zählt die Reihenfolge im Paar — es entstehen so viele Paare, wie das Produkt der beiden Elementanzahlen angibt.</div>` }
+   ],
+   quiz:[
+   { type:"mc", q:r`Welche der folgenden Mengen ist <b>beschreibend</b> dargestellt?`,
+     options:[ r`$M = \{2, 4, 6, 8\}$`, r`$M = \{x \in \N; x \text{ ist gerade}\}$`, r`$M = \{a, b, c\}$`, r`$M = \emptyset$` ],
+     a:1, why:r`Bei der beschreibenden Darstellung wird eine Eigenschaft angegeben, die die Elemente charakterisiert. Alle anderen Varianten zählen die Elemente auf (explizite Darstellung).` },
+
+   { type:"mc", q:r`Welche Aussage ist <b>richtig</b>?`,
+     options:[ r`$-5 \in \N$`, r`$\frac{2}{3} \in \Z$`, r`$-5 \in \Z$ und $-5 \in \Q$`, r`$\sqrt{2} \in \Q$` ],
+     a:2, why:r`$-5$ ist eine ganze Zahl und wegen $-5 = \frac{-5}{1}$ auch eine rationale Zahl. $\N$ enthält keine negativen Zahlen, $\frac{2}{3}$ ist keine ganze Zahl, und $\sqrt{2}$ ist irrational.` },
+
+   { type:"mc", q:r`Wie schreibt man die Menge $\{x \in \R; x \le 4\}$ als Intervall?`,
+     options:[ r`$[-\infty, 4]$`, r`$(-\infty, 4]$`, r`$(-\infty, 4)$`, r`$[4, \infty)$` ],
+     a:1, why:r`Die 4 gehört dazu, also rechts eckige Klammer. Links steht $-\infty$ — und weil $-\infty$ keine reelle Zahl ist, steht dort immer eine runde Klammer.` },
+
+   { type:"ms", q:r`Welche Schreibweisen sind <b>falsch</b>? (mehrere Antworten)`,
+     options:[ r`$[2, \infty]$`, r`$(2, \infty)$`, r`$[-\infty, 7)$`, r`$[2, 7]$` ],
+     a:[0,2], why:r`$\infty$ und $-\infty$ sind keine reellen Zahlen und dürfen deshalb nie in einer eckigen Klammer stehen. $(2, \infty)$ und $[2, 7]$ sind korrekt.` },
+
+   { type:"mc", q:r`Es sei $A = \{1, 2, 3, 4\}$ und $B = \{3, 4, 5\}$. Was ist $A \setminus B$?`,
+     options:[ r`$\{3, 4\}$`, r`$\{5\}$`, r`$\{1, 2\}$`, r`$\{1, 2, 5\}$` ],
+     a:2, why:r`$A \setminus B$ enthält alle Elemente von $A$, die nicht in $B$ liegen. Das sind 1 und 2. (Zum Vergleich: $B \setminus A = \{5\}$.)` },
+
+   { type:"input", q:r`$A$ hat 3 Elemente, $B$ hat 5 Elemente. Wie viele Elemente hat $A \times B$?`,
+     a:["15"], why:r`Das kartesische Produkt enthält alle Paare $(a, b)$. Zu jedem der 3 Elemente aus $A$ gibt es 5 mögliche Partner aus $B$, also $3 \cdot 5 = 15$ Paare.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Zwei Mengen $A$ und $B$ heißen <b>disjunkt</b>, wenn ...`,
+     options:[ r`$A \subseteq B$ gilt.`, r`$A \cap B = \emptyset$ gilt.`, r`$A \cup B = \emptyset$ gilt.`, r`$A$ und $B$ gleich viele Elemente haben.` ],
+     a:1, why:r`Disjunkt heißt: kein gemeinsames Element. Genau das sagt $A \cap B = \emptyset$. Wäre die Vereinigung leer, wären beide Mengen selbst leer.` },
+
+   { type:"mc", q:r`Wann gilt $A = B$?`,
+     options:[ r`Wenn $A \subseteq B$ gilt.`, r`Wenn $A \cap B \ne \emptyset$ gilt.`, r`Wenn $A \subseteq B$ und $B \subseteq A$ gilt.`, r`Wenn $A \setminus B = A$ gilt.` ],
+     a:2, why:r`Nur wenn beide Mengen wechselseitig Teilmenge voneinander sind, enthalten sie genau dieselben Elemente. $A \subseteq B$ allein lässt zu, dass $B$ noch weitere Elemente hat.` }
+   ]
+ },
+
+ /* ---------------------------------------------------------- 1.2 a */
+ { id:"1.2", title:"Terme und Rechenregeln",
+   lead:"Rechenreihenfolge, Kommutativ-, Assoziativ- und Distributivgesetz, Ausklammern und die binomischen Formeln.",
+   steps:[
+   { h:"Was ist ein Term?",
+     html: r`<p>Die Grundrechenarten sind Addition, Subtraktion, Multiplikation und Division. Die Verknüpfung von Zahlen durch Rechenoperationen nennen wir <b>Term</b>.</p>
+     <div class="note def"><span class="nh">Definition</span>
+     Ein <b>Term</b> ist eine sinnvolle Folge von Zahlen, Variablen und Rechenzeichen.</div>
+     <p>Terme sind zum Beispiel:</p>`
+     + D(r`3 \cdot (4 + 2), \quad x \cdot y - z, \quad a^2 + b^2`)
+     + r`<p>Wenn wir Terme umformen, kennzeichnen wir die Umformung mit dem Gleichheitszeichen. Ein Term ist übrigens <b>keine</b> Aussage — er ist weder wahr noch falsch. Dazu mehr in der Aussagenlogik.</p>` },
+
+   { h:"Reihenfolge der Rechenoperationen",
+     html: r`<p>Bei mehreren Grundrechenarten ist die Reihenfolge entscheidend. Es gelten drei Regeln:</p>
+     <p><b>1. Punkt vor Strich</b> — Multiplikation wird vor Addition durchgeführt:</p>`
+     + D(r`5 + 4 \cdot 3 = 5 + 12 = 17`)
+     + r`<p><b>2. Klammern zuerst</b> — Ausdrücke in Klammern werden zuerst ausgewertet:</p>`
+     + D(r`5 \cdot (4 - 2) = 5 \cdot 2 = 10`)
+     + r`<p><b>3. Von innen nach außen</b> — geschachtelte Klammern werden von innen nach außen aufgelöst:</p>`
+     + D(r`5 \cdot (6 - (3 - 2)) = 5 \cdot (6 - 1) = 5 \cdot 5 = 25`) },
+
+   { h:"Die drei Gesetze",
+     html: r`<p>Für $a, b, c \in \R$ gelten die folgenden Rechenregeln:</p>
+     <div class="note def"><span class="nh">Kommutativgesetz</span></div>`
+     + D(r`a + b = b + a, \quad a \cdot b = b \cdot a`)
+     + r`<div class="note def"><span class="nh">Assoziativgesetz</span></div>`
+     + D(r`(a + b) + c = a + (b + c), \quad (a \cdot b) \cdot c = a \cdot (b \cdot c)`)
+     + r`<div class="note def"><span class="nh">Distributivgesetz</span></div>`
+     + D(r`a \cdot (b + c) = a \cdot b + a \cdot c`)
+     + r`<p>Das Distributivgesetz hat je nach Leserichtung einen eigenen Namen: Von links nach rechts angewendet heißt der Schritt <b>Ausmultiplizieren</b>, von rechts nach links <b>Ausklammern</b>.</p>` },
+
+   { h:"Ausklammern als Werkzeug",
+     html: r`<p>Ausklammern ist eine gute Möglichkeit, gleichartige Terme zu vereinfachen. Der gemeinsame Faktor muss dabei nicht eine einzelne Zahl sein — er kann ein ganzer Klammerausdruck sein:</p>`
+     + D(r`6 \cdot (x - 2) + 4 \cdot (x - 2) = (x - 2) \cdot (6 + 4) = 10 \cdot (x - 2)`)
+     + r`<p>Der Blick dafür, was sich ausklammern lässt, ist eine der wichtigsten Rechentechniken überhaupt — beim Kürzen von Brüchen, beim Lösen von Gleichungen und beim Bestimmen von Nullstellen kommt sie immer wieder vor.</p>` },
+
+   { h:"Die binomischen Formeln",
+     html: r`<p>Wird eine Zahl mit sich selbst multipliziert, schreiben wir abkürzend $a^2 = a \cdot a$ und sprechen von einer Quadratzahl. Allgemein ist die $n$-te Potenz</p>`
+     + D(r`a^n = a \cdot a \cdot \ldots \cdot a \quad (n \text{ Faktoren})`)
+     + r`<p>Multiplizieren wir eine Summe oder Differenz mit sich selbst und wenden das Distributivgesetz an, entstehen die drei binomischen Formeln. Für $a, b \in \R$ gilt:</p>`
+     + D(r`(a + b)^2 = a^2 + 2ab + b^2`,
+         r`(a - b)^2 = a^2 - 2ab + b^2`,
+         r`(a + b) \cdot (a - b) = a^2 - b^2`)
+     + r`<div class="note warn"><span class="nh">Häufiger Fehler</span>
+     $(a + b)^2$ ist <b>nicht</b> $a^2 + b^2$. Der gemischte Term $2ab$ gehört dazu. Probieren Sie es mit $a = 1$, $b = 1$ aus: links steht 4, rechts stünde 2.</div>` }
+   ],
+   quiz:[
+   { type:"input", q:r`Berechnen Sie: $7 + 3 \cdot (8 - 6)$`,
+     a:["13"], why:r`Zuerst die Klammer: $8 - 6 = 2$. Dann Punkt vor Strich: $3 \cdot 2 = 6$. Zuletzt $7 + 6 = 13$.`, fmt:"Zahl" },
+
+   { type:"input", q:r`Berechnen Sie: $2 \cdot (10 - (4 - 1))$`,
+     a:["14"], why:r`Klammern von innen nach außen: $4 - 1 = 3$, dann $10 - 3 = 7$, zuletzt $2 \cdot 7 = 14$.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Welches Gesetz steckt hinter der Umformung $3 \cdot (x + 5) = 3x + 15$?`,
+     options:[ r`Kommutativgesetz`, r`Assoziativgesetz`, r`Distributivgesetz`, r`Binomische Formel` ],
+     a:2, why:r`Das Distributivgesetz $a \cdot (b + c) = a \cdot b + a \cdot c$, hier in der Richtung des Ausmultiplizierens.` },
+
+   { type:"mc", q:r`Vereinfachen Sie durch Ausklammern: $7 \cdot (x + 1) - 2 \cdot (x + 1)$`,
+     options:[ r`$5 \cdot (x + 1)$`, r`$9 \cdot (x + 1)$`, r`$5x + 1$`, r`$14 \cdot (x + 1)$` ],
+     a:0, why:r`Der gemeinsame Faktor ist die Klammer $(x + 1)$: $7 \cdot (x+1) - 2 \cdot (x+1) = (x+1) \cdot (7 - 2) = 5 \cdot (x+1)$.` },
+
+   { type:"mc", q:r`Wie lautet $(x - 3)^2$ ausmultipliziert?`,
+     options:[ r`$x^2 - 9$`, r`$x^2 + 9$`, r`$x^2 - 6x + 9$`, r`$x^2 - 3x + 9$` ],
+     a:2, why:r`Zweite binomische Formel mit $a = x$, $b = 3$: $x^2 - 2 \cdot x \cdot 3 + 3^2 = x^2 - 6x + 9$.` },
+
+   { type:"mc", q:r`Welcher Ausdruck ist gleich $x^2 - 25$?`,
+     options:[ r`$(x - 5)^2$`, r`$(x + 5)(x - 5)$`, r`$(x + 5)^2$`, r`$(x - 25)(x + 1)$` ],
+     a:1, why:r`Dritte binomische Formel: $a^2 - b^2 = (a + b)(a - b)$ mit $a = x$ und $b = 5$. Diese Zerlegung ist beim Kürzen von Brüchen extrem nützlich.` },
+
+   { type:"ms", q:r`Welche Gleichungen sind für <b>alle</b> $a, b \in \R$ richtig? (mehrere Antworten)`,
+     options:[ r`$(a + b)^2 = a^2 + b^2$`, r`$(a + b)^2 = a^2 + 2ab + b^2$`, r`$a \cdot (b + c) = a \cdot b + a \cdot c$`, r`$(a - b)^2 = (b - a)^2$` ],
+     a:[1,2,3], why:r`Die erste ist falsch — der Term $2ab$ fehlt. Die letzte stimmt, weil beim Quadrieren das Vorzeichen verschwindet: $(a-b)^2 = a^2 - 2ab + b^2 = (b-a)^2$.` },
+
+   { type:"input", q:r`Berechnen Sie mit der dritten binomischen Formel: $101 \cdot 99$`,
+     a:["9999"], why:r`$101 \cdot 99 = (100 + 1)(100 - 1) = 100^2 - 1^2 = 10000 - 1 = 9999$. Die binomischen Formeln sind auch als Kopfrechentrick brauchbar.`, fmt:"Zahl" }
+   ]
+ },
+
+ /* ---------------------------------------------------------- 1.2 b */
+ { id:"1.2", title:"Summen, Produkte, Binomialkoeffizient",
+   lead:"Summen- und Produktzeichen, Indexverschiebung, Fakultät, Binomialkoeffizient und der binomische Lehrsatz.",
+   steps:[
+   { h:"Das Summenzeichen",
+     html: r`<p>Werden viele Ausdrücke gleicher Struktur addiert, bietet das <b>Summenzeichen</b> $\sum$ eine kompakte Notation. Unter dem Zeichen steht der Laufindex mit Startwert, darüber der Endwert, dahinter der Summand:</p>`
+     + D(r`\sum_{k=1}^{n} a_k = a_1 + a_2 + \cdots + a_{n-1} + a_n`)
+     + r`<p>Der Laufindex muss nicht bei 1 beginnen — jede ganze Zahl ist erlaubt: $\sum_{k=m}^{n} a_k = a_m + a_{m+1} + \cdots + a_n$. Drei Beispiele:</p>`
+     + D(r`\sum_{k=1}^{5} k = 1 + 2 + 3 + 4 + 5 = 15`,
+         r`\sum_{k=1}^{4} k^2 = 1 + 4 + 9 + 16 = 30`,
+         r`\sum_{k=3}^{5} (2k + 1) = 7 + 9 + 11 = 27`)
+     + r`<p>Der <b>Name</b> des Laufindex ist beliebig und ändert nichts am Ergebnis: $\sum_{k=1}^{n} a_k = \sum_{l=1}^{n} a_l$.</p>` },
+
+   { h:"Indexverschiebung",
+     html: r`<p>Manchmal ist es hilfreich, den Laufindex zu verändern — etwa um zwei Summen zu vergleichen oder zu vereinheitlichen. Ersetzen wir $k$ durch $j$ mit $k = j + c$ und $c \in \Z$, müssen <b>Summand und Grenzen gemeinsam</b> angepasst werden:</p>`
+     + D(r`\sum_{k=m}^{n} a_k = \sum_{j=m-c}^{n-c} a_{j+c}`)
+     + r`<p>Beispiel: In $\sum_{k=1}^{4} (k + 1)$ soll der neue Index bei 0 beginnen. Wir setzen $k = j + 1$, also $j = k - 1$. Der Summand wird $k + 1 = (j+1)+1 = j+2$, die Grenzen werden aus $k = 1$ zu $j = 0$ und aus $k = 4$ zu $j = 3$:</p>`
+     + D(r`\sum_{k=1}^{4} (k + 1) = \sum_{j=0}^{3} (j + 2)`)
+     + r`<p>Zur Kontrolle beide Summen ausrechnen: $2+3+4+5 = 14$ auf beiden Seiten. Eine Indexverschiebung ändert nur die Darstellung, nie den Wert.</p>` },
+
+   { h:"Produktzeichen und Fakultät",
+     html: r`<p>Dasselbe Prinzip für Multiplikation liefert das <b>Produktzeichen</b> $\prod$:</p>`
+     + D(r`\prod_{k=1}^{n} a_k = a_1 \cdot a_2 \cdot \ldots \cdot a_n`)
+     + r`<p>Beispiele: $\prod_{k=1}^{3} k^3 = 1 \cdot 8 \cdot 27 = 216$ und $\prod_{k=2}^{4} (2k - 1) = 3 \cdot 5 \cdot 7 = 105$.</p>
+     <div class="note def"><span class="nh">Fakultät</span>
+     Die <b>Fakultät</b> einer natürlichen Zahl $n$ ist das Produkt aller natürlichen Zahlen von 1 bis $n$:</div>`
+     + D(r`n! = \prod_{k=1}^{n} k = 1 \cdot 2 \cdot 3 \cdots n, \quad \text{zusätzlich } 0! = 1`)
+     + r`<p>Die Fakultät wächst sehr schnell: $3! = 6$, $4! = 24$, $5! = 120$.</p>` },
+
+   { h:"Binomialkoeffizient",
+     html: r`<p>Für $n, k \in \N_0$ mit $n \ge k$ ist der <b>Binomialkoeffizient</b> definiert als</p>`
+     + D(r`\binom{n}{k} = \frac{n!}{(n - k)! \cdot k!}, \qquad \text{für } n < k \text{ setzen wir } \binom{n}{k} = 0.`)
+     + r`<p>Gesprochen wird er &bdquo;$n$ über $k$&ldquo;. Beim Rechnen kürzt sich fast alles weg:</p>`
+     + D(r`\binom{5}{3} = \frac{5!}{2! \cdot 3!} = \frac{5 \cdot 4 \cdot 3 \cdot 2 \cdot 1}{(2 \cdot 1)(3 \cdot 2 \cdot 1)} = \frac{5 \cdot 4}{2 \cdot 1} = 10`)
+     + r`<p>Es gelten die Eigenschaften</p>`
+     + D(r`\binom{n}{k} = \binom{n}{n-k}, \quad \binom{n}{n-1} = \binom{n}{1} = n, \quad \binom{n+1}{k+1} = \binom{n}{k} + \binom{n}{k+1}`) },
+
+   { h:"Pascalsches Dreieck und binomischer Lehrsatz",
+     html: r`<p>Die letzte Eigenschaft ist genau die Bauvorschrift des <b>Pascalschen Dreiecks</b>: Jede Zahl entsteht durch Addition der beiden Zahlen schräg darüber.</p>
+     <div class="disp" style="text-align:center">
+       <span class="ln m">1</span>
+       <span class="ln m">1&nbsp;&nbsp;1</span>
+       <span class="ln m">1&nbsp;&nbsp;2&nbsp;&nbsp;1</span>
+       <span class="ln m">1&nbsp;&nbsp;3&nbsp;&nbsp;3&nbsp;&nbsp;1</span>
+       <span class="ln m">1&nbsp;&nbsp;4&nbsp;&nbsp;6&nbsp;&nbsp;4&nbsp;&nbsp;1</span>
+       <span class="ln m">1&nbsp;&nbsp;5&nbsp;&nbsp;10&nbsp;&nbsp;10&nbsp;&nbsp;5&nbsp;&nbsp;1</span>
+     </div>
+     <p>Die $n$-te Zeile (beginnend bei $n = 0$) enthält genau die Koeffizienten der Entwicklung von $(a + b)^n$. Damit verallgemeinern sich die binomischen Formeln:</p>
+     <div class="note def"><span class="nh">Binomischer Lehrsatz</span>
+     Für $a, b \in \R$ und $n \in \N$ gilt</div>`
+     + D(r`(a + b)^n = \sum_{k=0}^{n} \binom{n}{k} \cdot a^{n-k} \cdot b^k`)
+     + r`<p>Für $n = 2$ liefert er die erste binomische Formel zurück: $1 \cdot a^2 + 2 \cdot ab + 1 \cdot b^2$.</p>` }
+   ],
+   quiz:[
+   { type:"input", q:r`Berechnen Sie: $\sum_{k=1}^{4} (3k - 1)$`,
+     a:["26"], why:r`Einsetzen von $k = 1, 2, 3, 4$ ergibt $2 + 5 + 8 + 11 = 26$.`, fmt:"Zahl" },
+
+   { type:"input", q:r`Berechnen Sie: $\prod_{k=2}^{4} k$`,
+     a:["24"], why:r`$2 \cdot 3 \cdot 4 = 24$. Das ist übrigens gerade $4!$, da der Faktor 1 nichts ändert.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Welche Summe ist gleich $\sum_{k=2}^{6} a_k$?`,
+     options:[ r`$\sum_{j=0}^{4} a_{j+2}$`, r`$\sum_{j=0}^{4} a_{j-2}$`, r`$\sum_{j=2}^{6} a_{j+2}$`, r`$\sum_{j=4}^{8} a_{j}$` ],
+     a:0, why:r`Mit $k = j + 2$ werden aus den Grenzen $k = 2$ und $k = 6$ die Grenzen $j = 0$ und $j = 4$, und der Summand wird $a_{j+2}$. Grenzen und Summand müssen immer gemeinsam angepasst werden.` },
+
+   { type:"input", q:r`Berechnen Sie $6!$`,
+     a:["720"], why:r`$6! = 1 \cdot 2 \cdot 3 \cdot 4 \cdot 5 \cdot 6 = 720$. Praktisch: $6! = 6 \cdot 5! = 6 \cdot 120$.`, fmt:"Zahl" },
+
+   { type:"input", q:r`Berechnen Sie den Binomialkoeffizienten &bdquo;6 über 2&ldquo;.`,
+     a:["15"], why:r`$\frac{6!}{4! \cdot 2!} = \frac{6 \cdot 5}{2 \cdot 1} = 15$. Alternativ in der 6. Zeile des Pascalschen Dreiecks ablesen.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Welcher Wert hat $0!$?`,
+     options:[ r`$0$`, r`$1$`, r`Nicht definiert`, r`$\infty$` ],
+     a:1, why:r`Per Definition ist $0! = 1$. Nur so bleiben Formeln wie der Binomialkoeffizient auch für $k = 0$ oder $k = n$ gültig.` },
+
+   { type:"mc", q:r`Welche Beziehung gilt für Binomialkoeffizienten?`,
+     options:[ r`&bdquo;n über k&ldquo; $=$ &bdquo;k über n&ldquo;`, r`&bdquo;n über k&ldquo; $=$ &bdquo;n über (n−k)&ldquo;`, r`&bdquo;n über k&ldquo; $= n \cdot k$`, r`&bdquo;n über 1&ldquo; $= 1$` ],
+     a:1, why:r`Die Symmetrie folgt direkt aus der Definition, weil sich $(n-k)!$ und $k!$ im Nenner nur vertauschen. Außerdem gilt &bdquo;n über 1&ldquo; $= n$, nicht 1.` },
+
+   { type:"mc", q:r`Der binomische Lehrsatz liefert für $(a + b)^3$ welche Koeffizienten?`,
+     options:[ r`$1, 2, 1$`, r`$1, 3, 3, 1$`, r`$1, 4, 6, 4, 1$`, r`$3, 3, 3$` ],
+     a:1, why:r`Das ist die Zeile für $n = 3$ im Pascalschen Dreieck: $(a+b)^3 = a^3 + 3a^2b + 3ab^2 + b^3$.` }
+   ]
+ },
+
+ /* ---------------------------------------------------------- 1.3 */
+ { id:"1.3", title:"Aussagenlogik",
+   lead:"Aussage und Aussageform, Negation, Implikation und Äquivalenz — und was das fürs Gleichungslösen bedeutet.",
+   steps:[
+   { h:"Aussage und Aussageform",
+     html: r`<div class="note def"><span class="nh">Definition</span>
+     Eine <b>Aussage</b> ist ein Sachverhalt, der entweder wahr oder falsch ist.</div>
+     <p>Aussagen sind zum Beispiel: $4 + 3 = 7$ (wahr), &bdquo;Jede natürliche Zahl ist ungerade&ldquo; (falsch), $3 < 5$ (wahr), $-2 \in \N$ (falsch).</p>
+     <p>Keine Aussagen sind dagegen $4 + 3$ oder $(x + y)^2$ — <b>Terme sind keine Aussagen</b>, denn es ergibt keinen Sinn, sie wahr oder falsch zu nennen. Gleichungen und Ungleichungen dagegen schon.</p>
+     <p>Sobald Variablen auftreten, hängt der Wahrheitswert von der Belegung ab. Die Gleichung $x + 3 = 10$ ist für $x = 7$ wahr und für jedes andere $x$ falsch.</p>
+     <div class="note def"><span class="nh">Aussageform</span>
+     Eine <b>Aussageform</b> ist ein Ausdruck, in dem Variablen auftreten. Erst nach Festlegung von Werten für die Variablen kann ihr ein Wahrheitswert zugeordnet werden.</div>
+     <p>$x - 4 = 6$ ist eine Aussageform, $x - 4$ dagegen nur ein Term.</p>` },
+
+   { h:"Negation",
+     html: r`<p>Zu jeder Aussage oder Aussageform lässt sich das logische Gegenteil bilden.</p>
+     <div class="note def"><span class="nh">Negation</span>
+     Das Gegenteil einer Aussage $A$ heißt <b>Negation</b> von $A$, geschrieben $\neg A$ (&bdquo;nicht $A$&ldquo;). Ist $A$ wahr, so ist $\neg A$ falsch — und umgekehrt.</div>`
+     + D(r`A: 4 + 3 = 7 \text{ (wahr)} \qquad \neg A: 4 + 3 \ne 7 \text{ (falsch)}`,
+         r`B: \sqrt{2} \in \Q \text{ (falsch)} \qquad \neg B: \sqrt{2} \notin \Q \text{ (wahr)}`) },
+
+   { h:"Implikation und Äquivalenz",
+     html: r`<p>Folgt aus $A$ die Aussage $B$, schreiben wir $A \Rightarrow B$ und nennen das <b>Implikation</b>. Dabei heißt $A$ <b>hinreichende</b> Bedingung für $B$ und $B$ <b>notwendige</b> Bedingung für $A$.</p>`
+     + D(r`x = 1 \Rightarrow x^2 = 1`)
+     + r`<p>Der Pfeil gilt hier nur in <b>eine</b> Richtung. Die Umkehrung ist falsch:</p>`
+     + D(r`x^2 = 1 \nRightarrow x = 1`)
+     + r`<p>Man sieht das an einem Gegenbeispiel: Für $x = -1$ ist $x^2 = 1$ eine wahre, $x = 1$ aber eine falsche Aussage.</p>
+     <div class="note def"><span class="nh">Äquivalenz</span>
+     Gilt $A \Rightarrow B$ <b>und</b> $B \Rightarrow A$, so heißen $A$ und $B$ <b>äquivalent</b>. Wir schreiben $A \Leftrightarrow B$.</div>`
+     + D(r`x + 3 = 10 \Leftrightarrow x = 7`,
+         r`x^2 = 1 \Leftrightarrow x = 1 \text{ oder } x = -1`) },
+
+   { h:"Warum das beim Gleichungslösen zählt",
+     html: r`<p>Beim Lösen einer Gleichung ist es sehr hilfreich, wenn die durchgeführten Umformungen <b>Äquivalenzumformungen</b> sind — denn dann ändert sich die Lösungsmenge nicht.</p>
+     <p>Zwei einfache Äquivalenzumformungen kennen wir schon:</p>`
+     + D(r`x = y \Leftrightarrow x + c = y + c`,
+         r`x = y \Leftrightarrow x \cdot c = y \cdot c, \quad c \ne 0`)
+     + r`<div class="note warn"><span class="nh">Achtung</span>
+     Die Multiplikation ist nur dann eine Äquivalenzumformung, wenn der Faktor <b>nicht null</b> ist. Bei einer Division durch null wäre die Umformung nicht mehr rückgängig zu machen.</div>` },
+
+   { h:"Eine Gleichung sauber notieren",
+     html: r`<p>Umformungen, die auf beiden Seiten durchgeführt werden, notieren wir mit einem senkrechten Strich hinter der Gleichung. Am Beispiel $5x + 3 = 7x - 1$:</p>`
+     + D(r`5x + 3 = 7x - 1 \quad | -7x`,
+         r`\Leftrightarrow 5x - 7x + 3 = -1 \quad | -3`,
+         r`\Leftrightarrow 5x - 7x = -1 - 3`,
+         r`\Leftrightarrow -2x = -4 \quad | : (-2)`,
+         r`\Leftrightarrow x = 2`)
+     + r`<p>Weil in jeder Zeile ein Äquivalenzzeichen steht, ist $x = 2$ garantiert die vollständige Lösungsmenge — eine Probe ist hier nicht nötig. Sobald aber irgendwo nur ein Folgerungspfeil steht, ist sie es.</p>` }
+   ],
+   quiz:[
+   { type:"ms", q:r`Welche der folgenden Ausdrücke sind <b>Aussagen</b> (nicht Aussageformen, nicht Terme)?`,
+     options:[ r`$7 \cdot 3 = 21$`, r`$x^2 + 1$`, r`$5 < 2$`, r`$y - 4 = 0$` ],
+     a:[0,2], why:r`Aussagen haben einen festen Wahrheitswert: die erste ist wahr, die dritte falsch. $x^2 + 1$ ist ein Term, $y - 4 = 0$ eine Aussageform (Wahrheitswert hängt von $y$ ab).` },
+
+   { type:"mc", q:r`Was ist die Negation von &bdquo;$x \ge 5$&ldquo;?`,
+     options:[ r`$x \le 5$`, r`$x > 5$`, r`$x < 5$`, r`$x \ne 5$` ],
+     a:2, why:r`Das Gegenteil von &bdquo;größer oder gleich 5&ldquo; ist &bdquo;kleiner als 5&ldquo;. Die Grenze 5 selbst gehört zur ursprünglichen Aussage, also nicht zur Negation.` },
+
+   { type:"mc", q:r`Welche Implikation ist <b>richtig</b>, aber nicht umkehrbar?`,
+     options:[ r`$x = 3 \Rightarrow x^2 = 9$`, r`$x + 1 = 4 \Rightarrow x = 3$`, r`$x^2 = 9 \Rightarrow x = 3$`, r`$2x = 6 \Rightarrow x = 3$` ],
+     a:0, why:r`Aus $x = 3$ folgt $x^2 = 9$. Umgekehrt folgt aus $x^2 = 9$ nur $x = 3$ <b>oder</b> $x = -3$ — die Umkehrung ist also falsch. Die anderen drei sind Äquivalenzen.` },
+
+   { type:"mc", q:r`In $A \Rightarrow B$ nennt man $B$ eine ...`,
+     options:[ r`hinreichende Bedingung für $A$`, r`notwendige Bedingung für $A$`, r`äquivalente Aussage zu $A$`, r`Negation von $A$` ],
+     a:1, why:r`$A$ ist hinreichend für $B$ ($A$ genügt, damit $B$ gilt), und $B$ ist notwendig für $A$ (ohne $B$ kann $A$ nicht gelten).` },
+
+   { type:"mc", q:r`Warum darf man eine Gleichung nicht mit $(x - 1)$ multiplizieren, ohne nachzudenken?`,
+     options:[ r`Weil Klammern nie multipliziert werden dürfen.`, r`Weil $x - 1$ null sein kann und die Umformung dann keine Äquivalenzumformung ist.`, r`Weil sich dabei das Vorzeichen umdreht.`, r`Weil dabei Lösungen verloren gehen müssen.` ],
+     a:1, why:r`Die Multiplikation ist nur für Faktoren ungleich null eine Äquivalenzumformung. Der Fall $x = 1$ muss deshalb gesondert betrachtet werden.` },
+
+   { type:"input", q:r`Lösen Sie durch Äquivalenzumformungen: $4x - 7 = x + 5$. Geben Sie $x$ an.`,
+     a:["4"], why:r`$4x - 7 = x + 5 \; | -x$ ergibt $3x - 7 = 5$, dann $| +7$ ergibt $3x = 12$, dann $| : 3$ ergibt $x = 4$.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Welches Zeichen gehört zwischen $x = 2$ und $x^2 = 4$?`,
+     options:[ r`$\Leftrightarrow$`, r`$\Rightarrow$`, r`$\Leftarrow$`, r`$\ne$` ],
+     a:1, why:r`Aus $x = 2$ folgt $x^2 = 4$, aber aus $x^2 = 4$ folgt nicht $x = 2$ (es könnte $x = -2$ sein). Quadrieren ist keine Äquivalenzumformung — deshalb ist danach immer eine Probe fällig.` }
+   ]
+ },
+
+ /* ---------------------------------------------------------- 1.4 */
+ { id:"1.4", title:"Bruchrechnung",
+   lead:"Kürzen und Erweitern, gleichnamig machen, Multiplikation und Division, Doppelbrüche.",
+   steps:[
+   { h:"Zähler, Nenner, Kehrwert",
+     html: r`<div class="note def"><span class="nh">Definition</span>
+     Ein Bruch $\frac{a}{b}$ ist eine andere Schreibweise für die Division $a : b$. Die Zahl über dem Bruchstrich heißt <b>Zähler</b>, die Zahl darunter <b>Nenner</b>.</div>
+     <p>Beim Bruch $\frac{6}{3}$ ist 6 der Zähler und 3 der Nenner. Der Zähler darf jede beliebige Zahl sein — der <b>Nenner darf nie null</b> sein.</p>
+     <div class="note def"><span class="nh">Kehrwert</span>
+     Der <b>Kehrwert</b> von $\frac{a}{b}$ entsteht durch Vertauschen von Zähler und Nenner, ist also $\frac{b}{a}$.</div>` },
+
+   { h:"Kürzen und Erweitern",
+     html: r`<p>Sind Zähler und Nenner durch denselben Faktor teilbar, ändert sich der Wert des Bruchs nicht, wenn wir beide durch diesen Faktor teilen. Das nennen wir <b>Kürzen</b>:</p>`
+     + D(r`\frac{a \cdot b}{b \cdot c} = \frac{a}{c}`)
+     + r`<p>Zwei Beispiele, das zweite mit einer binomischen Formel:</p>`
+     + D(r`\frac{6}{3} = \frac{2}{1} = 2, \qquad \frac{3x + 3}{x^2 - 1} = \frac{3 \cdot (x + 1)}{(x-1)(x+1)} = \frac{3}{x - 1}`)
+     + r`<div class="note warn"><span class="nh">Der klassische Fehler</span>
+     Es müssen immer der <b>komplette</b> Zähler und der <b>komplette</b> Nenner durch den Faktor geteilt werden. Deshalb gilt $\frac{2x + 3}{4} \ne \frac{x + 3}{2}$ — es wurde nur ein Summand gekürzt. Merksatz: aus Summen kürzen nur die Dummen.</div>
+     <p>Umgekehrt ändert sich der Wert auch nicht, wenn wir Zähler und Nenner mit demselben Faktor multiplizieren — das heißt <b>Erweitern</b>: $\frac{3}{4} = \frac{3 \cdot 2}{4 \cdot 2} = \frac{6}{8}$.</p>` },
+
+   { h:"Addition und Subtraktion",
+     html: r`<p>Zwei Brüche mit identischem Nenner heißen <b>gleichnamig</b>. Sie werden addiert oder subtrahiert, indem man ihre Zähler addiert oder subtrahiert:</p>`
+     + D(r`\frac{a}{b} + \frac{c}{b} = \frac{a + c}{b}, \qquad \frac{a}{b} - \frac{c}{b} = \frac{a - c}{b}`)
+     + r`<p>Sind die Brüche nicht gleichnamig, müssen wir sie erst gleichnamig machen — durch Erweitern auf das kleinste gemeinsame Vielfache der Nenner:</p>`
+     + D(r`\frac{1}{2} + \frac{3}{10} = \frac{1 \cdot 5}{2 \cdot 5} + \frac{3}{10} = \frac{5 + 3}{10} = \frac{8}{10} = \frac{4}{5}`,
+         r`\frac{1}{x} + \frac{7}{y} = \frac{1 \cdot y}{x \cdot y} + \frac{7 \cdot x}{x \cdot y} = \frac{y + 7x}{xy}`) },
+
+   { h:"Multiplikation und Division",
+     html: r`<p>Hier ist es <b>nicht</b> nötig, dass die Brüche gleichnamig sind — das ist eine häufige Verwechslung.</p>
+     <p>Zwei Brüche werden multipliziert, indem Zähler mit Zähler und Nenner mit Nenner multipliziert wird:</p>`
+     + D(r`\frac{a}{b} \cdot \frac{c}{d} = \frac{a \cdot c}{b \cdot d}`)
+     + r`<p>Durch einen Bruch wird dividiert, indem man mit seinem <b>Kehrwert</b> multipliziert:</p>`
+     + D(r`\frac{a}{b} : \frac{c}{d} = \frac{a}{b} \cdot \frac{d}{c} = \frac{a \cdot d}{b \cdot c}`) },
+
+   { h:"Doppelbrüche",
+     html: r`<p>Ist der Zähler oder der Nenner eines Bruchs selbst ein Bruch, sprechen wir von einem <b>Doppelbruch</b>. Solche Ausdrücke sind schwer zu lesen; man formt sie in einfache Brüche um, indem man die Division durch den Nenner als Multiplikation mit dessen Kehrwert schreibt.</p>`
+     + D(r`\frac{x + 3}{\frac{x}{2}} = (x + 3) \cdot \frac{2}{x} = \frac{2(x + 3)}{x}`)
+     + r`<p>Ein etwas größeres Beispiel — hier wird zuerst der Nenner zu einem einzigen Bruch zusammengefasst:</p>`
+     + D(r`\frac{\frac{x}{x+4}}{\frac{1}{x} + \frac{1}{3}} = \frac{\frac{x}{x+4}}{\frac{3 + x}{3x}} = \frac{x}{x+4} \cdot \frac{3x}{3 + x} = \frac{3x^2}{(x + 4)(x + 3)}`) }
+   ],
+   quiz:[
+   { type:"mc", q:r`Welche Kürzung ist <b>erlaubt</b>?`,
+     options:[ r`$\frac{2x + 3}{4} = \frac{x + 3}{2}$`, r`$\frac{4x + 6}{2} = 2x + 3$`, r`$\frac{x + 5}{x} = 5$`, r`$\frac{x^2 + 1}{x} = x + 1$` ],
+     a:1, why:r`Nur bei $\frac{4x+6}{2}$ ist der komplette Zähler durch 2 teilbar: $\frac{2(2x+3)}{2} = 2x + 3$. Bei allen anderen wurde aus einer Summe nur ein Teil gekürzt.` },
+
+   { type:"input", q:r`Berechnen Sie: $\frac{1}{4} + \frac{5}{12}$. Geben Sie das vollständig gekürzte Ergebnis als Bruch an, z.B. 3/7.`,
+     a:["2/3"], why:r`Auf den Hauptnenner 12 erweitern: $\frac{3}{12} + \frac{5}{12} = \frac{8}{12}$, und mit 4 gekürzt ergibt das $\frac{2}{3}$.`, fmt:"Bruch, z.B. 2/3" },
+
+   { type:"mc", q:r`Was ergibt $\frac{3}{5} \cdot \frac{2}{7}$?`,
+     options:[ r`$\frac{6}{35}$`, r`$\frac{5}{12}$`, r`$\frac{21}{10}$`, r`$\frac{6}{12}$` ],
+     a:0, why:r`Zähler mal Zähler, Nenner mal Nenner: $\frac{3 \cdot 2}{5 \cdot 7} = \frac{6}{35}$. Gleichnamig machen ist beim Multiplizieren nicht nötig.` },
+
+   { type:"mc", q:r`Was ergibt $\frac{3}{4} : \frac{2}{5}$?`,
+     options:[ r`$\frac{6}{20}$`, r`$\frac{15}{8}$`, r`$\frac{8}{15}$`, r`$\frac{5}{6}$` ],
+     a:1, why:r`Division durch einen Bruch heißt Multiplikation mit dem Kehrwert: $\frac{3}{4} \cdot \frac{5}{2} = \frac{15}{8}$.` },
+
+   { type:"mc", q:r`Vereinfachen Sie den Doppelbruch $\frac{\frac{a}{3}}{\frac{b}{6}}$.`,
+     options:[ r`$\frac{ab}{18}$`, r`$\frac{a}{2b}$`, r`$\frac{2a}{b}$`, r`$\frac{b}{2a}$` ],
+     a:2, why:r`Mit dem Kehrwert des Nenners multiplizieren: $\frac{a}{3} \cdot \frac{6}{b} = \frac{6a}{3b} = \frac{2a}{b}$.` },
+
+   { type:"mc", q:r`Kürzen Sie so weit wie möglich: $\frac{x^2 - 9}{x + 3}$`,
+     options:[ r`$x - 3$`, r`$x - 9$`, r`$x^2 - 3$`, r`Lässt sich nicht kürzen.` ],
+     a:0, why:r`Dritte binomische Formel im Zähler: $\frac{(x+3)(x-3)}{x+3} = x - 3$ (für $x \ne -3$). Faktorisieren ist der Schlüssel zum Kürzen.` },
+
+   { type:"input", q:r`Wie lautet der Kehrwert von $\frac{7}{9}$? (Format: 9/7)`,
+     a:["9/7"], why:r`Zähler und Nenner tauschen. Der Kehrwert ist $\frac{9}{7}$.`, fmt:"Bruch" },
+
+   { type:"mc", q:r`Welche Bedingung muss immer erfüllt sein?`,
+     options:[ r`Der Zähler darf nicht null sein.`, r`Der Nenner darf nicht null sein.`, r`Zähler und Nenner müssen ganze Zahlen sein.`, r`Der Zähler muss kleiner als der Nenner sein.` ],
+     a:1, why:r`Ein Bruch steht für eine Division, und durch null darf nicht geteilt werden. Der Zähler dagegen darf null sein — dann hat der Bruch den Wert 0.` }
+   ]
+ }
+ ]
+},
+{
+ n:"2", title:"Potenzen, Wurzeln und Logarithmen", lessons:[
+
+ /* ---------------------------------------------------------- 2.1 */
+ { id:"2.1", title:"Potenzen",
+   lead:"Basis und Exponent, negative und Null-Exponenten, die vier Potenzgesetze und die Falle beim Doppelexponenten.",
+   steps:[
+   { h:"Basis, Exponent und die Erweiterung auf ganze Zahlen",
+     html: r`<div class="note def"><span class="nh">Definition</span>
+     Für $x \in \R$ und $n \in \N$ ist die $n$-te Potenz von $x$ definiert durch $x^n = x \cdot x \cdot \ldots \cdot x$ mit $n$ Faktoren. Die Zahl $x$ heißt <b>Basis</b>, die Zahl $n$ heißt <b>Exponent</b>.</div>
+     <p>Beispiel: $4^3 = 4 \cdot 4 \cdot 4 = 64$.</p>
+     <p>Ist die Basis nicht null, lässt sich die Definition auf negative Exponenten und auf den Exponenten 0 erweitern. Für $x \in \R \setminus \{0\}$ und $n \in \N$ setzen wir:</p>`
+     + D(r`x^{-n} = \frac{1}{x^n}, \qquad x^0 = 1`)
+     + r`<p>Insbesondere gilt also $x^{-1} = \frac{1}{x}$ — das negative Vorzeichen im Exponenten bedeutet <b>Kehrwert</b>, nicht negatives Ergebnis.</p>` },
+
+   { h:"Addieren und Subtrahieren von Potenzen",
+     html: r`<p>Gleiche Potenzen können wie Variablen addiert oder subtrahiert werden. Eventuell müssen sie vorher passend umgeschrieben werden:</p>`
+     + D(r`4^5 + 4^5 = 2 \cdot 4^5`,
+         r`3^4 - 3^3 = 3 \cdot 3^3 - 3^3 = 2 \cdot 3^3`)
+     + r`<p>Es gibt <b>kein</b> Gesetz, das $a^n + b^n$ zusammenfasst. Die Rechengesetze auf der nächsten Seite gelten alle nur für Multiplikation und Division.</p>` },
+
+   { h:"Gleiche Basis, gleicher Exponent",
+     html: r`<div class="note def"><span class="nh">Gleiche Basis</span>
+     Für $x \in \R \setminus \{0\}$ und $m, n \in \Z$ gilt</div>`
+     + D(r`x^m \cdot x^n = x^{m+n}, \qquad \frac{x^m}{x^n} = x^{m-n}`)
+     + r`<p>In Worten: Potenzen mit gleicher Basis werden multipliziert, indem man ihre <b>Exponenten addiert</b>, und dividiert, indem man die Exponenten subtrahiert.</p>
+     <div class="note def"><span class="nh">Gleicher Exponent</span>
+     Für $x, y \in \R \setminus \{0\}$ und $n \in \Z$ gilt</div>`
+     + D(r`x^n \cdot y^n = (x \cdot y)^n, \qquad \frac{x^n}{y^n} = (\frac{x}{y})^n`)
+     + r`<p>Potenzen mit gleichem Exponenten werden multipliziert, indem man ihre <b>Basen multipliziert</b>.</p>` },
+
+   { h:"Potenzen von Potenzen — und wo die Klammer sitzt",
+     html: r`<p>Für $x \in \R \setminus \{0\}$ und $m, n \in \Z$ gilt</p>`
+     + D(r`(x^m)^n = x^{m \cdot n}`)
+     + r`<div class="note warn"><span class="nh">Achtung: die Reihenfolge zählt</span>
+     Im Allgemeinen ist $(x^m)^n \ne x^{(m^n)}$. Beispiel:</div>`
+     + D(r`(2^2)^3 = 4^3 = 64, \qquad 2^{(2^3)} = 2^8 = 256`)
+     + r`<p>Die Klammer legt eindeutig fest, welche Potenz zuerst berechnet wird. Wird ein doppelter Exponent ohne Klammer geschrieben, ist in der Regel die zweite Variante gemeint: $x^{m^n} = x^{(m^n)}$ — also von oben nach unten gelesen.</p>` }
+   ],
+   quiz:[
+   { type:"input", q:r`Berechnen Sie: $2^{-3}$. Geben Sie das Ergebnis als Bruch an (z.B. 1/4).`,
+     a:["1/8"], why:r`$2^{-3} = \frac{1}{2^3} = \frac{1}{8}$. Ein negativer Exponent bedeutet Kehrwert — das Ergebnis bleibt positiv.`, fmt:"Bruch" },
+
+   { type:"mc", q:r`Was ist $7^0$?`,
+     options:[ r`$0$`, r`$1$`, r`$7$`, r`Nicht definiert` ],
+     a:1, why:r`Jede Potenz mit Exponent 0 und Basis ungleich null ergibt 1. Das passt zum Potenzgesetz: $\frac{x^n}{x^n} = x^{n-n} = x^0$, und links steht offensichtlich 1.` },
+
+   { type:"mc", q:r`Vereinfachen Sie: $x^5 \cdot x^{-2}$`,
+     options:[ r`$x^{-10}$`, r`$x^{3}$`, r`$x^{7}$`, r`$x^{2{,}5}$` ],
+     a:1, why:r`Gleiche Basis, also Exponenten addieren: $5 + (-2) = 3$, folglich $x^3$.` },
+
+   { type:"mc", q:r`Vereinfachen Sie: $\frac{a^7}{a^3}$`,
+     options:[ r`$a^{4}$`, r`$a^{10}$`, r`$a^{21}$`, r`$a^{\frac{7}{3}}$` ],
+     a:0, why:r`Gleiche Basis beim Dividieren: Exponenten subtrahieren, $7 - 3 = 4$.` },
+
+   { type:"input", q:r`Berechnen Sie $2^4 \cdot 5^4$ mit dem passenden Potenzgesetz.`,
+     a:["10000"], why:r`Gleicher Exponent, also Basen multiplizieren: $2^4 \cdot 5^4 = (2 \cdot 5)^4 = 10^4 = 10000$.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Vereinfachen Sie: $(y^3)^4$`,
+     options:[ r`$y^{7}$`, r`$y^{12}$`, r`$y^{81}$`, r`$y^{34}$` ],
+     a:1, why:r`Potenz einer Potenz: Exponenten <b>multiplizieren</b>, $3 \cdot 4 = 12$. Addieren würde man nur bei $y^3 \cdot y^4$.` },
+
+   { type:"input", q:r`Berechnen Sie: $3^{(2^2)}$`,
+     a:["81"], why:r`Zuerst der obere Exponent: $2^2 = 4$, dann $3^4 = 81$. Zum Vergleich: $(3^2)^2 = 9^2 = 81$ ist hier zufällig gleich, im Allgemeinen aber nicht.`, fmt:"Zahl" },
+
+   { type:"ms", q:r`Welche Umformungen sind <b>richtig</b>? (mehrere Antworten)`,
+     options:[ r`$x^3 + x^3 = x^6$`, r`$x^3 + x^3 = 2x^3$`, r`$x^3 \cdot x^3 = x^6$`, r`$(2x)^3 = 8x^3$` ],
+     a:[1,2,3], why:r`Addition fasst gleiche Potenzen wie Variablen zusammen ($2x^3$), erst die Multiplikation addiert Exponenten. Und $(2x)^3 = 2^3 x^3 = 8x^3$ nach dem Gesetz für gleiche Exponenten.` }
+   ]
+ },
+
+ /* ---------------------------------------------------------- 2.2 */
+ { id:"2.2", title:"Wurzeln",
+   lead:"Quadratwurzel und n-te Wurzel, der Unterschied zur quadratischen Gleichung, Rechenregeln und rationale Exponenten.",
+   steps:[
+   { h:"Die Quadratwurzel",
+     html: r`<p>Die Wurzel ist dadurch motiviert, dass wir bei einer Gleichung $x^2 = a$ zu gegebenem $a$ die Lösung $x$ suchen.</p>
+     <div class="note def"><span class="nh">Wurzel</span>
+     Zu $a \in \R$, $a \ge 0$, heißt die Zahl $x \in \R$, die $x^2 = a$ <b>und</b> $x \ge 0$ erfüllt, die <b>Wurzel</b> von $a$. Wir schreiben $x = \sqrt{a}$.</div>
+     <p>Die Wurzel von $a$ ist also immer eine <b>nichtnegative</b> Zahl. Für negative reelle Zahlen ist die Quadratwurzel nicht definiert — unter der Wurzel darf keine negative Zahl stehen.</p>` },
+
+   { h:"Wurzel vs. quadratische Gleichung",
+     html: r`<p>Das ist der Punkt, an dem am häufigsten geschludert wird. Die Wurzel aus einer positiven Zahl ist <b>eindeutig und positiv</b>. Wollen wir aber die Gleichung $x^2 = a$ für $a > 0$ lösen, erhalten wir <b>zwei</b> Lösungen:</p>`
+     + D(r`x^2 = a \Leftrightarrow x = \pm\sqrt{a}`)
+     + r`<div class="note warn"><span class="nh">Merken</span>
+     Die Gleichung $x^2 = 9$ hat die Lösungen $x = +3$ und $x = -3$. Dagegen ist $\sqrt{9} = 3$ — nur die positive Zahl. Das Symbol $\sqrt{\quad}$ steht für die positive Quadratwurzel.</div>
+     <p>Aus demselben Grund gilt für beliebiges $a \in \R$ nicht $\sqrt{a^2} = a$, sondern</p>`
+     + D(r`\sqrt{a^2} = |a|`)
+     + r`<p>Beispiel: $\sqrt{4^2} = \sqrt{16} = 4$ und $\sqrt{(-4)^2} = \sqrt{16} = 4$.</p>` },
+
+   { h:"Rechenregeln — und was nicht gilt",
+     html: r`<div class="note def"><span class="nh">Multiplikation und Division</span>
+     Für $a, b \ge 0$ gilt $\sqrt{a} \cdot \sqrt{b} = \sqrt{a \cdot b}$, und für $a \ge 0$, $b > 0$ gilt $\frac{\sqrt{a}}{\sqrt{b}} = \sqrt{\frac{a}{b}}$.</div>
+     <div class="note warn"><span class="nh">Es gibt keine Regel für Plus und Minus</span>
+     Im Allgemeinen gilt</div>`
+     + D(r`\sqrt{a} + \sqrt{b} \ne \sqrt{a + b}, \qquad \sqrt{a} - \sqrt{b} \ne \sqrt{a - b}`)
+     + r`<p>Gegenprobe mit $a = b = 9$: links $3 + 3 = 6$, rechts $\sqrt{18} \approx 4{,}24$.</p>` },
+
+   { h:"Die n-te Wurzel",
+     html: r`<p>Verallgemeinern wir auf $x^n = a$, kommt es darauf an, ob $n$ gerade oder ungerade ist. Für gerades $n$ gilt $x^n \ge 0$ für alle $x$, es kann also nur für $a \ge 0$ eine Lösung geben. Für ungerades $n$ kann $x^n$ jedes Vorzeichen annehmen.</p>
+     <div class="note def"><span class="nh">n-te Wurzel</span>
+     Ist $n$ <b>gerade</b> und $a \ge 0$, so heißt die eindeutig bestimmte Zahl $x \ge 0$ mit $x^n = a$ die $n$-te Wurzel von $a$: $x = \sqrt[n]{a}$.<br>
+     Ist $n$ <b>ungerade</b> und $a \in \R$ beliebig, so heißt die eindeutig bestimmte Zahl $x$ mit $x^n = a$ ebenfalls $n$-te Wurzel: $x = \sqrt[n]{a}$.</div>`
+     + D(r`\sqrt[4]{16} = 2, \qquad \sqrt[4]{-16} \text{ ist nicht definiert}`,
+         r`\sqrt[3]{8} = 2, \qquad \sqrt[3]{-8} = -2`) },
+
+   { h:"Potenzen mit rationalen Exponenten",
+     html: r`<p>Mit der Wurzel können wir Potenzen auch für rationale Exponenten definieren. Für $x \ge 0$, $m \in \Z$ und $n \in \N$:</p>`
+     + D(r`x^{\frac{1}{n}} = \sqrt[n]{x}, \qquad x^{\frac{m}{n}} = (\sqrt[n]{x})^m`)
+     + r`<p>Damit gelten <b>alle</b> Potenzgesetze aus dem letzten Abschnitt auch für Wurzeln — das ist der eigentliche Gewinn dieser Schreibweise. Zusätzlich gilt für $a \ge 0$, $m \in \Z$ und $n, k \in \N$:</p>`
+     + D(r`\sqrt[n]{a^m} = (\sqrt[n]{a})^m, \qquad \sqrt[n]{\sqrt[k]{a}} = \sqrt[k]{\sqrt[n]{a}} = \sqrt[n \cdot k]{a}`) }
+   ],
+   quiz:[
+   { type:"input", q:r`Berechnen Sie: $\sqrt{81}$`,
+     a:["9"], why:r`Die Wurzel ist per Definition die <b>nichtnegative</b> Lösung, also 9 und nicht $\pm 9$.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Wie viele reelle Lösungen hat die Gleichung $x^2 = 49$?`,
+     options:[ r`Keine`, r`Genau eine, nämlich $x = 7$`, r`Genau zwei, nämlich $x = 7$ und $x = -7$`, r`Unendlich viele` ],
+     a:2, why:r`Die Gleichung $x^2 = a$ mit $a > 0$ hat immer zwei Lösungen $\pm\sqrt{a}$. Nur das <b>Symbol</b> $\sqrt{49}$ steht allein für die positive Lösung 7.` },
+
+   { type:"mc", q:r`Was ist $\sqrt{(-6)^2}$?`,
+     options:[ r`$-6$`, r`$6$`, r`$36$`, r`Nicht definiert` ],
+     a:1, why:r`Es gilt $\sqrt{a^2} = |a|$. Zuerst wird quadriert ($36$), dann die Wurzel gezogen — und die ist nie negativ.` },
+
+   { type:"mc", q:r`Welche Umformung ist <b>falsch</b>?`,
+     options:[ r`$\sqrt{3} \cdot \sqrt{12} = \sqrt{36} = 6$`, r`$\frac{\sqrt{50}}{\sqrt{2}} = \sqrt{25} = 5$`, r`$\sqrt{9} + \sqrt{16} = \sqrt{25} = 5$`, r`$\sqrt{2} \cdot \sqrt{8} = 4$` ],
+     a:2, why:r`Für Summen gibt es keine Wurzelregel: $\sqrt{9} + \sqrt{16} = 3 + 4 = 7$, nicht 5. Multiplikation und Division dagegen dürfen unter die Wurzel gezogen werden.` },
+
+   { type:"input", q:r`Berechnen Sie: $\sqrt[3]{-27}$`,
+     a:["-3"], why:r`Bei <b>ungeradem</b> Wurzelexponenten sind auch negative Radikanden erlaubt, denn $(-3)^3 = -27$.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Warum ist $\sqrt[4]{-16}$ nicht definiert?`,
+     options:[ r`Weil 16 keine Quadratzahl ist.`, r`Weil bei geradem Wurzelexponenten $x^n \ge 0$ gilt und es kein reelles $x$ mit $x^4 = -16$ gibt.`, r`Weil der Wurzelexponent größer als 3 ist.`, r`Weil Wurzeln nur für ganze Zahlen definiert sind.` ],
+     a:1, why:r`Bei geradem $n$ ist $x^n$ für jedes reelle $x$ nichtnegativ. Ein negativer Radikand hat deshalb keine reelle Lösung.` },
+
+   { type:"mc", q:r`Schreiben Sie $\sqrt[5]{x^3}$ als Potenz.`,
+     options:[ r`$x^{\frac{5}{3}}$`, r`$x^{\frac{3}{5}}$`, r`$x^{15}$`, r`$x^{-\frac{3}{5}}$` ],
+     a:1, why:r`Es gilt $\sqrt[n]{x^m} = x^{\frac{m}{n}}$: der Wurzelexponent kommt in den Nenner, der Potenzexponent in den Zähler.` },
+
+   { type:"input", q:r`Berechnen Sie: $16^{\frac{3}{4}}$`,
+     a:["8"], why:r`$16^{\frac{3}{4}} = (\sqrt[4]{16})^3 = 2^3 = 8$. Erst die Wurzel, dann die Potenz — so bleiben die Zahlen klein.`, fmt:"Zahl" }
+   ]
+ },
+
+ /* ---------------------------------------------------------- 2.3 */
+ { id:"2.3", title:"Logarithmen",
+   lead:"Der Logarithmus als zweite Umkehrung des Potenzierens, seine Rechenregeln und der Basiswechsel.",
+   steps:[
+   { h:"Die zweite Art, das Potenzieren umzukehren",
+     html: r`<p>Bei $x^n = a$ ist die Basis gesucht — das leistet die Wurzel. Betrachten wir dagegen</p>`
+     + D(r`a^x = b`)
+     + r`<p>so sind $a$ und $b$ gegeben und der <b>Exponent</b> $x$ ist gesucht. Diese Frage führt zum Logarithmus.</p>
+     <div class="note def"><span class="nh">Logarithmus</span>
+     Für $a > 0$, $a \ne 1$ und $b > 0$ besitzt die Gleichung $a^x = b$ immer eine eindeutige Lösung $x \in \R$. Diese heißt <b>Logarithmus von $b$ zur Basis $a$</b>, geschrieben $x = \log_a(b)$.</div>
+     <p>Anders gesagt: $\log_a(b)$ ist genau der Exponent, mit dem man $a$ potenzieren muss, um $b$ zu erhalten.</p>`
+     + D(r`\log_4(64) = 3, \text{ denn } 4^3 = 64`,
+         r`\log_2(16) = 4, \text{ denn } 2^4 = 16`)
+     + r`<p>Daraus folgen unmittelbar: $\log_a(a) = 1$, $\log_a(1) = 0$ und $\log_a(a^x) = x$.</p>` },
+
+   { h:"Die drei benannten Logarithmen",
+     html: r`<p>Für einige Basen gibt es eigene Namen und Notationen:</p>
+     <div class="scrollx"><table class="tbl">
+     <tr><th>Basis</th><th>Name</th><th>Schreibweise</th></tr>
+     <tr><td>$e$</td><td>Natürlicher Logarithmus</td><td>$\log_e(x) = \ln(x)$</td></tr>
+     <tr><td>$10$</td><td>Dekadischer Logarithmus</td><td>$\log_{10}(x) = \lg(x)$</td></tr>
+     <tr><td>$2$</td><td>Dualer Logarithmus</td><td>$\log_2(x) = \ld(x)$</td></tr>
+     </table></div>
+     <p>Am wichtigsten wird der natürliche Logarithmus $\ln(x)$ zur Eulerschen Zahl $e$. Für ihn gilt insbesondere</p>`
+     + D(r`\ln(e^x) = x \qquad \text{und} \qquad e^{\ln(x)} = x`)
+     + r`<p>Diese beiden Gleichungen sind der Grund, warum $\ln$ und $e$-Funktion einander aufheben — genau das nutzen wir später beim Lösen von Exponentialgleichungen.</p>` },
+
+   { h:"Rechenregeln",
+     html: r`<p>Zu jeder Potenzregel gibt es eine Logarithmusregel — eine Stufe tiefer: Aus Multiplikation wird Addition, aus Potenzieren wird Multiplikation.</p>
+     <div class="note def"><span class="nh">Für $a > 0$, $a \ne 1$, $x, y > 0$ und $t \in \R$</span></div>`
+     + D(r`\log_a(x \cdot y) = \log_a(x) + \log_a(y)`,
+         r`\log_a(\frac{x}{y}) = \log_a(x) - \log_a(y)`,
+         r`\log_a(x^t) = t \cdot \log_a(x)`)
+     + r`<div class="note warn"><span class="nh">Kein Gesetz für Summen</span>
+     $\log_a(x + y)$ lässt sich <b>nicht</b> vereinfachen. Insbesondere ist $\log_a(x + y) \ne \log_a(x) + \log_a(y)$ — die rechte Seite gehört zum <b>Produkt</b>.</div>` },
+
+   { h:"Basiswechsel",
+     html: r`<p>Eine Potenz $a^x$ lässt sich in jeder beliebigen Basis $b$ schreiben. Der Trick: $a = b^{\log_b(a)}$ einsetzen.</p>`
+     + D(r`a^x = (b^{\log_b(a)})^x = b^{x \cdot \log_b(a)}, \qquad \text{speziell } a^x = e^{x \cdot \ln(a)}`)
+     + r`<p>Beispiel: $5^{14} = (10^{\lg(5)})^{14} = 10^{14 \cdot \lg(5)}$.</p>
+     <p>Auch Logarithmen lassen sich umrechnen. Aus $x = \log_a(b)$, also $a^x = b$, folgt durch Logarithmieren zur Basis $c$: $x \cdot \log_c(a) = \log_c(b)$, und damit</p>`
+     + D(r`\log_a(b) = \frac{\log_c(b)}{\log_c(a)}, \qquad \text{speziell } \log_a(b) = \frac{\ln(b)}{\ln(a)}`)
+     + r`<p>Das ist praktisch, weil Taschenrechner meist nur $\ln$ und $\lg$ kennen.</p>` }
+   ],
+   quiz:[
+   { type:"input", q:r`Berechnen Sie: $\log_3(81)$`,
+     a:["4"], why:r`Gesucht ist der Exponent mit $3^x = 81$. Wegen $3^4 = 81$ ist das Ergebnis 4.`, fmt:"Zahl" },
+
+   { type:"input", q:r`Berechnen Sie: $\ld(32)$, also $\log_2(32)$`,
+     a:["5"], why:r`$2^5 = 32$, also $\log_2(32) = 5$.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Was ist $\log_a(1)$ für jedes zulässige $a$?`,
+     options:[ r`$0$`, r`$1$`, r`$a$`, r`Nicht definiert` ],
+     a:0, why:r`Es gilt $a^0 = 1$ für jedes $a > 0$, also ist der gesuchte Exponent 0.` },
+
+   { type:"mc", q:r`Fassen Sie zusammen: $\ln(7) + \ln(3)$`,
+     options:[ r`$\ln(10)$`, r`$\ln(21)$`, r`$\ln(7) \cdot \ln(3)$`, r`$\ln(\frac{7}{3})$` ],
+     a:1, why:r`Die Summe zweier Logarithmen gehört zum <b>Produkt</b> der Argumente: $\ln(7) + \ln(3) = \ln(7 \cdot 3) = \ln(21)$.` },
+
+   { type:"mc", q:r`Schreiben Sie $\log_5(x^3)$ ohne Exponenten im Argument.`,
+     options:[ r`$3 + \log_5(x)$`, r`$3 \cdot \log_5(x)$`, r`$(\log_5(x))^3$`, r`$\frac{\log_5(x)}{3}$` ],
+     a:1, why:r`Der Exponent im Argument wird zum Faktor vor dem Logarithmus: $\log_a(x^t) = t \cdot \log_a(x)$.` },
+
+   { type:"ms", q:r`Welche Gleichungen sind <b>richtig</b>? (mehrere Antworten)`,
+     options:[ r`$\ln(x + y) = \ln(x) + \ln(y)$`, r`$e^{\ln(x)} = x$ für $x > 0$`, r`$\ln(\frac{x}{y}) = \ln(x) - \ln(y)$`, r`$\log_a(a) = 1$` ],
+     a:[1,2,3], why:r`Nur für Summen im Argument gibt es keine Regel. Die anderen drei sind Grundgleichungen, die Sie ständig brauchen werden.` },
+
+   { type:"mc", q:r`Wie berechnet man $\log_7(20)$ mit einem Taschenrechner, der nur $\ln$ kennt?`,
+     options:[ r`$\ln(20) - \ln(7)$`, r`$\frac{\ln(20)}{\ln(7)}$`, r`$\frac{\ln(7)}{\ln(20)}$`, r`$\ln(20) \cdot \ln(7)$` ],
+     a:1, why:r`Basiswechselformel: $\log_a(b) = \frac{\ln(b)}{\ln(a)}$ — das gesuchte Argument steht oben, die gesuchte Basis unten.` },
+
+   { type:"mc", q:r`Warum muss die Basis $a$ eines Logarithmus $a \ne 1$ erfüllen?`,
+     options:[ r`Weil $1^x = 1$ für alle $x$ gilt und die Gleichung $1^x = b$ deshalb keine eindeutige Lösung hat.`, r`Weil $\log_1$ negativ wäre.`, r`Weil 1 keine Primzahl ist.`, r`Weil dann das Argument negativ würde.` ],
+     a:0, why:r`Bei Basis 1 ist $1^x$ konstant gleich 1 — für $b \ne 1$ gäbe es gar keine Lösung, für $b = 1$ unendlich viele. Eindeutigkeit verlangt $a \ne 1$ und $a > 0$.` }
+   ]
+ }
+ ]
+},
+{
+ n:"3", title:"Trigonometrie", lessons:[
+
+ /* ---------------------------------------------------------- 3.1 */
+ { id:"3.1", title:"Trigonometrie im rechtwinkligen Dreieck",
+   lead:"Sinus, Kosinus, Tangens über Seitenverhältnisse, der trigonometrische Pythagoras und die Werte der besonderen Winkel.",
+   steps:[
+   { h:"Die Seiten benennen",
+     html: r`<p>Wir betrachten ein rechtwinkliges Dreieck und bezeichnen einen der beiden Winkel, die nicht $90°$ betragen, mit $\alpha$. Die Seiten heißen dann:</p>
+     <ul>
+       <li><b>Hypotenuse</b> — die Seite gegenüber dem rechten Winkel (im Bild $c$)</li>
+       <li><b>Gegenkathete</b> — die Seite gegenüber dem Winkel $\alpha$ (im Bild $a$)</li>
+       <li><b>Ankathete</b> — die verbleibende Seite, die am Winkel $\alpha$ liegt (im Bild $b$)</li>
+     </ul>
+     <div class="note warn"><span class="nh">Wichtig</span>
+     Gegen- und Ankathete sind <b>relativ zum betrachteten Winkel</b> benannt. Wechselt man zum anderen spitzen Winkel, tauschen die beiden ihre Rollen. Nur die Hypotenuse bleibt immer dieselbe Seite.</div>` },
+
+   { h:"Sinus, Kosinus, Tangens",
+     html: r`<p>Über die Seitenverhältnisse definieren wir die trigonometrischen Funktionen. Der Winkel $\alpha$ heißt dabei <b>Argument</b>.</p>`
+     + D(r`\sin(\alpha) = \frac{a}{c} \quad (\frac{\text{Gegenkathete}}{\text{Hypotenuse}})`,
+         r`\cos(\alpha) = \frac{b}{c} \quad (\frac{\text{Ankathete}}{\text{Hypotenuse}})`,
+         r`\tan(\alpha) = \frac{a}{b} \quad (\frac{\text{Gegenkathete}}{\text{Ankathete}})`)
+     + r`<p>Mit dieser Beschreibung sind die drei Größen für jeden Winkel zwischen $0°$ und $90°$ definiert. Der Tangens lässt sich auch durch Sinus und Kosinus ausdrücken, und sein Kehrwert heißt <b>Kotangens</b>:</p>`
+     + D(r`\tan(\alpha) = \frac{\sin(\alpha)}{\cos(\alpha)}, \qquad \cot(\alpha) = \frac{1}{\tan(\alpha)} = \frac{\cos(\alpha)}{\sin(\alpha)}`) },
+
+   { h:"Der trigonometrische Pythagoras",
+     html: r`<p>Im rechtwinkligen Dreieck gilt der Satz des Pythagoras $a^2 + b^2 = c^2$. Aus der Definition wissen wir außerdem $a = c \cdot \sin(\alpha)$ und $b = c \cdot \cos(\alpha)$. Einsetzen liefert:</p>`
+     + D(r`(c \cdot \sin(\alpha))^2 + (c \cdot \cos(\alpha))^2 = c^2`,
+         r`\Leftrightarrow c^2 \cdot \sin^2(\alpha) + c^2 \cdot \cos^2(\alpha) = c^2 \quad | : c^2`,
+         r`\Leftrightarrow \sin^2(\alpha) + \cos^2(\alpha) = 1`)
+     + r`<div class="note def"><span class="nh">Trigonometrischer Pythagoras</span>
+     Für jeden Winkel $\alpha$ gilt $\sin^2(\alpha) + \cos^2(\alpha) = 1$. Wichtig dabei: Die Argumente von Sinus und Kosinus müssen <b>identisch</b> sein.</div>` },
+
+   { h:"Die besonderen Winkel herleiten",
+     html: r`<p><b>45°</b> — im rechtwinkligen <b>gleichschenkligen</b> Dreieck sind beide Katheten gleich lang ($a$), die Hypotenuse ist nach Pythagoras $\sqrt{2}a$:</p>`
+     + D(r`\sin(45°) = \frac{a}{\sqrt{2}a} = \frac{1}{\sqrt{2}} = \frac{\sqrt{2}}{2}, \qquad \tan(45°) = \frac{a}{a} = 1`)
+     + r`<p><b>30° und 60°</b> — halbieren wir ein gleichseitiges Dreieck mit Seitenlänge $a$, entsteht ein rechtwinkliges Dreieck mit Grundseite $\frac{a}{2}$ und Höhe $h = \frac{\sqrt{3}}{2}a$:</p>`
+     + D(r`\sin(60°) = \frac{\sqrt{3}}{2}, \quad \cos(60°) = \frac{1}{2}, \quad \tan(60°) = \sqrt{3}`,
+         r`\sin(30°) = \frac{1}{2}, \quad \cos(30°) = \frac{\sqrt{3}}{2}, \quad \tan(30°) = \frac{1}{\sqrt{3}}`)
+     + r`<p>Beachten Sie die Symmetrie: $\sin(30°) = \cos(60°)$ und $\sin(60°) = \cos(30°)$. Das ist kein Zufall — es sind dieselben beiden Seiten, nur vom jeweils anderen Winkel aus betrachtet.</p>` },
+
+   { h:"Additionstheoreme",
+     html: r`<p>Die Additionstheoreme führen trigonometrische Funktionen von Summen und Differenzen auf die Funktionen der einzelnen Winkel zurück. Für zwei Winkel $\alpha$ und $\beta$ gilt:</p>`
+     + D(r`\sin(\alpha \pm \beta) = \sin(\alpha) \cdot \cos(\beta) \pm \cos(\alpha) \cdot \sin(\beta)`,
+         r`\cos(\alpha \pm \beta) = \cos(\alpha) \cdot \cos(\beta) \mp \sin(\alpha) \cdot \sin(\beta)`,
+         r`\tan(\alpha + \beta) = \frac{\tan(\alpha) + \tan(\beta)}{1 - \tan(\alpha) \cdot \tan(\beta)}`)
+     + r`<p>Achten Sie beim Kosinus auf das <b>umgekehrte</b> Vorzeichen. Der Spezialfall $\alpha = \beta$ liefert die Doppelwinkelformeln:</p>`
+     + D(r`\sin(2\alpha) = 2\sin(\alpha)\cos(\alpha)`,
+         r`\cos(2\alpha) = \cos^2(\alpha) - \sin^2(\alpha)`,
+         r`\tan(2\alpha) = \frac{2\tan(\alpha)}{1 - \tan^2(\alpha)}`) }
+   ],
+   quiz:[
+   { type:"mc", q:r`In einem rechtwinkligen Dreieck betrachten wir den Winkel $\alpha$. Wie ist $\cos(\alpha)$ definiert?`,
+     options:[ r`$\frac{\text{Gegenkathete}}{\text{Hypotenuse}}$`, r`$\frac{\text{Ankathete}}{\text{Hypotenuse}}$`, r`$\frac{\text{Gegenkathete}}{\text{Ankathete}}$`, r`$\frac{\text{Hypotenuse}}{\text{Ankathete}}$` ],
+     a:1, why:r`Kosinus ist Ankathete durch Hypotenuse. Merkhilfe: <b>GAGA HHAG</b> — Sinus = Gegen/Hypotenuse, Kosinus = An/Hypotenuse, Tangens = Gegen/An.` },
+
+   { type:"mc", q:r`Ein rechtwinkliges Dreieck hat die Hypotenuse $c = 10$ und die Gegenkathete $a = 6$ zum Winkel $\alpha$. Wie groß ist $\sin(\alpha)$?`,
+     options:[ r`$0{,}6$`, r`$0{,}8$`, r`$1{,}67$`, r`$0{,}75$` ],
+     a:0, why:r`$\sin(\alpha) = \frac{a}{c} = \frac{6}{10} = 0{,}6$. (Die Ankathete wäre nach Pythagoras 8, also $\cos(\alpha) = 0{,}8$.)` },
+
+   { type:"input", q:r`Für einen Winkel $\alpha$ gilt $\sin(\alpha) = 0{,}6$. Wie groß ist $\cos^2(\alpha)$?`,
+     a:["0.64","0,64",".64"], why:r`Trigonometrischer Pythagoras: $\cos^2(\alpha) = 1 - \sin^2(\alpha) = 1 - 0{,}36 = 0{,}64$. (Damit ist $\cos(\alpha) = 0{,}8$ für spitze Winkel.)`, fmt:"Dezimalzahl" },
+
+   { type:"mc", q:r`Welcher Ausdruck ist immer gleich $\tan(\alpha)$?`,
+     options:[ r`$\frac{\cos(\alpha)}{\sin(\alpha)}$`, r`$\sin(\alpha) \cdot \cos(\alpha)$`, r`$\frac{\sin(\alpha)}{\cos(\alpha)}$`, r`$1 - \sin^2(\alpha)$` ],
+     a:2, why:r`$\tan = \frac{\text{Gegen}}{\text{An}} = \frac{a/c}{b/c} = \frac{\sin}{\cos}$. Der Kehrwert davon ist der Kotangens.` },
+
+   { type:"input", q:r`Wie groß ist $\tan(45°)$?`,
+     a:["1"], why:r`Im rechtwinkligen gleichschenkligen Dreieck sind Gegen- und Ankathete gleich lang, das Verhältnis ist also 1.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Welche Werte gehören zu $30°$?`,
+     options:[ r`$\sin(30°) = \frac{\sqrt{3}}{2}$, $\cos(30°) = \frac{1}{2}$`, r`$\sin(30°) = \frac{1}{2}$, $\cos(30°) = \frac{\sqrt{3}}{2}$`, r`$\sin(30°) = \cos(30°) = \frac{1}{\sqrt{2}}$`, r`$\sin(30°) = 1$, $\cos(30°) = 0$` ],
+     a:1, why:r`Beim halbierten gleichseitigen Dreieck ist die Gegenkathete zu $30°$ die kurze Seite $\frac{a}{2}$, also $\sin(30°) = \frac{1}{2}$. Der Wert $\frac{\sqrt{3}}{2}$ gehört zum Kosinus.` },
+
+   { type:"mc", q:r`Wie lautet $\cos(\alpha - \beta)$?`,
+     options:[ r`$\cos(\alpha)\cos(\beta) - \sin(\alpha)\sin(\beta)$`, r`$\cos(\alpha)\cos(\beta) + \sin(\alpha)\sin(\beta)$`, r`$\cos(\alpha) - \cos(\beta)$`, r`$\sin(\alpha)\cos(\beta) - \cos(\alpha)\sin(\beta)$` ],
+     a:1, why:r`Beim Kosinus dreht sich das Vorzeichen um: $\cos(\alpha \mp \beta)$ bekommt $\pm \sin\sin$. Bei der Differenz steht also ein Plus.` },
+
+   { type:"mc", q:r`Vereinfachen Sie $2 \sin(x) \cos(x)$.`,
+     options:[ r`$\sin(x^2)$`, r`$\sin(2x)$`, r`$\cos(2x)$`, r`$1$` ],
+     a:1, why:r`Das ist die Doppelwinkelformel des Sinus, der Spezialfall $\alpha = \beta$ im Additionstheorem.` }
+   ]
+ },
+
+ /* ---------------------------------------------------------- 3.2 */
+ { id:"3.2", title:"Trigonometrie im Einheitskreis",
+   lead:"Winkel über 90 Grad hinaus, das Bogenmaß und die Tabelle der markanten Funktionswerte.",
+   steps:[
+   { h:"Warum der Einheitskreis?",
+     html: r`<p>So wie wir die trigonometrischen Größen bisher eingeführt haben, sind nur Argumente zwischen $0°$ und $90°$ zugelassen — mehr passt in ein rechtwinkliges Dreieck nicht hinein. Um das zu erweitern, platzieren wir das Dreieck in einen Kreis mit Radius 1, den <b>Einheitskreis</b>.</p>
+     <p>Die Hypotenuse hat dann die Länge 1, und aus $\sin(\alpha) = \frac{a}{1}$ bzw. $\cos(\alpha) = \frac{b}{1}$ wird:</p>
+     <div class="note def"><span class="nh">Am Einheitskreis</span>
+     Der Punkt auf dem Einheitskreis zum Winkel $\alpha$ hat die Koordinaten $(\cos(\alpha), \sin(\alpha))$. Der Kosinus ist also die <b>x</b>-Koordinate, der Sinus die <b>y</b>-Koordinate.</div>
+     <p>Dreht sich der Winkel weiter, wandert der Punkt um den Kreis — die Werte sind damit für jeden Winkel von $0°$ bis $360°$ und darüber hinaus erklärt. Im zweiten Quadranten wird der Kosinus negativ, im dritten beide, im vierten der Sinus. Beide Werte liegen immer zwischen $-1$ und $1$.</p>` },
+
+   { h:"Das Bogenmaß",
+     html: r`<p>In der Trigonometrie wird der Winkel meist nicht im Gradmaß angegeben, sondern im <b>Bogenmaß</b>. Zu einem Winkel $\alpha$ im Gradmaß gehört ein eindeutiger Winkel $x$ im Bogenmaß — und zwar ist $x$ die <b>Länge des Kreisbogens</b> auf dem Einheitskreis.</p>
+     <p>Der Umfang des gesamten Einheitskreises beträgt $2\pi$, das entspricht $360°$. Daraus ergeben sich die wichtigen Umrechnungen:</p>`
+     + D(r`180° = \pi, \quad 90° = \frac{\pi}{2}, \quad 60° = \frac{\pi}{3}, \quad 45° = \frac{\pi}{4}, \quad 30° = \frac{\pi}{6}`)
+     + r`<div class="note def"><span class="nh">Umrechnungsformel</span>
+     Zwischen Gradmaß $\alpha$ und Bogenmaß $x$ gilt $\frac{\alpha}{180°} = \frac{x}{\pi}$.</div>
+     <p>Aufgelöst heißt das: $x = \frac{\alpha \cdot \pi}{180°}$ und umgekehrt $\alpha = \frac{x \cdot 180°}{\pi}$.</p>` },
+
+   { h:"Die Wertetabelle",
+     html: r`<p>Diese Tabelle sollten Sie auswendig können — sie kommt in jeder Klausur vor:</p>
+     <div class="scrollx"><table class="tbl">
+     <tr><th>Gradmaß $\alpha$</th><td>$0°$</td><td>$30°$</td><td>$45°$</td><td>$60°$</td><td>$90°$</td></tr>
+     <tr><th>Bogenmaß $x$</th><td>$0$</td><td>$\frac{\pi}{6}$</td><td>$\frac{\pi}{4}$</td><td>$\frac{\pi}{3}$</td><td>$\frac{\pi}{2}$</td></tr>
+     <tr><th>$\sin(x)$</th><td>$0$</td><td>$\frac{1}{2}$</td><td>$\frac{1}{2}\sqrt{2}$</td><td>$\frac{1}{2}\sqrt{3}$</td><td>$1$</td></tr>
+     <tr><th>$\cos(x)$</th><td>$1$</td><td>$\frac{1}{2}\sqrt{3}$</td><td>$\frac{1}{2}\sqrt{2}$</td><td>$\frac{1}{2}$</td><td>$0$</td></tr>
+     <tr><th>$\tan(x)$</th><td>$0$</td><td>$\frac{1}{\sqrt{3}}$</td><td>$1$</td><td>$\sqrt{3}$</td><td>—</td></tr>
+     </table></div>
+     <p>Ein Merktrick für die Sinuszeile: Schreiben Sie $\frac{1}{2}\sqrt{0}$, $\frac{1}{2}\sqrt{1}$, $\frac{1}{2}\sqrt{2}$, $\frac{1}{2}\sqrt{3}$, $\frac{1}{2}\sqrt{4}$ — das ergibt genau $0, \frac{1}{2}, \frac{1}{2}\sqrt{2}, \frac{1}{2}\sqrt{3}, 1$. Die Kosinuszeile ist dieselbe Folge rückwärts.</p>
+     <p>Bei $90°$ ist der Tangens nicht definiert, weil dort $\cos(90°) = 0$ ist und er durch null teilen würde.</p>` }
+   ],
+   quiz:[
+   { type:"mc", q:r`Welche Koordinaten hat der Punkt auf dem Einheitskreis zum Winkel $\alpha$?`,
+     options:[ r`$(\sin(\alpha), \cos(\alpha))$`, r`$(\cos(\alpha), \sin(\alpha))$`, r`$(\tan(\alpha), 1)$`, r`$(1, \alpha)$` ],
+     a:1, why:r`Der Kosinus ist die waagerechte, der Sinus die senkrechte Komponente — also $(\cos(\alpha), \sin(\alpha))$.` },
+
+   { type:"mc", q:r`Wie groß ist $60°$ im Bogenmaß?`,
+     options:[ r`$\frac{\pi}{6}$`, r`$\frac{\pi}{4}$`, r`$\frac{\pi}{3}$`, r`$\frac{\pi}{2}$` ],
+     a:2, why:r`$\frac{\alpha}{180°} = \frac{x}{\pi}$ mit $\alpha = 60°$ liefert $x = \frac{60 \cdot \pi}{180} = \frac{\pi}{3}$.` },
+
+   { type:"input", q:r`Rechnen Sie $\frac{3\pi}{4}$ ins Gradmaß um. (Antwort in Grad, nur die Zahl)`,
+     a:["135"], why:r`$\alpha = \frac{x \cdot 180°}{\pi} = \frac{3\pi}{4} \cdot \frac{180°}{\pi} = 3 \cdot 45° = 135°$.`, fmt:"Zahl in Grad" },
+
+   { type:"mc", q:r`Welcher Wert gehört zu $\cos(45°)$?`,
+     options:[ r`$\frac{1}{2}$`, r`$\frac{1}{2}\sqrt{2}$`, r`$\frac{1}{2}\sqrt{3}$`, r`$1$` ],
+     a:1, why:r`Bei $45°$ sind Sinus und Kosinus gleich: $\frac{1}{\sqrt{2}} = \frac{\sqrt{2}}{2} = \frac{1}{2}\sqrt{2} \approx 0{,}707$.` },
+
+   { type:"input", q:r`Wie groß ist $\sin(90°)$?`,
+     a:["1"], why:r`Bei $90°$ steht der Punkt auf dem Einheitskreis genau oben, bei $(0, 1)$. Die y-Koordinate ist der Sinus, also 1 — und $\cos(90°) = 0$.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Warum ist $\tan(90°)$ nicht definiert?`,
+     options:[ r`Weil $\sin(90°) = 0$ ist.`, r`Weil $\cos(90°) = 0$ ist und der Tangens durch den Kosinus teilt.`, r`Weil $90°$ kein spitzer Winkel ist.`, r`Weil das Bogenmaß dort $\pi$ wäre.` ],
+     a:1, why:r`$\tan(x) = \frac{\sin(x)}{\cos(x)}$, und bei $90°$ ist der Nenner null. Im Dreieck entspricht das einer Ankathete der Länge null.` },
+
+   { type:"mc", q:r`In welchem Bereich liegen die Werte von $\sin(x)$ für beliebige Winkel?`,
+     options:[ r`$[0, 1]$`, r`$[-1, 1]$`, r`$(-\infty, \infty)$`, r`$[0, \infty)$` ],
+     a:1, why:r`Der Sinus ist die y-Koordinate eines Punktes auf dem Kreis mit Radius 1 — sie kann also nie größer als 1 oder kleiner als $-1$ werden. (Der Tangens dagegen ist unbeschränkt.)` },
+
+   { type:"mc", q:r`In welchem Quadranten ist der Kosinus negativ und der Sinus positiv?`,
+     options:[ r`Erster Quadrant (0° bis 90°)`, r`Zweiter Quadrant (90° bis 180°)`, r`Dritter Quadrant (180° bis 270°)`, r`Vierter Quadrant (270° bis 360°)` ],
+     a:1, why:r`Im zweiten Quadranten liegt der Punkt links oben: negative x-Koordinate (Kosinus), positive y-Koordinate (Sinus).` }
+   ]
+ }
+ ]
+},
+{
+ n:"4", title:"Gleichungen und Ungleichungen", lessons:[
+
+ /* ---------------------------------------------------------- 4.1 a */
+ { id:"4.1", title:"Lineare und quadratische Gleichungen",
+   lead:"Definitionsbereich und Lösungsmenge, gefährliche Umformungen, p-q-Formel und Satz vom Nullprodukt.",
+   steps:[
+   { h:"Definitionsbereich und Lösungsmenge",
+     html: r`<p>Eine Gleichung besteht aus zwei Termen, verknüpft durch das Gleichheitszeichen. Enthält sie Variablen, ist sie eine Aussageform: $x + 3 = 5$ ist für $x = 2$ wahr und sonst falsch. Unser Ziel ist es, alle solchen Werte zu finden.</p>
+     <div class="note def"><span class="nh">Definitionen</span>
+     Der <b>Definitionsbereich</b> $D$ einer Gleichung sind alle reellen Zahlen, für die sowohl die linke als auch die rechte Seite definiert sind.<br><br>
+     Die <b>Lösungsmenge</b> $L$ sind alle Zahlen aus $D$, die die Gleichung lösen: $L = \{x \in D; x \text{ löst die Gleichung}\}$.</div>
+     <p>Zwei Gleichungen heißen <b>äquivalent</b>, wenn sie dieselbe Lösungsmenge besitzen. Die Strategie beim Lösen lautet deshalb: durch Äquivalenzumformungen so umformen, dass die Lösungsmenge klar ablesbar wird.</p>` },
+
+   { h:"Umformungen, die die Lösungsmenge verändern",
+     html: r`<p>Nicht jede Termumformung ist eine Äquivalenzumformung. Zwei typische Fälle:</p>
+     <p><b>Kürzen</b> — hier vergrößert sich der Definitionsbereich:</p>`
+     + D(r`\frac{x^2(x-1)}{x} = 0 \Rightarrow x(x-1) = 0`)
+     + r`<p>Links ist nur $x = 1$ Lösung (für $x = 0$ wäre der Nenner null). Rechts kommt $x = 0$ als Lösung hinzu.</p>
+     <p><b>Quadrieren</b> — hier kommen ebenfalls Lösungen hinzu:</p>`
+     + D(r`x = 2 \Rightarrow x^2 = 4`)
+     + r`<p>Links nur $x = 2$, rechts zusätzlich $x = -2$.</p>
+     <div class="note warn"><span class="nh">Die Konsequenz</span>
+     Zwischen solchen Zeilen steht nur ein <b>Folgerungspfeil</b>. Beide Umformungen sind erlaubt und oft sogar nötig — aber danach ist eine <b>Probe zwingend</b>: Jeder Lösungskandidat muss in die <b>ursprüngliche</b> Gleichung eingesetzt und überprüft werden.</div>` },
+
+   { h:"Lineare Gleichungen",
+     html: r`<div class="note def"><span class="nh">Definition</span>
+     Eine <b>lineare Gleichung</b> ist von der Form $ax + b = 0$ mit $a, b \in \R$ und $a \ne 0$.</div>
+     <p>Auch Gleichungen, die erst nach Äquivalenzumformungen diese Gestalt haben, nennen wir linear. Eine solche Gleichung hat immer <b>genau eine</b> Lösung:</p>`
+     + D(r`ax + b = 0 \quad | -b`,
+         r`\Leftrightarrow ax = -b \quad | : a`,
+         r`\Leftrightarrow x = -\frac{b}{a}, \qquad \text{also } L = \{-\frac{b}{a}\}`)
+     + r`<p>Beispiel $3x - 18 = -2x + 7$: mit $|+2x$ wird daraus $5x - 18 = 7$, mit $|+18$ dann $5x = 25$, mit $|:5$ schließlich $x = 5$. Also $L = \{5\}$.</p>` },
+
+   { h:"Quadratische Gleichungen und die p-q-Formel",
+     html: r`<p>Eine <b>quadratische Gleichung</b> hat die Form $a x^2 + bx + c = 0$ mit $a \ne 0$. Teilen wir durch $a$ und setzen $p = \frac{b}{a}$, $q = \frac{c}{a}$, erhalten wir die <b>Normalform</b> $x^2 + px + q = 0$.</p>
+     <p>Die Lösung entsteht durch quadratische Ergänzung:</p>`
+     + D(r`x^2 + px + (\frac{p}{2})^2 - (\frac{p}{2})^2 + q = 0`,
+         r`\Leftrightarrow (x + \frac{p}{2})^2 = (\frac{p}{2})^2 - q`,
+         r`\Leftrightarrow x + \frac{p}{2} = \pm\sqrt{(\frac{p}{2})^2 - q}`)
+     + r`<div class="note def"><span class="nh">p-q-Formel</span>
+     Die Gleichung $x^2 + px + q = 0$ hat die Lösungen</div>`
+     + D(r`x_{1,2} = -\frac{p}{2} \pm \sqrt{(\frac{p}{2})^2 - q}`)
+     + r`<p>Der Ausdruck unter der Wurzel — die <b>Diskriminante</b> — entscheidet über die Anzahl der Lösungen:</p>
+     <ul>
+       <li>$(\frac{p}{2})^2 - q < 0$: keine reelle Lösung, $L = \emptyset$</li>
+       <li>$(\frac{p}{2})^2 - q = 0$: genau eine Lösung</li>
+       <li>$(\frac{p}{2})^2 - q > 0$: genau zwei Lösungen</li>
+     </ul>
+     <p>Beispiel: $x^2 + 6x + 5 = 0$ liefert $x_{1,2} = -3 \pm \sqrt{9 - 5} = -3 \pm 2$, also $L = \{-5, -1\}$.</p>` },
+
+   { h:"Satz vom Nullprodukt",
+     html: r`<p>Liegt die linke Seite bereits als Produkt von Linearfaktoren vor, wäre Ausmultiplizieren plus p-q-Formel zwar richtig, aber unnötig umständlich.</p>
+     <div class="note def"><span class="nh">Satz vom Nullprodukt</span>
+     Ein Produkt zweier Ausdrücke ist genau dann 0, wenn einer oder beide Faktoren 0 sind:</div>`
+     + D(r`x \cdot y = 0 \Leftrightarrow x = 0 \text{ oder } y = 0`)
+     + r`<p>Bei $(x - 1)(x - 2) = 0$ liest man die Lösungen also direkt ab: $x_1 = 1$ und $x_2 = 2$.</p>
+     <p>Derselbe Gedanke hilft, wenn sich $x$ ausklammern lässt: Aus $x^2 - 3x = 0$ wird $x(x - 3) = 0$, also $x_1 = 0$ und $x_2 = 3$ — ganz ohne p-q-Formel. Ein Fehler wäre es, hier durch $x$ zu <b>teilen</b>: dann ginge die Lösung $x = 0$ verloren.</p>` }
+   ],
+   quiz:[
+   { type:"input", q:r`Lösen Sie: $7x + 4 = 2x - 11$. Geben Sie $x$ an.`,
+     a:["-3"], why:r`$| -2x$ ergibt $5x + 4 = -11$, dann $| -4$ ergibt $5x = -15$, dann $| :5$ ergibt $x = -3$.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Warum ist nach dem Quadrieren einer Gleichung eine Probe zwingend?`,
+     options:[ r`Weil Quadrieren die Lösungsmenge verkleinern kann.`, r`Weil Quadrieren keine Äquivalenzumformung ist und Lösungen hinzukommen können.`, r`Weil sich der Definitionsbereich verkleinert.`, r`Weil die p-q-Formel sonst nicht gilt.` ],
+     a:1, why:r`Aus $x = 2$ folgt $x^2 = 4$, aber $x^2 = 4$ hat zusätzlich die Lösung $x = -2$. Solche Scheinlösungen entlarvt nur die Probe in der <b>ursprünglichen</b> Gleichung.` },
+
+   { type:"mc", q:r`Wie viele Lösungen hat $x^2 + 2x + 4 = 0$?`,
+     options:[ r`Keine reelle Lösung`, r`Genau eine`, r`Genau zwei`, r`Unendlich viele` ],
+     a:0, why:r`p-q-Formel mit $p = 2$, $q = 4$: unter der Wurzel steht $1 - 4 = -3 < 0$. Die Diskriminante ist negativ, also $L = \emptyset$.` },
+
+   { type:"mc", q:r`Wie lautet die Lösungsmenge von $x^2 - 4x + 4 = 0$?`,
+     options:[ r`$L = \{2, -2\}$`, r`$L = \{2\}$`, r`$L = \{4\}$`, r`$L = \emptyset$` ],
+     a:1, why:r`$x_{1,2} = 2 \pm \sqrt{4 - 4} = 2 \pm 0$. Die Diskriminante ist null, es gibt genau eine Lösung. (Es ist auch die binomische Formel $(x-2)^2 = 0$.)` },
+
+   { type:"ms", q:r`Lösen Sie $x^2 + x - 6 = 0$. Welche Werte gehören zur Lösungsmenge? (mehrere Antworten)`,
+     options:[ r`$x = 2$`, r`$x = -3$`, r`$x = 3$`, r`$x = -2$` ],
+     a:[0,1], why:r`p-q-Formel mit $p = 1$, $q = -6$: $x_{1,2} = -\frac{1}{2} \pm \sqrt{\frac{1}{4} + 6} = -\frac{1}{2} \pm \frac{5}{2}$, also $x_1 = 2$ und $x_2 = -3$.` },
+
+   { type:"mc", q:r`Was sind die Lösungen von $(x + 4)(x - 7) = 0$?`,
+     options:[ r`$x = 4$ und $x = -7$`, r`$x = -4$ und $x = 7$`, r`$x = 28$`, r`$x = -4$ und $x = -7$` ],
+     a:1, why:r`Satz vom Nullprodukt: jeder Faktor wird einzeln null gesetzt. Aus $x + 4 = 0$ folgt $x = -4$, aus $x - 7 = 0$ folgt $x = 7$.` },
+
+   { type:"mc", q:r`Was ist der Fehler in: &bdquo;$x^2 = 5x$, also (durch $x$ teilen) $x = 5$&ldquo;?`,
+     options:[ r`Man darf Gleichungen nie durch Variablen teilen.`, r`Durch $x$ zu teilen ist nur für $x \ne 0$ erlaubt — die Lösung $x = 0$ geht verloren.`, r`Man hätte quadrieren müssen.`, r`Es ist kein Fehler, $x = 5$ ist die einzige Lösung.` ],
+     a:1, why:r`Richtig ist: $x^2 - 5x = 0 \Leftrightarrow x(x - 5) = 0$, also $L = \{0, 5\}$. Beim Teilen durch einen Term, der null sein kann, gehen Lösungen verloren.` },
+
+   { type:"input", q:r`Bringen Sie $2x^2 + 10x - 28 = 0$ in Normalform und lösen Sie. Geben Sie die <b>größere</b> Lösung an.`,
+     a:["2"], why:r`Durch 2 teilen ergibt $x^2 + 5x - 14 = 0$. Mit $p = 5$, $q = -14$: $x_{1,2} = -2{,}5 \pm \sqrt{6{,}25 + 14} = -2{,}5 \pm 4{,}5$, also $x_1 = 2$ und $x_2 = -7$.`, fmt:"Zahl" }
+   ]
+ },
+
+ /* ---------------------------------------------------------- 4.1 b */
+ { id:"4.1", title:"Wurzel-, Exponential- und Logarithmusgleichungen",
+   lead:"Gleichungen, bei denen die Unbekannte unter der Wurzel, im Exponenten oder im Logarithmus steckt — plus Substitution.",
+   steps:[
+   { h:"Wurzelgleichungen",
+     html: r`<div class="note def"><span class="nh">Definition</span>
+     Eine <b>Wurzelgleichung</b> ist eine Gleichung, bei der die unbekannte Variable mindestens einmal im Argument einer Wurzel vorkommt.</div>
+     <p>Das Vorgehen: eine Wurzel durch Äquivalenzumformungen auf einer Seite <b>isolieren</b>, dann beide Seiten <b>quadrieren</b>. Gibt es noch Wurzeln, wiederholen. Danach nach $x$ auflösen — und weil Quadrieren keine Äquivalenzumformung ist, am Ende <b>Probe machen</b>.</p>
+     <p>Beispiel $\sqrt{x - 1} + x = 3$:</p>`
+     + D(r`\sqrt{x-1} + x = 3 \quad | -x`,
+         r`\Leftrightarrow \sqrt{x-1} = 3 - x \quad | (\ldots)^2`,
+         r`\Rightarrow x - 1 = 9 - 6x + x^2`,
+         r`\Leftrightarrow x^2 - 7x + 10 = 0`)
+     + r`<p>Die p-q-Formel liefert $x_{1,2} = \frac{7}{2} \pm \frac{3}{2}$, also die Kandidaten $x_1 = 5$ und $x_2 = 2$. Die Probe entscheidet:</p>`
+     + D(r`x_1 = 5: \sqrt{4} + 5 = 7 \ne 3 \quad \text{falsch}`,
+         r`x_2 = 2: \sqrt{1} + 2 = 3 \quad \text{wahr}`)
+     + r`<p>Nur $x = 2$ löst die ursprüngliche Gleichung: $L = \{2\}$. Ohne Probe hätte man eine falsche Lösung mitgeschleppt.</p>` },
+
+   { h:"Exponentialgleichungen",
+     html: r`<div class="note def"><span class="nh">Definition</span>
+     Eine <b>Exponentialgleichung</b> ist eine Gleichung, bei der die Variable $x$ im <b>Exponenten</b> einer Potenz vorkommt.</div>
+     <p>Der Schlüssel ist die Beziehung $a^x = b \Leftrightarrow x = \log_a(b)$ für $a > 0$, $a \ne 1$ und $b > 0$. Wichtig: Die Potenz muss zuerst <b>isoliert</b> werden.</p>
+     <p>Beispiel $5 \cdot e^{-x} = 7$:</p>`
+     + D(r`5 \cdot e^{-x} = 7 \quad | : 5`,
+         r`\Leftrightarrow e^{-x} = \frac{7}{5} \quad | \ln(\ldots)`,
+         r`\Leftrightarrow -x = \ln(\frac{7}{5}) \quad | \cdot (-1)`,
+         r`\Leftrightarrow x = -\ln(\frac{7}{5})`)
+     + r`<div class="note warn"><span class="nh">Wenn das Argument negativ wird</span>
+     Bei $3 \cdot 4^{x+1} = -6$ führt $| : 3$ auf $4^{x+1} = -2$. Der Logarithmus einer negativen Zahl ist nicht definiert — und tatsächlich ist eine Potenz nie negativ. Also $L = \emptyset$.</div>` },
+
+   { h:"Logarithmusgleichungen",
+     html: r`<div class="note def"><span class="nh">Definition</span>
+     Eine <b>Logarithmusgleichung</b> ist eine Gleichung, bei der die Variable $x$ im <b>Argument</b> eines Logarithmus vorkommt.</div>
+     <p>Hier nutzen wir dieselbe Beziehung mit anderem Fokus: $\log_c(x) = d \Leftrightarrow x = c^d$ für $c > 0$, $c \ne 1$ und $x > 0$. Man wendet also die Potenz zur Basis $c$ an.</p>
+     <p><b>Erster Schritt ist immer der Definitionsbereich</b>, denn Logarithmen brauchen positive Argumente. Beispiel $\log_3(x - 4) = 2$: Aus $x - 4 > 0$ folgt $D = (4, \infty)$.</p>`
+     + D(r`\log_3(x - 4) = 2 \quad | 3^{(\ldots)}`,
+         r`\Rightarrow x - 4 = 9 \quad | +4`,
+         r`\Leftrightarrow x = 13`)
+     + r`<p>Beim Potenzieren verschwindet die Einschränkung an $x$ — der Definitionsbereich wird größer, deshalb steht dort nur ein Folgerungspfeil und deshalb ist auch hier die <b>Probe</b> nötig. Hier liegt $13$ in $D$, also $L = \{13\}$.</p>` },
+
+   { h:"Mehrere Logarithmusterme",
+     html: r`<p>Treten mehrere Logarithmen auf, fassen wir sie mit den Rechenregeln zusammen. Auch das kann den Definitionsbereich vergrößern — Probe also erst recht.</p>
+     <p>Beispiel $\log_4(x - 1) + \log_4(x - 7) = 2$. Zuerst der Definitionsbereich: aus $x - 1 > 0$ folgt $x > 1$, aus $x - 7 > 0$ folgt $x > 7$. Beide Bedingungen zusammen ergeben $D = (7, \infty)$.</p>`
+     + D(r`\log_4((x-1)(x-7)) = 2 \quad | 4^{(\ldots)}`,
+         r`\Rightarrow (x-1)(x-7) = 16`,
+         r`\Leftrightarrow x^2 - 8x + 7 = 16`,
+         r`\Leftrightarrow x^2 - 8x - 9 = 0`,
+         r`\Leftrightarrow x = 9 \text{ oder } x = -1`)
+     + r`<p>Von den beiden Kandidaten liegt nur $x = 9$ im Definitionsbereich. Also $L = \{9\}$.</p>` },
+
+   { h:"Substitution",
+     html: r`<p>Manche Gleichungen sehen kompliziert aus, haben aber die Struktur einer quadratischen Gleichung. Dann hilft <b>Substitution</b>: Man ersetzt den wiederkehrenden Ausdruck durch eine neue Variable $u$, löst die einfache Gleichung und <b>substituiert zurück</b>.</p>
+     <p>Beispiel $x^4 - 5x^2 + 4 = 0$ mit $u = x^2$:</p>`
+     + D(r`u^2 - 5u + 4 = 0 \Leftrightarrow u = 1 \text{ oder } u = 4`,
+         r`\text{Rücksubstitution: } x^2 = 1 \Rightarrow x = \pm 1, \quad x^2 = 4 \Rightarrow x = \pm 2`)
+     + r`<p>Beispiel mit Logarithmus: $(\log_3(x+2))^2 - 7\log_3(x+2) + 10 = 0$. Mit $u = \log_3(x+2)$ wird daraus $u^2 - 7u + 10 = 0$ mit den Lösungen $u = 2$ und $u = 5$. Die Rücksubstitution ergibt</p>`
+     + D(r`\log_3(x+2) = u \Rightarrow x + 2 = 3^u \Rightarrow x = 3^u - 2`,
+         r`x = 3^2 - 2 = 7 \quad \text{oder} \quad x = 3^5 - 2 = 241`)
+     + r`<p>Beide liegen im Definitionsbereich $D = (-2, \infty)$ und sind damit gültig.</p>
+     <div class="note warn"><span class="nh">Nicht vergessen</span>
+     Die Rücksubstitution ist kein Formalismus. Eine Lösung für $u$ ist noch keine Lösung für $x$ — und aus einem $u$ können zwei $x$ werden (wie bei $u = x^2$) oder gar keines.</div>` }
+   ],
+   quiz:[
+   { type:"input", q:r`Lösen Sie: $\sqrt{x - 1} - 1 = 2$. Geben Sie $x$ an.`,
+     a:["10"], why:r`$|+1$ ergibt $\sqrt{x-1} = 3$, quadrieren ergibt $x - 1 = 9$, also $x = 10$. Probe: $\sqrt{9} - 1 = 2$ — stimmt.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Bei der Wurzelgleichung $\sqrt{x+3} = x - 3$ erhält man die Kandidaten $x = 1$ und $x = 6$. Was ist die Lösungsmenge?`,
+     options:[ r`$L = \{1, 6\}$`, r`$L = \{6\}$`, r`$L = \{1\}$`, r`$L = \emptyset$` ],
+     a:1, why:r`Probe: Für $x = 6$ ist $\sqrt{9} = 3$ und $6 - 3 = 3$ — wahr. Für $x = 1$ ist $\sqrt{4} = 2$, aber $1 - 3 = -2$ — falsch (die Wurzel ist nie negativ). Also nur $x = 6$.` },
+
+   { type:"mc", q:r`Was ist der erste Schritt bei $4 \cdot 2^{x} = 32$?`,
+     options:[ r`Sofort logarithmieren.`, r`Zuerst durch 4 teilen, um die Potenz zu isolieren.`, r`Beide Seiten quadrieren.`, r`Substitution $u = 2^x$ und danach die p-q-Formel.` ],
+     a:1, why:r`Der Logarithmus wirkt nur auf die reine Potenz. Erst $| : 4$ liefert $2^x = 8$, und daraus $x = \log_2(8) = 3$.` },
+
+   { type:"input", q:r`Lösen Sie: $3^{x} = 81$. Geben Sie $x$ an.`,
+     a:["4"], why:r`$x = \log_3(81) = 4$, denn $3^4 = 81$.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Wie lautet die Lösungsmenge von $2 \cdot 5^{x} = -10$?`,
+     options:[ r`$L = \{-1\}$`, r`$L = \{1\}$`, r`$L = \emptyset$`, r`$L = \{\log_5(-5)\}$` ],
+     a:2, why:r`Nach $| : 2$ steht $5^x = -5$. Eine Potenz mit positiver Basis ist immer positiv, und $\log_5(-5)$ ist nicht definiert. Es gibt keine Lösung.` },
+
+   { type:"mc", q:r`Wie lautet der Definitionsbereich von $\ln(x - 5) = 2$?`,
+     options:[ r`$D = \R$`, r`$D = (5, \infty)$`, r`$D = [5, \infty)$`, r`$D = (-\infty, 5)$` ],
+     a:1, why:r`Das Argument eines Logarithmus muss <b>echt positiv</b> sein: $x - 5 > 0$, also $x > 5$. Die 5 selbst gehört nicht dazu.` },
+
+   { type:"input", q:r`Lösen Sie: $\log_2(x + 3) = 4$. Geben Sie $x$ an.`,
+     a:["13"], why:r`Potenz zur Basis 2 anwenden: $x + 3 = 2^4 = 16$, also $x = 13$. Probe: $13 + 3 = 16 > 0$, liegt im Definitionsbereich.`, fmt:"Zahl" },
+
+   { type:"ms", q:r`Lösen Sie $x^4 - 13x^2 + 36 = 0$ durch Substitution $u = x^2$. Welche Werte lösen die Gleichung? (mehrere Antworten)`,
+     options:[ r`$x = 2$`, r`$x = -2$`, r`$x = 3$`, r`$x = -3$` ],
+     a:[0,1,2,3], why:r`$u^2 - 13u + 36 = 0$ hat die Lösungen $u = 4$ und $u = 9$. Die Rücksubstitution $x^2 = 4$ und $x^2 = 9$ liefert je zwei Werte — insgesamt vier Lösungen.` }
+   ]
+ },
+
+ /* ---------------------------------------------------------- 4.2 */
+ { id:"4.2", title:"Lineare Gleichungssysteme",
+   lead:"Einsetzungs- und Additionsverfahren, die drei möglichen Lösungsfälle und Systeme mit drei Unbekannten.",
+   steps:[
+   { h:"Was ist ein lineares Gleichungssystem?",
+     html: r`<div class="note def"><span class="nh">Definition</span>
+     Für $a_{11}, a_{12}, a_{21}, a_{22}, b_1, b_2 \in \R$ heißt</div>`
+     + D(r`a_{11} \cdot x + a_{12} \cdot y = b_1`,
+         r`a_{21} \cdot x + a_{22} \cdot y = b_2`)
+     + r`<p>ein <b>lineares Gleichungssystem</b> mit zwei Gleichungen und zwei Unbekannten. Eine Lösung sind zwei Zahlen $x$ und $y$, die <b>beide</b> Gleichungen erfüllen.</p>
+     <div class="note def"><span class="nh">Nur drei Fälle sind möglich</span>
+     Ein solches System hat entweder <b>keine</b> Lösung, <b>genau eine</b> Lösung oder <b>unendlich viele</b> Lösungen. Andere Fälle — etwa genau zwei Lösungen — kann es nicht geben.</div>` },
+
+   { h:"Einsetzungsverfahren",
+     html: r`<p>Die Strategie: Eine Gleichung nach einer Unbekannten auflösen und das Ergebnis in die andere Gleichung einsetzen. Welche Gleichung und welche Variable man wählt, ist gleichgültig — man nimmt die bequemste.</p>
+     <p>Beispiel: $3x + 2y = 4$ (1) und $2x + y = 3$ (2). Gleichung (2) nach $y$ aufgelöst ergibt $y = 3 - 2x$. Eingesetzt in (1):</p>`
+     + D(r`3x + 2 \cdot (3 - 2x) = 4`,
+         r`\Leftrightarrow 3x + 6 - 4x = 4 \quad | -6`,
+         r`\Leftrightarrow -x = -2 \Leftrightarrow x = 2`)
+     + r`<p>Rückeinsetzen: $y = 3 - 2 \cdot 2 = -1$. Also $L = \{(2; -1)\}$.</p>
+     <p>Das Verfahren ist intuitiv und funktioniert auch bei nichtlinearen oder größeren Systemen — wird dort aber schnell unübersichtlich und rechenintensiv.</p>` },
+
+   { h:"Die anderen beiden Fälle erkennen",
+     html: r`<p><b>Keine Lösung.</b> Für $x + y = 4$ (1) und $-2x - 2y = 1$ (2) setzen wir $x = 4 - y$ aus (1) in (2) ein:</p>`
+     + D(r`-2 \cdot (4 - y) - 2y = 1 \Leftrightarrow -8 + 2y - 2y = 1 \Leftrightarrow -8 = 1`)
+     + r`<p>Ein Widerspruch — die Variablen sind verschwunden und übrig bleibt eine falsche Aussage. Also $L = \emptyset$.</p>
+     <p><b>Unendlich viele Lösungen.</b> Für $-3x + y = 1$ (1) und $6x - 2y = -2$ (2) ergibt dasselbe Vorgehen $-2 = -2$ — eine <b>wahre</b>, aber informationslose Aussage. Die zweite Gleichung ist nur das $(-2)$-fache der ersten, enthält also nichts Neues.</p>
+     <p>Wir haben effektiv eine Gleichung mit zwei Unbekannten. Eine Variable ist frei wählbar, etwa $x = t \in \R$, dann ist $y = 1 + 3t$:</p>`
+     + D(r`L = \{(t; 1 + 3t); t \in \R\}`)
+     + r`<div class="note"><span class="nh">Faustregel</span>
+     Verschwinden beim Umformen alle Variablen, sagt die übrig bleibende Aussage alles: <b>falsch</b> bedeutet keine Lösung, <b>wahr</b> bedeutet unendlich viele.</div>` },
+
+   { h:"Additionsverfahren",
+     html: r`<p>Beim <b>Additionsverfahren</b> multiplizieren wir die Gleichungen mit passenden Zahlen ungleich null, so dass beim anschließenden Addieren eine Variable verschwindet.</p>
+     <p>Dasselbe System wie oben: $3x + 2y = 4$ (1), $2x + y = 3$ (2). Wir multiplizieren (2) mit $-2$:</p>`
+     + D(r`3x + 2y = 4 \qquad (1)`,
+         r`-4x - 2y = -6 \qquad (2')`)
+     + r`<p>Die Vorfaktoren vor $y$ sind jetzt bis aufs Vorzeichen identisch. Addieren beider Gleichungen (jeweils linke und rechte Seite):</p>`
+     + D(r`-x = -2 \Leftrightarrow x = 2`)
+     + r`<p>Einsetzen in (1): $3 \cdot 2 + 2y = 4$, also $y = -1$. Wieder $L = \{(2; -1)\}$.</p>` },
+
+   { h:"Drei Gleichungen, drei Unbekannte",
+     html: r`<p>Das Additionsverfahren skaliert. Bei drei Unbekannten eliminiert man zunächst eine Variable aus zwei Gleichungen, dann die nächste — bis eine Gleichung mit nur einer Unbekannten übrig bleibt (Stufenform). Beispiel:</p>`
+     + D(r`x - 3y - 4z = 1 \qquad (1)`,
+         r`2x + y - z = 2 \qquad (2)`,
+         r`5x - y - 3z = -4 \qquad (3)`)
+     + r`<p>Wir rechnen $2 \cdot (1) - (2)$ und $5 \cdot (1) - (3)$, um $x$ zu eliminieren:</p>`
+     + D(r`x - 3y - 4z = 1 \qquad (1')`,
+         r`-7y - 7z = 0 \qquad (2')`,
+         r`-14y - 17z = 9 \qquad (3')`)
+     + r`<p>Jetzt $2 \cdot (2') - (3')$, um auch $y$ zu eliminieren:</p>`
+     + D(r`3z = -9 \Rightarrow z = -3`)
+     + r`<p>Rückwärts einsetzen: aus $(2')$ folgt $-7y + 21 = 0$, also $y = 3$; aus $(1')$ folgt $x - 9 + 12 = 1$, also $x = -2$. Damit $L = \{(-2; 3; -3)\}$.</p>` }
+   ],
+   quiz:[
+   { type:"mc", q:r`Wie viele Lösungen kann ein lineares Gleichungssystem mit zwei Gleichungen und zwei Unbekannten haben?`,
+     options:[ r`Nur genau eine`, r`Keine, genau eine oder unendlich viele`, r`Keine, eine oder genau zwei`, r`Beliebig viele, je nach Koeffizienten` ],
+     a:1, why:r`Geometrisch sind es zwei Geraden: Sie schneiden sich (eine Lösung), sind parallel (keine) oder identisch (unendlich viele). Genau zwei Schnittpunkte kann es bei Geraden nicht geben.` },
+
+   { type:"input", q:r`Lösen Sie: $x + y = 7$ und $x - y = 1$. Geben Sie $x$ an.`,
+     a:["4"], why:r`Additionsverfahren: Beide Gleichungen addieren ergibt $2x = 8$, also $x = 4$ (und damit $y = 3$).`, fmt:"Zahl" },
+
+   { type:"input", q:r`Lösen Sie: $2x + 3y = 12$ und $x = 3$. Geben Sie $y$ an.`,
+     a:["2"], why:r`Einsetzen von $x = 3$ in die erste Gleichung: $6 + 3y = 12$, also $3y = 6$ und $y = 2$.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Beim Umformen eines Systems bleibt die Aussage $0 = 5$ übrig. Was folgt daraus?`,
+     options:[ r`$L = \emptyset$ — das System hat keine Lösung.`, r`Das System hat unendlich viele Lösungen.`, r`$x = 5$`, r`Es wurde falsch gerechnet — das kann nicht vorkommen.` ],
+     a:0, why:r`Alle Variablen sind verschwunden und übrig bleibt ein Widerspruch. Die beiden Gleichungen sind unverträglich, geometrisch also parallele Geraden.` },
+
+   { type:"mc", q:r`Beim Umformen bleibt die wahre Aussage $-2 = -2$ übrig. Was bedeutet das?`,
+     options:[ r`Das System hat keine Lösung.`, r`Die zweite Gleichung enthält keine neue Information — es gibt unendlich viele Lösungen.`, r`Beide Variablen sind null.`, r`Das System ist eindeutig lösbar.` ],
+     a:1, why:r`Die eine Gleichung ist ein Vielfaches der anderen. Effektiv bleibt eine Gleichung mit zwei Unbekannten: eine Variable ist frei wählbar, etwa $x = t$.` },
+
+   { type:"mc", q:r`Mit welchem Faktor muss man $x + 3y = 5$ multiplizieren, damit beim Addieren zu $2x - 3y = 1$ das $y$ verschwindet?`,
+     options:[ r`Mit $-1$`, r`Gar nicht — die Vorfaktoren passen schon.`, r`Mit $3$`, r`Mit $2$` ],
+     a:1, why:r`Die Vorfaktoren $+3$ und $-3$ sind bereits bis aufs Vorzeichen gleich. Direktes Addieren ergibt $3x = 6$, also $x = 2$.` },
+
+   { type:"mc", q:r`Warum verwendet man bei größeren Systemen lieber das Additionsverfahren?`,
+     options:[ r`Weil das Einsetzungsverfahren dort falsche Ergebnisse liefert.`, r`Weil das Einsetzungsverfahren schnell unübersichtlich und rechenintensiv wird.`, r`Weil das Additionsverfahren auch bei nichtlinearen Systemen funktioniert.`, r`Weil es weniger Lösungen liefert.` ],
+     a:1, why:r`Beide Verfahren sind korrekt. Aber das Einsetzen ineinander verschachtelter Ausdrücke wird bei drei oder mehr Unbekannten schnell unhandlich, während das Additionsverfahren systematisch auf Stufenform führt.` },
+
+   { type:"input", q:r`Im System $x - 3y - 4z = 1$, $-7y - 7z = 0$, $3z = -9$ ergibt sich $z = -3$. Welchen Wert hat dann $y$?`,
+     a:["3"], why:r`In die zweite Gleichung einsetzen: $-7y - 7 \cdot (-3) = 0$, also $-7y + 21 = 0$ und damit $y = 3$.`, fmt:"Zahl" }
+   ]
+ },
+
+ /* ---------------------------------------------------------- 4.3 */
+ { id:"4.3", title:"Ungleichungen",
+   lead:"Was sich gegenüber Gleichungen ändert: das Umdrehen des Ungleichheitszeichens und die Fallunterscheidung.",
+   steps:[
+   { h:"Die vier Zeichen",
+     html: r`<p>Ersetzen wir in einer Gleichung das Gleichheitszeichen durch ein Ungleichheitszeichen, entsteht eine <b>Ungleichung</b>. Es gibt vier Zeichen: $<$ kleiner, $\le$ kleiner oder gleich, $>$ größer, $\ge$ größer oder gleich.</p>
+     <p>Wie bei Gleichungen gilt: Stehen auf beiden Seiten reine Zahlenwerte, ist die Ungleichung eine <b>Aussage</b> ($2 < 3$ wahr, $\sqrt{2} > 2$ falsch). Kommen Variablen vor, ist sie eine <b>Aussageform</b>: $x + 3 \le 5$ ist wahr für $x \le 2$ und sonst falsch.</p>
+     <p>Ziel ist wieder, durch Äquivalenzumformungen die Lösungsmenge sichtbar zu machen.</p>` },
+
+   { h:"Was gleich bleibt und was sich ändert",
+     html: r`<p>Diese Umformungen ändern die Lösungsmenge nicht:</p>`
+     + D(r`x \le y \Leftrightarrow x + c \le y + c`,
+         r`x \le y \Leftrightarrow x \cdot c \le y \cdot c, \quad c > 0`)
+     + r`<div class="note warn"><span class="nh">Der entscheidende Unterschied</span>
+     Bei Gleichungen musste der Faktor nur $\ne 0$ sein. Bei Ungleichungen muss er <b>positiv</b> sein — sonst dreht sich das Zeichen um:</div>`
+     + D(r`x \le y \Leftrightarrow x \cdot c \ge y \cdot c, \quad c < 0`)
+     + r`<p>Beispiel: Aus $2 < 4$ wird nach $| \cdot (-1)$ die Aussage $-2 > -4$ — was offensichtlich stimmt.</p>
+     <p>Auch das Bilden des <b>Kehrwerts</b> dreht das Zeichen um, sofern beide Seiten dasselbe Vorzeichen haben: Aus $2 < 4$ wird $\frac{1}{2} > \frac{1}{4}$.</p>` },
+
+   { h:"Fallunterscheidung",
+     html: r`<p>Problematisch wird es, wenn man mit einer <b>Variablen</b> multiplizieren muss — denn deren Vorzeichen kennt man ja noch nicht. Betrachten wir</p>`
+     + D(r`\frac{1}{x} + 2 \le 4 \quad | -2`,
+         r`\Leftrightarrow \frac{1}{x} \le 2 \quad | \cdot x`)
+     + r`<p>Ob sich das Zeichen dreht, hängt vom Vorzeichen von $x$ ab. Die Lösung ist eine <b>Fallunterscheidung</b>.</p>
+     <p><b>Fall 1: $x > 0$.</b> Das Zeichen bleibt:</p>`
+     + D(r`\frac{1}{x} \le 2 \Leftrightarrow 1 \le 2x \Leftrightarrow \frac{1}{2} \le x`)
+     + r`<p>Beide Bedingungen müssen gelten: $x \ge \frac{1}{2}$ <b>und</b> $x > 0$. Zusammen: $x \ge \frac{1}{2}$.</p>
+     <p><b>Fall 2: $x < 0$.</b> Das Zeichen dreht sich um:</p>`
+     + D(r`\frac{1}{x} \le 2 \Leftrightarrow 1 \ge 2x \Leftrightarrow \frac{1}{2} \ge x`)
+     + r`<p>Beide Bedingungen: $x \le \frac{1}{2}$ <b>und</b> $x < 0$. Zusammen: $x < 0$.</p>
+     <p>Den Fall $x = 0$ müssen wir nicht betrachten, weil die Ungleichung dort nicht definiert ist. Zum Schluss werden die Fälle vereinigt:</p>`
+     + D(r`L = \{x \in \R; x < 0 \text{ oder } x \ge \frac{1}{2}\}`)
+     + r`<div class="note"><span class="nh">Merken</span>
+     Innerhalb eines Falls werden die Bedingungen mit <b>und</b> verknüpft (beide müssen gelten), am Ende werden die Fälle mit <b>oder</b> vereinigt.</div>` }
+   ],
+   quiz:[
+   { type:"mc", q:r`Lösen Sie: $-3x > 12$`,
+     options:[ r`$x > 4$`, r`$x < -4$`, r`$x > -4$`, r`$x < 4$` ],
+     a:1, why:r`Division durch $-3$ ist eine Multiplikation mit einer negativen Zahl — das Zeichen dreht sich um: $x < -4$.` },
+
+   { type:"mc", q:r`Wann muss das Ungleichheitszeichen umgedreht werden?`,
+     options:[ r`Beim Addieren einer negativen Zahl`, r`Beim Multiplizieren mit einer negativen Zahl`, r`Beim Multiplizieren mit einer positiven Zahl`, r`Immer beim Umformen` ],
+     a:1, why:r`Addition und Subtraktion lassen das Zeichen unverändert, egal welches Vorzeichen der Summand hat. Nur Multiplikation und Division mit einer negativen Zahl (und das Bilden des Kehrwerts) drehen es um.` },
+
+   { type:"mc", q:r`Lösen Sie: $2x + 5 \le 11$`,
+     options:[ r`$x \le 3$`, r`$x \ge 3$`, r`$x \le 8$`, r`$x \ge -3$` ],
+     a:0, why:r`$| -5$ ergibt $2x \le 6$, dann $| : 2$ (positive Zahl, Zeichen bleibt) ergibt $x \le 3$.` },
+
+   { type:"mc", q:r`Aus $3 < 5$ folgt durch Kehrwertbildung:`,
+     options:[ r`$\frac{1}{3} < \frac{1}{5}$`, r`$\frac{1}{3} > \frac{1}{5}$`, r`$\frac{1}{3} = \frac{1}{5}$`, r`Der Kehrwert ist hier nicht erlaubt.` ],
+     a:1, why:r`Haben beide Seiten dasselbe Vorzeichen, dreht sich das Zeichen beim Kehrwert um. Und tatsächlich: $\frac{1}{3} \approx 0{,}33 > 0{,}2 = \frac{1}{5}$.` },
+
+   { type:"mc", q:r`Warum braucht man bei $\frac{1}{x} \le 2$ eine Fallunterscheidung?`,
+     options:[ r`Weil Brüche nie in Ungleichungen vorkommen dürfen.`, r`Weil man mit $x$ multiplizieren muss, dessen Vorzeichen aber unbekannt ist.`, r`Weil $x$ auch null sein könnte.`, r`Weil die Ungleichung zwei Lösungen hat.` ],
+     a:1, why:r`Beim Multiplizieren mit $x$ hängt es vom Vorzeichen ab, ob sich das Zeichen dreht. Da $x$ die gesuchte Größe ist, muss man beide Möglichkeiten getrennt untersuchen.` },
+
+   { type:"mc", q:r`In einem Fall der Fallunterscheidung ergibt sich $x \le \frac{1}{2}$ unter der Annahme $x < 0$. Was ist die Teillösung dieses Falls?`,
+     options:[ r`$x \le \frac{1}{2}$`, r`$x < 0$`, r`$0 < x \le \frac{1}{2}$`, r`Keine Lösung` ],
+     a:1, why:r`Beide Bedingungen müssen gleichzeitig gelten. Jedes $x < 0$ erfüllt automatisch auch $x \le \frac{1}{2}$ — die schärfere Bedingung ist $x < 0$.` },
+
+   { type:"ms", q:r`Welche Zahlen gehören zur Lösungsmenge $L = \{x \in \R; x < 0 \text{ oder } x \ge \frac{1}{2}\}$? (mehrere Antworten)`,
+     options:[ r`$x = -3$`, r`$x = 0{,}25$`, r`$x = 0{,}5$`, r`$x = 2$` ],
+     a:[0,2,3], why:r`$-3$ erfüllt $x < 0$; $0{,}5$ und $2$ erfüllen $x \ge \frac{1}{2}$. Der Wert $0{,}25$ liegt in der Lücke dazwischen und gehört nicht dazu.` }
+   ]
+ }
+ ]
+},
+{
+ n:"5", title:"Reelle Funktionen", lessons:[
+
+ /* ---------------------------------------------------------- 5.1 / 5.2 */
+ { id:"5.1", title:"Funktionsbegriff, Injektivität und Surjektivität",
+   lead:"Definitions-, Ziel- und Wertebereich, der Graph — und wann eine Funktion injektiv, surjektiv oder bijektiv ist.",
+   steps:[
+   { h:"Was ist eine Funktion?",
+     html: r`<p>Funktionen ordnen einer Eingangsgröße eine <b>eindeutig bestimmte</b> Ausgangsgröße zu. Ist die Ausgangsgröße nicht eindeutig, handelt es sich nicht um eine Funktion.</p>
+     <div class="note def"><span class="nh">Definition</span>
+     Eine <b>Funktion</b> $f$ zwischen zwei Mengen $D$ und $Z$ ist eine Abbildung, die jedem Element $x \in D$ ein eindeutiges Element $y = f(x) \in Z$ zuordnet. Wir schreiben $f: D \to Z$, $y = f(x)$.</div>
+     <p>Dabei heißen:</p>
+     <ul>
+       <li>$D$ — <b>Definitionsbereich</b> (Definitionsmenge)</li>
+       <li>$Z$ — <b>Zielbereich</b> (Zielmenge)</li>
+       <li>$W = f(D) = \{f(x); x \in D\}$ — <b>Wertebereich</b>, also die Menge der tatsächlich angenommenen Werte</li>
+     </ul>
+     <p>Es muss <b>nicht</b> jeder Wert aus $Z$ angenommen werden, deshalb gilt immer $W \subseteq Z$. Weiter heißt $x$ das <b>Argument</b> oder die unabhängige Variable und $f(x)$ der <b>Funktionswert</b>.</p>` },
+
+   { h:"Graph und maximaler Definitionsbereich",
+     html: r`<div class="note def"><span class="nh">Graph</span>
+     Der <b>Graph</b> einer Funktion $f: D \to Z$ ist die Menge aller Paare $G = \{(x, f(x)); x \in D\}$.</div>
+     <p>Bei reellen Funktionen zeichnet man ihn in ein kartesisches Koordinatensystem: die Eingangsgröße auf der waagerechten Achse (<b>x-Achse</b> oder Abszisse), die Ausgangsgröße auf der senkrechten (<b>y-Achse</b> oder Ordinate).</p>
+     <p>Ist kein Definitionsbereich angegeben, sondern nur die Zuordnungsvorschrift, nimmt man implizit den <b>maximalen Definitionsbereich</b> an — alle reellen Zahlen, die eingesetzt werden dürfen. Für $f(x) = \sqrt{x}$ ist das $D = \{x \in \R; x \ge 0\}$, für $f(x) = \frac{1}{x}$ wäre es $\R \setminus \{0\}$.</p>` },
+
+   { h:"Injektiv, surjektiv, bijektiv",
+     html: r`<div class="note def"><span class="nh">Definition</span>
+     Gegeben sei $f: D \to Z$.<br><br>
+     $f$ heißt <b>injektiv</b>, wenn gilt: $f(x_1) = f(x_2) \Rightarrow x_1 = x_2$.<br>
+     $f$ heißt <b>surjektiv</b>, wenn zu jedem $y \in Z$ mindestens ein $x \in D$ existiert mit $f(x) = y$.<br>
+     $f$ heißt <b>bijektiv</b>, wenn sie injektiv und surjektiv ist.</div>
+     <p>Anschaulich:</p>
+     <ul>
+       <li><b>Injektiv</b>: Verschiedene Elemente des Definitionsbereichs werden auf verschiedene Elemente abgebildet. Äquivalent: $x_1 \ne x_2 \Rightarrow f(x_1) \ne f(x_2)$.</li>
+       <li><b>Surjektiv</b>: Jedes Element der Zielmenge wird mindestens einmal getroffen — also genau dann, wenn $W = f(D) = Z$.</li>
+       <li><b>Bijektiv</b>: Jedes Element der Zielmenge wird genau einmal getroffen.</li>
+     </ul>
+     <div class="note warn"><span class="nh">Wichtig</span>
+     Surjektivität bezieht sich immer auf die <b>Zielmenge</b> $Z$, nicht auf den Wertebereich. Ob eine Funktion injektiv, surjektiv oder bijektiv ist, hängt deshalb von <b>drei</b> Dingen ab: der Funktionsvorschrift, dem Definitionsbereich <b>und</b> der Zielmenge.</div>` },
+
+   { h:"Dieselbe Vorschrift, drei Urteile",
+     html: r`<p>Wie sehr die Mengen entscheiden, zeigt $f(x) = x^2$ in drei Varianten:</p>
+     <p><b>1.</b> $f: \R \to \R$, $f(x) = x^2$ — <b>weder</b> injektiv (denn $f(2) = 4 = f(-2)$, obwohl $2 \ne -2$) <b>noch</b> surjektiv (negative Zahlen werden nie angenommen, es gibt kein $x$ mit $x^2 = -1$).</p>
+     <p><b>2.</b> $f: \R \to [0, \infty)$, $f(x) = x^2$ — jetzt <b>surjektiv</b>, denn jedes $y \ge 0$ hat ein Urbild ($x = \sqrt{y}$). Aber weiterhin nicht injektiv, also nicht bijektiv.</p>
+     <p><b>3.</b> $f: [0, \infty) \to [0, \infty)$, $f(x) = x^2$ — jetzt <b>bijektiv</b>: Aus $x_1^2 = x_2^2$ mit $x_1, x_2 \ge 0$ folgt $x_1 = x_2$, und jedes $y \ge 0$ wird getroffen.</p>
+     <p>Zum Vergleich: $f: \R \to \R$ mit $f(x) = 2x + 1$ ist bijektiv. Injektiv, weil aus $2x_1 + 1 = 2x_2 + 1$ sofort $x_1 = x_2$ folgt; surjektiv, weil sich $y = 2x + 1$ zu $x = \frac{y-1}{2}$ auflösen lässt.</p>` },
+
+   { h:"Am Graphen ablesen",
+     html: r`<div class="note def"><span class="nh">Waagerechten-Test</span>
+     Eine reelle Funktion ist <b>injektiv</b>, wenn jede waagerechte Gerade den Graphen <b>höchstens</b> in einem Punkt schneidet.</div>
+     <p>Hat eine waagerechte Gerade mehrere Schnittpunkte, gibt es verschiedene $x$-Werte mit demselben Funktionswert — die Funktion ist dann nicht injektiv. Bei $f(x) = x^2$ schneidet die Gerade $y = 4$ den Graphen bei $x = 2$ und $x = -2$.</p>
+     <p><b>Surjektivität</b> auf $Z = \R$ bedeutet entsprechend: Der Graph besitzt zu <b>jeder</b> Höhe $y$ mindestens einen Punkt. Die Normalparabel scheitert daran, weil es unterhalb der x-Achse keine Punkte gibt.</p>
+     <p>Beides zusammen — jede Waagerechte trifft den Graphen genau einmal — heißt bijektiv.</p>` }
+   ],
+   quiz:[
+   { type:"mc", q:r`Was ist die entscheidende Bedingung dafür, dass eine Zuordnung eine Funktion ist?`,
+     options:[ r`Jedem $x$ wird mindestens ein $y$ zugeordnet.`, r`Jedem $x$ wird genau ein $y$ zugeordnet.`, r`Jedem $y$ wird genau ein $x$ zugeordnet.`, r`Definitions- und Zielmenge sind gleich groß.` ],
+     a:1, why:r`Eindeutigkeit der Ausgangsgröße ist der Kern des Funktionsbegriffs. Dass jedem $y$ genau ein $x$ entspricht, wäre dagegen die Bedingung für Bijektivität.` },
+
+   { type:"mc", q:r`Welche Beziehung gilt immer zwischen Wertebereich $W$ und Zielmenge $Z$?`,
+     options:[ r`$W = Z$`, r`$W \subseteq Z$`, r`$Z \subseteq W$`, r`$W \cap Z = \emptyset$` ],
+     a:1, why:r`Der Wertebereich enthält nur die tatsächlich angenommenen Werte, ist also stets eine Teilmenge der Zielmenge. Gleichheit $W = Z$ gilt genau dann, wenn die Funktion surjektiv ist.` },
+
+   { type:"mc", q:r`Wie lautet der maximale Definitionsbereich von $f(x) = \sqrt{x - 3}$?`,
+     options:[ r`$D = \R$`, r`$D = (3, \infty)$`, r`$D = [3, \infty)$`, r`$D = (-\infty, 3]$` ],
+     a:2, why:r`Unter der Wurzel darf keine negative Zahl stehen: $x - 3 \ge 0$, also $x \ge 3$. Die 3 selbst ist erlaubt, denn $\sqrt{0} = 0$ — daher die eckige Klammer.` },
+
+   { type:"mc", q:r`Warum ist $f: \R \to \R$ mit $f(x) = x^2$ nicht injektiv?`,
+     options:[ r`Weil negative Werte nicht angenommen werden.`, r`Weil $f(2) = f(-2) = 4$ gilt, obwohl $2 \ne -2$.`, r`Weil der Definitionsbereich zu groß ist.`, r`Weil sie nicht stetig ist.` ],
+     a:1, why:r`Injektivität verlangt, dass verschiedene Argumente verschiedene Funktionswerte haben. Hier liefern zwei verschiedene $x$ denselben Wert. (Dass negative Werte fehlen, betrifft die Surjektivität.)` },
+
+   { type:"mc", q:r`Die Funktion $f: \R \to [0, \infty)$, $f(x) = x^2$ ist ...`,
+     options:[ r`injektiv, aber nicht surjektiv`, r`surjektiv, aber nicht injektiv`, r`bijektiv`, r`weder injektiv noch surjektiv` ],
+     a:1, why:r`Durch die verkleinerte Zielmenge wird sie surjektiv — jedes $y \ge 0$ hat ein Urbild. Injektiv wird sie dadurch nicht, dafür müsste man auch den Definitionsbereich auf $[0, \infty)$ einschränken.` },
+
+   { type:"mc", q:r`Eine waagerechte Gerade schneidet den Graphen von $f$ in drei Punkten. Was folgt daraus?`,
+     options:[ r`$f$ ist nicht injektiv.`, r`$f$ ist nicht surjektiv.`, r`$f$ ist keine Funktion.`, r`$f$ ist bijektiv.` ],
+     a:0, why:r`Drei Schnittpunkte bedeuten drei verschiedene $x$-Werte mit demselben Funktionswert — genau der Widerspruch zur Injektivität. (Mehrere Schnittpunkte einer <b>senkrechten</b> Geraden würden dagegen bedeuten, dass es gar keine Funktion ist.)` },
+
+   { type:"ms", q:r`Wovon hängt es ab, ob eine Funktion bijektiv ist? (mehrere Antworten)`,
+     options:[ r`Von der Funktionsvorschrift`, r`Vom Definitionsbereich`, r`Von der Zielmenge`, r`Vom Namen der Variablen` ],
+     a:[0,1,2], why:r`Alle drei zusammen entscheiden. $f(x) = x^2$ ist je nach Wahl von $D$ und $Z$ weder injektiv noch surjektiv, nur surjektiv oder sogar bijektiv.` },
+
+   { type:"mc", q:r`Ist $f: \R \to \R$ mit $f(x) = 2x + 1$ bijektiv?`,
+     options:[ r`Ja — sie ist injektiv und surjektiv.`, r`Nein, sie ist nur injektiv.`, r`Nein, sie ist nur surjektiv.`, r`Nein, sie ist weder das eine noch das andere.` ],
+     a:0, why:r`Aus $2x_1 + 1 = 2x_2 + 1$ folgt $x_1 = x_2$ (injektiv), und $y = 2x + 1$ lässt sich für jedes $y$ zu $x = \frac{y-1}{2}$ auflösen (surjektiv).` }
+   ]
+ },
+
+ /* ---------------------------------------------------------- 5.3 / 5.4 */
+ { id:"5.3", title:"Eigenschaften und zusammengesetzte Funktionen",
+   lead:"Nullstellen, Symmetrie, Monotonie — sowie Verknüpfung, Komposition und Umkehrfunktion.",
+   steps:[
+   { h:"Nullstellen",
+     html: r`<div class="note def"><span class="nh">Definition</span>
+     Die <b>Nullstellen</b> einer Funktion $f: D \to \R$ sind die Stellen $x \in D$, an denen $f(x) = 0$ gilt.</div>
+     <p>Anschaulich sind das die $x$-Koordinaten der Schnittpunkte des Graphen mit der x-Achse. Bestimmt werden sie, indem man die Gleichung $f(x) = 0$ nach $x$ auflöst — womit alles aus Kapitel 4 wieder ins Spiel kommt.</p>
+     <p>Eine Funktion kann keine, eine, mehrere oder sogar unendlich viele Nullstellen haben: $f(x) = x^2 + 1$ hat keine, $f(x) = x^2 - 4$ hat zwei, $f(x) = \sin(x)$ hat unendlich viele.</p>` },
+
+   { h:"Symmetrie",
+     html: r`<p>Voraussetzung ist ein <b>symmetrischer</b> Definitionsbereich: Aus $x \in D$ muss auch $-x \in D$ folgen.</p>
+     <div class="note def"><span class="nh">Definition</span>
+     $f$ heißt <b>achsensymmetrisch</b> oder <b>gerade</b>, wenn für alle $x \in D$ gilt: $f(-x) = f(x)$.<br><br>
+     $f$ heißt <b>punktsymmetrisch</b> oder <b>ungerade</b>, wenn für alle $x \in D$ gilt: $f(-x) = -f(x)$.</div>
+     <p>Anschaulich: Der Graph einer achsensymmetrischen Funktion geht durch Spiegelung an der <b>y-Achse</b> in sich selbst über, der einer punktsymmetrischen durch Punktspiegelung am <b>Koordinatenursprung</b>.</p>
+     <p>Beispiele: $f(x) = x^2$ ist gerade, denn $(-x)^2 = x^2$. $f(x) = x^3$ ist ungerade, denn $(-x)^3 = -x^3$. Die Namen kommen von den Potenzen — gerade Exponenten liefern gerade Funktionen. $f(x) = x^2 + x$ ist weder das eine noch das andere.</p>` },
+
+   { h:"Monotonie",
+     html: r`<p>Das Monotonieverhalten sagt, wie sich die Funktionswerte in einem Bereich verändern. Für $f: D \to \R$ und alle $x, y \in D$ mit $x < y$:</p>
+     <div class="note def"><span class="nh">Definition</span>
+     <b>monoton steigend</b> (wachsend): $f(x) \le f(y)$<br>
+     <b>streng monoton steigend</b>: $f(x) < f(y)$<br>
+     <b>monoton fallend</b>: $f(x) \ge f(y)$<br>
+     <b>streng monoton fallend</b>: $f(x) > f(y)$</div>
+     <p>Der Unterschied liegt allein im $\le$ gegenüber $<$: Eine monoton steigende Funktion darf waagerechte Stücke haben, eine streng monoton steigende nicht.</p>
+     <div class="note"><span class="nh">Zusammenhang zur Injektivität</span>
+     Eine streng monotone Funktion ist immer injektiv — sie kann keinen Wert zweimal annehmen. Das Monotonieverhalten hängt dabei stets vom <b>betrachteten Definitionsbereich</b> ab: $f(x) = x^2$ ist auf $[0, \infty)$ streng monoton steigend, auf ganz $\R$ aber überhaupt nicht monoton.</div>` },
+
+   { h:"Verknüpfung mit Konstanten",
+     html: r`<p>Zwei Funktionen $f, g: D \to \R$ lassen sich mit den bekannten Rechenarten zu neuen Funktionen verbinden:</p>`
+     + D(r`h_1(x) = f(x) + g(x), \quad h_2(x) = f(x) \cdot g(x), \quad h_3(x) = \frac{f(x)}{g(x)}`)
+     + r`<p>Bei $h_3$ muss $g(x) \ne 0$ für alle $x \in D$ gelten. Besonders anschaulich ist der Spezialfall, dass eine der Funktionen eine <b>Konstante</b> $c$ ist:</p>
+     <ul>
+       <li><b>Addition</b> von $c$: Der Graph wird parallel zur y-Achse <b>verschoben</b>.</li>
+       <li><b>Multiplikation</b> mit $c$: Der Graph wird <b>gestreckt</b> ($|c| > 1$) oder <b>gestaucht</b> ($|c| < 1$). Ist $c < 0$, wird er zusätzlich an der x-Achse gespiegelt.</li>
+     </ul>` },
+
+   { h:"Komposition",
+     html: r`<p>Funktionen lassen sich auch <b>hintereinander ausführen</b>.</p>
+     <div class="note def"><span class="nh">Komposition</span>
+     Sind $f: D \to W$ und $g: W \to \R$, so ist die <b>Komposition</b> (Verkettung) $g \circ f$ definiert durch $(g \circ f)(x) = g(f(x))$.</div>
+     <p>Gelesen wird $g \circ f$ als &bdquo;$g$ nach $f$&ldquo; — zuerst wirkt die <b>innere</b> Funktion $f$. Beispiel mit $f(x) = 2x + 3$ und $g(x) = \frac{1}{x^2 + 1}$:</p>`
+     + D(r`(g \circ f)(x) = g(f(x)) = \frac{1}{(2x+3)^2 + 1}`,
+         r`(f \circ g)(x) = f(g(x)) = \frac{2}{x^2+1} + 3`)
+     + r`<p>Die Reihenfolge ist also wesentlich: Im Allgemeinen gilt $g \circ f \ne f \circ g$.</p>` },
+
+   { h:"Umkehrfunktion",
+     html: r`<div class="note def"><span class="nh">Umkehrfunktion</span>
+     $f: D \to W$ heißt <b>invertierbar</b> (umkehrbar), wenn es eine Funktion $g: W \to D$ gibt mit $g(f(x)) = x$ für alle $x \in D$ und $f(g(y)) = y$ für alle $y \in W$. Dann heißt $g$ die <b>Umkehrfunktion</b> von $f$, geschrieben $f^{-1}$.</div>
+     <div class="note warn"><span class="nh">Keine Potenz</span>
+     Die $-1$ in $f^{-1}$ ist <b>kein</b> Exponent. $f^{-1}(x)$ ist die Umkehrfunktion, nicht $\frac{1}{f(x)}$.</div>
+     <p>Wann existiert sie? Das hängt davon ab, worauf sich die Umkehrung beziehen soll:</p>
+     <ul>
+       <li>$f: D \to Z$ ist genau dann auf der <b>Zielmenge</b> $Z$ umkehrbar, wenn sie <b>bijektiv</b> ist.</li>
+       <li>$f: D \to W$ mit $W = f(D)$ ist genau dann umkehrbar, wenn sie <b>injektiv</b> ist — die Surjektivität auf $W$ ist ja automatisch erfüllt.</li>
+     </ul>
+     <p>Falls die Umkehrfunktion existiert, ist sie eindeutig bestimmt.</p>` },
+
+   { h:"Umkehrfunktion bestimmen",
+     html: r`<p>Das Rezept hat zwei Schritte:</p>
+     <ol>
+       <li>$y = f(x)$ nach $x$ auflösen, also $x = f^{-1}(y)$.</li>
+       <li>Die Bezeichnungen $x$ und $y$ vertauschen, also $y = f^{-1}(x)$.</li>
+     </ol>
+     <p>Beispiel $f(x) = 2x + 1$: Aus $y = 2x + 1$ folgt $x = \frac{y - 1}{2}$, nach Umbenennen also</p>`
+     + D(r`f^{-1}(x) = \frac{x - 1}{2}`)
+     + r`<p>Ebenso gut kann man in $y = f(x)$ zuerst $x$ und $y$ vertauschen und dann $x = f(y)$ nach $y$ auflösen.</p>
+     <div class="note"><span class="nh">Anschaulich</span>
+     Den Graphen der Umkehrfunktion erhält man, indem man den Graphen von $f$ an der Winkelhalbierenden $y = x$ spiegelt.</div>
+     <p>Übrigens haben wir Umkehrfunktionen längst benutzt: Die Wurzel kehrt das Potenzieren um, der Logarithmus die Exponentialfunktion. Genau deshalb funktioniert das Auflösen von Gleichungen.</p>` }
+   ],
+   quiz:[
+   { type:"input", q:r`Bestimmen Sie die <b>positive</b> Nullstelle von $f(x) = x^2 - 16$.`,
+     a:["4"], why:r`$x^2 - 16 = 0 \Leftrightarrow x^2 = 16 \Leftrightarrow x = \pm 4$. Die positive Nullstelle ist 4.`, fmt:"Zahl" },
+
+   { type:"mc", q:r`Welche Funktion ist <b>achsensymmetrisch</b> (gerade)?`,
+     options:[ r`$f(x) = x^3$`, r`$f(x) = x^4 + 2$`, r`$f(x) = x^3 + x$`, r`$f(x) = x^2 + x$` ],
+     a:1, why:r`Es muss $f(-x) = f(x)$ gelten. Für $x^4 + 2$ ist $(-x)^4 + 2 = x^4 + 2$ — passt. $x^3$ und $x^3+x$ sind punktsymmetrisch, $x^2 + x$ ist keins von beiden.` },
+
+   { type:"mc", q:r`Für welche Funktion gilt $f(-x) = -f(x)$?`,
+     options:[ r`$f(x) = x^2$`, r`$f(x) = x^3$`, r`$f(x) = |x|$`, r`$f(x) = x^2 + 1$` ],
+     a:1, why:r`$(-x)^3 = -x^3$, also ist $x^3$ punktsymmetrisch (ungerade). Die anderen drei sind achsensymmetrisch.` },
+
+   { type:"mc", q:r`Was ist der Unterschied zwischen monoton und streng monoton steigend?`,
+     options:[ r`Streng monoton steigend erlaubt keine waagerechten Stücke ($f(x) < f(y)$ statt $f(x) \le f(y)$).`, r`Monoton steigend gilt nur auf Intervallen.`, r`Streng monoton steigend bedeutet, dass die Funktion positiv ist.`, r`Es gibt keinen Unterschied.` ],
+     a:0, why:r`Bei $x < y$ verlangt streng monoton steigend echt größere Werte. Eine streng monotone Funktion ist deshalb immer injektiv — eine nur monotone nicht.` },
+
+   { type:"mc", q:r`Auf welchem Bereich ist $f(x) = x^2$ streng monoton steigend?`,
+     options:[ r`Auf ganz $\R$`, r`Auf $[0, \infty)$`, r`Auf $(-\infty, 0]$`, r`Nirgends` ],
+     a:1, why:r`Rechts von der Null wachsen die Werte, links fallen sie. Monotonie ist deshalb immer eine Aussage über einen <b>bestimmten</b> Bereich.` },
+
+   { type:"mc", q:r`Gegeben $f(x) = x + 1$ und $g(x) = x^2$. Was ist $(g \circ f)(x)$?`,
+     options:[ r`$x^2 + 1$`, r`$(x + 1)^2$`, r`$x^3 + x^2$`, r`$x^2 + x + 1$` ],
+     a:1, why:r`$(g \circ f)(x) = g(f(x))$ — zuerst wirkt die innere Funktion $f$: $g(x+1) = (x+1)^2$. Zum Vergleich: $(f \circ g)(x) = x^2 + 1$.` },
+
+   { type:"mc", q:r`Was bedeutet das Symbol $f^{-1}$?`,
+     options:[ r`Den Kehrwert $\frac{1}{f(x)}$`, r`Die Umkehrfunktion von $f$`, r`Die Ableitung von $f$`, r`Die Funktion $f$ mit negativem Vorzeichen` ],
+     a:1, why:r`Die $-1$ ist hier kein Exponent, sondern die Kennzeichnung der Umkehrfunktion. Der Kehrwert wäre $(f(x))^{-1}$.` },
+
+   { type:"mc", q:r`Wann besitzt $f: D \to Z$ eine Umkehrfunktion $f^{-1}: Z \to D$?`,
+     options:[ r`Wenn $f$ injektiv ist.`, r`Wenn $f$ surjektiv ist.`, r`Wenn $f$ bijektiv ist.`, r`Immer.` ],
+     a:2, why:r`Auf der Zielmenge $Z$ braucht es beides: Injektivität, damit jeder Wert höchstens ein Urbild hat, und Surjektivität, damit jedes Element von $Z$ überhaupt getroffen wird. Betrachtet man stattdessen nur $W = f(D)$, genügt Injektivität.` },
+
+   { type:"mc", q:r`Bestimmen Sie die Umkehrfunktion von $f(x) = 3x - 6$.`,
+     options:[ r`$f^{-1}(x) = \frac{x + 6}{3}$`, r`$f^{-1}(x) = \frac{1}{3x - 6}$`, r`$f^{-1}(x) = 3x + 6$`, r`$f^{-1}(x) = \frac{x - 6}{3}$` ],
+     a:0, why:r`Aus $y = 3x - 6$ folgt $y + 6 = 3x$, also $x = \frac{y + 6}{3}$. Nach Umbenennen der Variablen: $f^{-1}(x) = \frac{x + 6}{3}$.` },
+
+   { type:"mc", q:r`Wie erhält man den Graphen der Umkehrfunktion aus dem Graphen von $f$?`,
+     options:[ r`Durch Spiegelung an der x-Achse`, r`Durch Spiegelung an der y-Achse`, r`Durch Spiegelung an der Winkelhalbierenden $y = x$`, r`Durch Verschiebung um 1 nach rechts` ],
+     a:2, why:r`Beim Umkehren tauschen Eingangs- und Ausgangsgröße die Rollen — das entspricht genau dem Vertauschen der Achsen, also der Spiegelung an $y = x$.` }
+   ]
+ }
+ ]
+}
+];
+
+/* ============================================================
+   Kurslogik
+   ============================================================ */
+var LESSONS = [];
+COURSE.forEach(function(ch, ci){
+  ch.lessons.forEach(function(ls, li){
+    ls.key = "k" + ci + "l" + li; ls.chap = ch; ls.chapIdx = ci;
+    LESSONS.push(ls);
+  });
+});
+var EXAM_KEY = "exam", EXAM_SIZE = 24, PASS = 70;
+
+var STORE = "vorkurs-mathe-v1";
+var S = { pos:0, mode:"learn", step:0, qi:0, given:[], sel:null, checked:false, pool:null, progress:{} };
+
+function load(){
+  try{
+    var raw = localStorage.getItem(STORE);
+    if(!raw) return;
+    var d = JSON.parse(raw);
+    if(d && typeof d === "object"){
+      S.progress = d.progress || {};
+      if(typeof d.pos === "number" && d.pos >= 0 && d.pos < LESSONS.length) S.pos = d.pos;
+    }
+  }catch(e){}
+}
+function save(){
+  try{ localStorage.setItem(STORE, JSON.stringify({ pos:S.pos, progress:S.progress })); }catch(e){}
+}
+
+function prog(key){ return S.progress[key] || null; }
+function passed(key){ var p = prog(key); return !!p && p.pct >= PASS; }
+function doneCount(){ return LESSONS.filter(function(l){ return passed(l.key); }).length; }
+
+function el(id){ return document.getElementById(id); }
+function norm(v){
+  return String(v).toLowerCase().replace(/−/g, "-").replace(/\s+/g, "")
+         .replace(/,/g, ".").replace(/^\+/, "");
+}
+
+/* ------------------------------------------------------------ Rail */
+function renderRail(){
+  var h = "";
+  COURSE.forEach(function(ch, ci){
+    h += '<div class="chap"><div class="chap-h"><i>' + ch.n + "</i>" + ch.title + "</div>";
+    ch.lessons.forEach(function(ls){
+      var i = LESSONS.indexOf(ls), p = prog(ls.key);
+      var cls = passed(ls.key) ? "mark done" : (p ? "mark part" : "mark");
+      var glyph = passed(ls.key) ? "✓" : (p ? "·" : "");
+      h += '<button class="lrow" type="button" data-go="' + i + '"' +
+           (S.pos === i && !isExamMode() ? ' aria-current="true"' : "") + ">" +
+           '<span class="' + cls + '">' + glyph + "</span>" +
+           '<span class="lname"><em>' + ls.id + "</em>" + ls.title + "</span>" +
+           '<span class="lscore">' + (p && p.total ? p.pct + "%" : "") + "</span></button>";
+    });
+    h += "</div>";
+  });
+  var ep = prog(EXAM_KEY);
+  h += '<div class="chap"><div class="chap-h"><i>&#9873;</i>Abschluss</div>' +
+       '<button class="lrow" type="button" data-exam="1"' + (isExamMode() ? ' aria-current="true"' : "") + ">" +
+       '<span class="' + (ep && ep.pct >= PASS ? "mark done" : (ep ? "mark part" : "mark")) + '">' +
+       (ep && ep.pct >= PASS ? "✓" : (ep ? "·" : "")) + "</span>" +
+       '<span class="lname">Abschlussprüfung</span>' +
+       '<span class="lscore">' + (ep && ep.total ? ep.pct + "%" : EXAM_SIZE + " Fr.") + "</span></button></div>";
+  el("railbox").innerHTML = h;
+
+  var d = doneCount(), C = 119.4;
+  el("gring").setAttribute("stroke-dashoffset", String(C - C * d / LESSONS.length));
+  el("gnum").textContent = d + " von " + LESSONS.length;
+  var cur = isExamMode() ? "Abschlussprüfung" : (LESSONS[S.pos].id + " " + LESSONS[S.pos].title);
+  el("mobnow").textContent = cur;
+}
+
+/* ------------------------------------------------------------ Views */
+function stepBar(n, cur){
+  var h = '<div class="steps">';
+  for(var i = 0; i < n; i++) h += "<span class=\"" + (i < cur ? "on" : (i === cur ? "cur" : "")) + "\"></span>";
+  return h + "</div>";
+}
+
+function renderLearn(){
+  var L = LESSONS[S.pos], st = L.steps[S.step], last = S.step === L.steps.length - 1;
+  var h = '<div class="crumb"><span>Kapitel ' + L.chap.n + "</span><span class=\"dot\"></span><span>Lektion " + L.id + "</span></div>" +
+    "<h1>" + L.title + "</h1>" +
+    '<p class="lead">' + md(L.lead) + "</p>" +
+    stepBar(L.steps.length + 1, S.step) +
+    '<section class="card"><div class="card-h"><span class="kicker">Schritt ' + (S.step + 1) + " / " + L.steps.length + "</span>" +
+    "<h2>" + md(st.h) + '</h2></div><div class="body">' + md(st.html) + "</div></section>" +
+    '<div class="nav">' +
+    '<button class="btn sec" type="button" data-act="prev"' + (S.step === 0 && S.pos === 0 ? " disabled" : "") + ">Zurück</button>" +
+    '<button class="btn" type="button" data-act="next" data-primary="1">' + (last ? "Zur Lernkontrolle" : "Weiter") + "</button>" +
+    '<span class="spacer"></span><span class="hintline">Enter</span></div>';
+  el("view").innerHTML = h;
+}
+
+function isExamMode(){ return S.mode === "exam" || S.mode === "examresult"; }
+function quizList(){ return isExamMode() ? S.pool : LESSONS[S.pos].quiz; }
+
+function renderQuiz(){
+  var qs = quizList(), q = qs[S.qi];
+  var isExam = isExamMode();
+  var title = isExam ? "Abschlussprüfung" : LESSONS[S.pos].title;
+  var crumb = isExam
+    ? '<div class="crumb"><span>Abschluss</span><span class="dot"></span><span>alle Kapitel</span></div>'
+    : '<div class="crumb"><span>Kapitel ' + LESSONS[S.pos].chap.n + '</span><span class="dot"></span><span>Lernkontrolle ' + LESSONS[S.pos].id + "</span></div>";
+
+  var h = crumb + "<h1>" + title + "</h1>";
+  h += isExam
+    ? '<p class="lead">' + EXAM_SIZE + " Fragen quer durch alle fünf Kapitel. Ab " + PASS + " % bestanden.</p>"
+    : '<p class="lead">' + qs.length + " Fragen zur Lektion. Ab " + PASS + " % ist die Lektion bestanden.</p>";
+  h += stepBar(isExam ? qs.length : LESSONS[S.pos].steps.length + 1,
+               isExam ? S.qi : LESSONS[S.pos].steps.length);
+
+  var kind = q.type === "ms" ? "Mehrfachauswahl" : (q.type === "input" ? "Freie Eingabe" : "Eine Antwort");
+  h += '<section class="card"><div class="body">' +
+       '<div class="qhead"><span class="qmeta">Frage ' + (S.qi + 1) + " / " + qs.length + '</span><span class="qmeta">' + kind + "</span></div>" +
+       '<p class="qtext">' + md(q.q) + "</p>";
+
+  if(q.type === "input"){
+    h += '<div class="freein"><input id="ans" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" ' +
+         'placeholder="Antwort eingeben"' + (S.checked ? " disabled" : "") +
+         (S.checked ? ' value="' + String(S.sel || "").replace(/"/g, "&quot;") + '"' : "") + ">" +
+         '<span class="fmt">' + (q.fmt || "Antwort") + "</span></div>";
+  } else {
+    h += '<div class="opts">';
+    q.options.forEach(function(o, i){
+      var c = "opt", chosen = (q.type === "ms") ? (S.sel || []).indexOf(i) >= 0 : S.sel === i;
+      if(S.checked){
+        var right = (q.type === "ms") ? q.a.indexOf(i) >= 0 : q.a === i;
+        if(right) c += " ok"; else if(chosen) c += " no";
+      } else if(chosen) c += " sel";
+      h += '<button class="' + c + '" type="button" data-opt="' + i + '"' + (S.checked ? " disabled" : "") + ">" +
+           '<span class="key">' + (i + 1) + "</span><span>" + md(o) + "</span></button>";
+    });
+    h += "</div>";
+  }
+
+  if(S.checked){
+    var ok = S.given[S.qi];
+    h += '<div class="verdict ' + (ok ? "ok" : "no") + '"><div class="vh">' +
+         (ok ? "✓ Richtig" : "✕ Noch nicht") + "</div>" + md(q.why) + "</div>";
+  }
+  h += "</div></section>";
+
+  h += '<div class="nav">';
+  if(!S.checked){
+    h += '<button class="btn" type="button" data-act="check" data-primary="1">Prüfen</button>' +
+         '<span class="spacer"></span><span class="hintline">' +
+         (q.type === "input" ? "Enter zum Prüfen" : "Tasten 1–" + q.options.length + " oder klicken") + "</span>";
+  } else {
+    h += '<button class="btn" type="button" data-act="nextq" data-primary="1">' +
+         (S.qi === qs.length - 1 ? "Zur Auswertung" : "Nächste Frage") + "</button>" +
+         '<span class="spacer"></span><span class="hintline">Enter</span>';
+  }
+  h += "</div>";
+  el("view").innerHTML = h;
+  var inp = el("ans");
+  if(inp && !S.checked) inp.focus();
+}
+
+function renderResult(){
+  var qs = quizList(), isExam = isExamMode();
+  var score = S.given.filter(Boolean).length, total = qs.length;
+  var pct = Math.round(score / total * 100), ok = pct >= PASS;
+  var key = isExam ? EXAM_KEY : LESSONS[S.pos].key;
+  var prev = prog(key);
+  if(!prev || pct > prev.pct) S.progress[key] = { pct:pct, score:score, total:total };
+  save();
+
+  var C = 301.6, off = C - C * pct / 100;
+  var head = ok
+    ? (isExam ? "Abschlussprüfung bestanden" : "Lektion bestanden")
+    : (pct >= 50 ? "Fast geschafft" : "Da ist noch Luft");
+  var sub = ok
+    ? (isExam ? "Sie haben den kompletten Vorkursstoff sicher im Griff." : "Weiter zur nächsten Lektion — oder die Fragen noch einmal durchgehen.")
+    : "Ab " + PASS + " % gilt die Lernkontrolle als bestanden. Gehen Sie die falsch beantworteten Fragen unten durch und wiederholen Sie sie.";
+
+  var h = '<div class="crumb"><span>' + (isExam ? "Abschluss" : "Kapitel " + LESSONS[S.pos].chap.n) +
+          '</span><span class="dot"></span><span>Auswertung</span></div>' +
+          "<h1>" + (isExam ? "Abschlussprüfung" : LESSONS[S.pos].title) + "</h1>" +
+          '<section class="card" style="margin-top:22px"><div class="result">' +
+          '<div class="ring"><svg width="112" height="112" viewBox="0 0 112 112" aria-hidden="true">' +
+          '<circle cx="56" cy="56" r="48" fill="none" stroke="var(--line)" stroke-width="9"></circle>' +
+          '<circle cx="56" cy="56" r="48" fill="none" stroke="' + (ok ? "var(--good)" : "var(--bad)") +
+          '" stroke-width="9" stroke-linecap="round" stroke-dasharray="' + C + '" stroke-dashoffset="' + off +
+          '" transform="rotate(-90 56 56)"></circle></svg><b>' + pct + "%</b></div>" +
+          '<div class="rtxt"><h3>' + head + "</h3><p>" + score + " von " + total + " Fragen richtig. " + sub + "</p></div></div>";
+
+  h += '<div class="review"><h4>Alle Fragen im Überblick</h4>';
+  qs.forEach(function(q, i){
+    var good = S.given[i];
+    h += '<div class="ritem"><span class="ric ' + (good ? "ok" : "no") + '">' + (good ? "✓" : "✕") + "</span>" +
+         "<span>" + md(q.q) + (good ? "" : "<small>" + md(q.why) + "</small>") + "</span></div>";
+  });
+  h += "</div></section>";
+
+  h += '<div class="nav">';
+  if(isExam){
+    h += '<button class="btn" type="button" data-act="exam" data-primary="1">Prüfung wiederholen</button>' +
+         '<button class="btn sec" type="button" data-go="0">Zurück zu Lektion 1.1</button>';
+  } else if(ok && S.pos < LESSONS.length - 1){
+    h += '<button class="btn" type="button" data-act="nextlesson" data-primary="1">Nächste Lektion: ' +
+         LESSONS[S.pos + 1].id + " " + LESSONS[S.pos + 1].title + "</button>" +
+         '<button class="btn sec" type="button" data-act="retry">Wiederholen</button>';
+  } else if(ok){
+    h += '<button class="btn" type="button" data-act="exam" data-primary="1">Zur Abschlussprüfung</button>' +
+         '<button class="btn sec" type="button" data-act="retry">Wiederholen</button>';
+  } else {
+    h += '<button class="btn" type="button" data-act="retry" data-primary="1">Lernkontrolle wiederholen</button>' +
+         '<button class="btn sec" type="button" data-act="reread">Lektion noch einmal lesen</button>';
+  }
+  h += "</div>";
+  el("view").innerHTML = h;
+}
+
+function render(){
+  if(S.mode === "learn") renderLearn();
+  else if(S.mode === "quiz" || S.mode === "exam") renderQuiz();
+  else renderResult();
+  renderRail();
+  window.scrollTo(0, 0);
+}
+
+/* ------------------------------------------------------------ Aktionen */
+function goLesson(i, atStep){
+  S.pos = i; S.mode = "learn"; S.step = atStep || 0;
+  S.qi = 0; S.given = []; S.sel = null; S.checked = false; S.pool = null;
+  if(!S.progress[LESSONS[i].key]) S.progress[LESSONS[i].key] = { pct:0, score:0, total:0 };
+  save(); render();
+}
+function startQuiz(){
+  S.mode = "quiz"; S.qi = 0; S.given = []; S.sel = null; S.checked = false; render();
+}
+function startExam(){
+  var all = [];
+  LESSONS.forEach(function(l){ l.quiz.forEach(function(q){ all.push(q); }); });
+  for(var i = all.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = all[i]; all[i] = all[j]; all[j] = t; }
+  S.pool = all.slice(0, Math.min(EXAM_SIZE, all.length));
+  S.mode = "exam"; S.qi = 0; S.given = []; S.sel = null; S.checked = false;
+  render();
+}
+function check(){
+  var q = quizList()[S.qi], ok = false;
+  if(q.type === "input"){
+    var inp = el("ans"); if(!inp) return;
+    var v = inp.value; if(!v.trim()) { inp.focus(); return; }
+    S.sel = v;
+    ok = q.a.some(function(a){ return norm(a) === norm(v); });
+  } else if(q.type === "ms"){
+    var sel = (S.sel || []).slice().sort(function(a,b){return a-b;});
+    if(!sel.length) return;
+    var want = q.a.slice().sort(function(a,b){return a-b;});
+    ok = sel.length === want.length && sel.every(function(x, i){ return x === want[i]; });
+  } else {
+    if(S.sel === null) return;
+    ok = S.sel === q.a;
+  }
+  S.given[S.qi] = ok; S.checked = true; render();
+}
+function nextQ(){
+  var qs = quizList();
+  if(S.qi === qs.length - 1){ S.mode = S.mode === "exam" ? "examresult" : "result"; render(); return; }
+  S.qi++; S.sel = null; S.checked = false; render();
+}
+
+/* ------------------------------------------------------------ Events */
+document.addEventListener("click", function(e){
+  if(!e.target || !e.target.closest) return;
+  var t = e.target.closest("[data-go],[data-exam],[data-act],[data-opt]");
+  if(!t) return;
+  if(t.hasAttribute("data-go")){ goLesson(parseInt(t.getAttribute("data-go"), 10), 0); closeRail(); return; }
+  if(t.hasAttribute("data-exam")){ startExam(); closeRail(); return; }
+  if(t.hasAttribute("data-opt")){
+    var i = parseInt(t.getAttribute("data-opt"), 10), q = quizList()[S.qi];
+    if(q.type === "ms"){
+      var a = S.sel || []; var k = a.indexOf(i);
+      if(k >= 0) a.splice(k, 1); else a.push(i);
+      S.sel = a;
+    } else S.sel = i;
+    render(); return;
+  }
+  var act = t.getAttribute("data-act"), L = LESSONS[S.pos];
+  if(act === "next"){
+    if(S.step < L.steps.length - 1){ S.step++; render(); }
+    else startQuiz();
+  } else if(act === "prev"){
+    if(S.step > 0){ S.step--; render(); }
+    else if(S.pos > 0) goLesson(S.pos - 1, LESSONS[S.pos - 1].steps.length - 1);
+  } else if(act === "check") check();
+  else if(act === "nextq") nextQ();
+  else if(act === "retry") { S.mode = S.mode === "examresult" ? "exam" : "quiz"; S.qi = 0; S.given = []; S.sel = null; S.checked = false; render(); }
+  else if(act === "reread") { S.mode = "learn"; S.step = 0; render(); }
+  else if(act === "nextlesson") goLesson(S.pos + 1, 0);
+  else if(act === "exam") startExam();
+});
+
+document.addEventListener("keydown", function(e){
+  if(e.metaKey || e.ctrlKey || e.altKey) return;
+  var inField = e.target && e.target.tagName === "INPUT";
+  if(e.key === "Enter"){
+    var p = document.querySelector("[data-primary]");
+    if(p){ e.preventDefault(); p.click(); }
+    return;
+  }
+  if(inField) return;
+  if((S.mode === "quiz" || S.mode === "exam") && !S.checked && /^[1-9]$/.test(e.key)){
+    var b = document.querySelector('[data-opt="' + (parseInt(e.key, 10) - 1) + '"]');
+    if(b){ e.preventDefault(); b.click(); }
+  }
+});
+
+function closeRail(){ el("railbox").classList.remove("open"); }
+el("mobtoggle").addEventListener("click", function(){ el("railbox").classList.toggle("open"); });
+el("reset").addEventListener("click", function(){
+  if(!confirm("Gesamten Lernfortschritt löschen?")) return;
+  S.progress = {}; S.pos = 0; save(); goLesson(0, 0);
+});
+
+/* ------------------------------------------------------------ Start */
+load();
+S.mode = "learn"; S.step = 0;
+render();
+})();
+</script>
