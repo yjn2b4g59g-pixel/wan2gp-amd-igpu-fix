@@ -1,0 +1,1264 @@
+<title>Einheitskreis-Labor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&family=Schibsted+Grotesk:wght@400;500;600;800&display=swap">
+<style>
+:root{
+  --paper:#F2F3EE; --panel:#FBFBF8; --ink:#18202E; --muted:#586070; --faint:#8C939D;
+  --grid:#E3E6DC; --line:#CBD0C4; --chip:#E9EBE3; --chip-hover:#DFE2D8;
+  --sin:#CF3A2A; --cos:#2360C2; --tan:#12805A; --cot:#8444BE; --sec:#A96A0E; --csc:#B03D78;
+  --hl:#F5CF3A; --ok:#12805A; --bad:#C23A2B; --focus:#2360C2;
+  --font-ui:"Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-num:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-math:"STIX Two Text", "Cambria Math", "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#10141A; --panel:#161B23; --ink:#E6E9EE; --muted:#A1A9B5; --faint:#6D7683;
+    --grid:#1D232D; --line:#333B48; --chip:#222933; --chip-hover:#2B3340;
+    --sin:#FF6D5C; --cos:#72A6FF; --tan:#3FCB8F; --cot:#BD8DF2; --sec:#E6A845; --csc:#F07BB6;
+    --hl:#E9C43B; --ok:#3FCB8F; --bad:#FF6D5C; --focus:#72A6FF;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#10141A; --panel:#161B23; --ink:#E6E9EE; --muted:#A1A9B5; --faint:#6D7683;
+  --grid:#1D232D; --line:#333B48; --chip:#222933; --chip-hover:#2B3340;
+  --sin:#FF6D5C; --cos:#72A6FF; --tan:#3FCB8F; --cot:#BD8DF2; --sec:#E6A845; --csc:#F07BB6;
+  --hl:#E9C43B; --ok:#3FCB8F; --bad:#FF6D5C; --focus:#72A6FF;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--font-ui);font-size:15px;line-height:1.5;padding:0 16px;}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 56px;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.math{font-family:var(--font-math)}
+.num{font-family:var(--font-num);font-variant-numeric:tabular-nums}
+
+/* Header */
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 32px}
+.top h1{font-size:clamp(26px,4vw,36px);font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.top h1 .math{font-weight:400;font-style:italic;color:var(--muted)}
+.top p{color:var(--muted);max-width:62ch;margin-top:8px}
+.seg{display:inline-flex;background:var(--chip);border-radius:9px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;padding:6px 12px;border-radius:7px;cursor:pointer;font-weight:500;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--panel);color:var(--ink);box-shadow:0 1px 2px rgb(0 0 0 / .12)}
+.unitbox{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+
+/* Lab layout */
+.lab{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:900px){.lab{grid-template-columns:minmax(0,1fr)}}
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+@media (max-width:900px){.stage{position:static}}
+.readout{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px}
+.readout .coord{font-family:var(--font-num);font-size:17px;font-variant-numeric:tabular-nums}
+.readout .coord .c{color:var(--cos);font-weight:600}
+.readout .coord .s{color:var(--sin);font-weight:600}
+.readout .coord .lab-p{font-family:var(--font-math);font-style:italic;font-size:19px}
+.readout .ang{font-family:var(--font-num);font-size:17px}
+.readout .ang b{font-family:var(--font-math);font-style:italic;font-weight:400;font-size:19px}
+#circle{width:100%;max-width:min(100%, calc(100vh - 190px));min-width:min(100%, 320px);margin:0 auto;aspect-ratio:1;display:block;touch-action:none;user-select:none;-webkit-user-select:none;cursor:crosshair}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:7px 12px;cursor:pointer;font-weight:500;font-size:14px;display:inline-flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums}
+.btn:hover{background:var(--chip)}
+.btn.primary{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.btn.primary:hover{opacity:.9;background:var(--ink)}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;margin-left:auto;color:var(--muted)}
+.toggle input{width:16px;height:16px;accent-color:var(--ink)}
+
+/* SVG */
+.gridline{stroke:var(--grid);stroke-width:1}
+.axis{stroke:var(--muted);stroke-width:1.4}
+.axis-head{fill:var(--muted)}
+.axlbl{fill:var(--muted);font-family:var(--font-math);font-style:italic;font-size:16px}
+.tickl{fill:var(--faint);font-family:var(--font-num);font-size:10.5px}
+.unit{fill:none;stroke:var(--ink);stroke-width:2}
+.quad{fill:var(--faint);font-family:var(--font-math);font-size:20px;opacity:.55;transition:opacity .2s,fill .2s}
+.quad.on{fill:var(--ink);opacity:1;font-weight:600}
+.helper{stroke:var(--faint);stroke-width:1.2;stroke-dasharray:4 5}
+.tickdot{fill:var(--panel);stroke:var(--faint);stroke-width:1.3}
+.tickhit{fill:transparent;cursor:pointer}
+.tickhit:hover + .tickdot{stroke:var(--ink);fill:var(--hl)}
+.angl{fill:var(--muted);font-family:var(--font-num);font-size:10.5px;transition:opacity .15s}
+.angl.dim{opacity:.12}
+.tri{fill:var(--sin);fill-opacity:.07;stroke:none}
+.arc{fill:var(--hl);fill-opacity:.35;stroke:var(--ink);stroke-width:1.3}
+.arclbl{fill:var(--ink);font-family:var(--font-math);font-style:italic;font-size:17px}
+.seg-l{stroke-width:4.5;stroke-linecap:round}
+.seg-l.sin{stroke:var(--sin)} .seg-l.cos{stroke:var(--cos)} .seg-l.tan{stroke:var(--tan)} .seg-l.cot{stroke:var(--cot)}
+.ray{stroke-width:1.4;stroke-dasharray:6 5}
+.ray.tan{stroke:var(--tan)} .ray.cot{stroke:var(--cot)}
+.band{stroke-width:9;stroke-linecap:round;stroke-opacity:.35}
+.band.sec{stroke:var(--sec)} .band.csc{stroke:var(--csc)}
+.radius{stroke:var(--ink);stroke-width:2.6;stroke-linecap:round}
+.fnl{font-family:var(--font-math);font-size:15px;paint-order:stroke;stroke:var(--panel);stroke-width:4px;stroke-linejoin:round}
+.fnl.sin{fill:var(--sin)} .fnl.cos{fill:var(--cos)} .fnl.tan{fill:var(--tan)} .fnl.cot{fill:var(--cot)} .fnl.one{fill:var(--ink)}
+.fnl.pt{fill:var(--ink);font-style:italic;font-size:18px}
+.pt-s{stroke:var(--panel);stroke-width:1.5}
+.pt-s.tan{fill:var(--tan)} .pt-s.cot{fill:var(--cot)}
+.origin{fill:var(--ink)}
+.halo{fill:var(--hl);fill-opacity:.35;stroke:var(--hl);stroke-width:1.5}
+.dot{fill:var(--hl);stroke:var(--ink);stroke-width:2.2}
+#handle{cursor:grab}
+#handle:focus{outline:none}
+#handle:focus-visible .halo{stroke:var(--focus);stroke-width:3}
+.ghost-pt{fill:var(--panel);stroke-width:2.2}
+.ghost-ln{stroke-width:1.6;stroke-dasharray:3 4}
+.ghost-lbl{font-family:var(--font-num);font-size:11px;paint-order:stroke;stroke:var(--panel);stroke-width:4px;stroke-linejoin:round}
+.g-sin .ghost-pt,.g-sin .ghost-ln{stroke:var(--sin)} .g-sin .ghost-lbl{fill:var(--sin)}
+.g-cos .ghost-pt,.g-cos .ghost-ln{stroke:var(--cos)} .g-cos .ghost-lbl{fill:var(--cos)}
+.g-tan .ghost-pt,.g-tan .ghost-ln{stroke:var(--tan)} .g-tan .ghost-lbl{fill:var(--tan)}
+
+/* Panel */
+.panel{display:flex;flex-direction:column;gap:16px}
+.block{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.bh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.bh h2{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
+.hint{font-size:13px;color:var(--muted)}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field > span{font-size:12.5px;color:var(--muted)}
+.inp{width:100%;min-width:0;border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:8px 10px;font-family:var(--font-num);font-size:16px;font-variant-numeric:tabular-nums}
+.inp:focus{outline:2px solid var(--focus);outline-offset:0;border-color:transparent}
+.inp.err{border-color:var(--bad);outline-color:var(--bad)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+input[type=range]{width:100%;accent-color:var(--ink);margin:0}
+.note{font-size:13px;color:var(--muted)}
+.note:empty{display:none}
+
+.inv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:460px){.inv{grid-template-columns:1fr}}
+.inv .field > span{font-family:var(--font-math);font-size:15px;color:var(--ink)}
+.inv .field.sin .inp{border-left:4px solid var(--sin)}
+.inv .field.cos .inp{border-left:4px solid var(--cos)}
+.inv .field.tan .inp{border-left:4px solid var(--tan)}
+.keys{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.key{border:1px solid var(--line);background:var(--chip);border-radius:7px;min-width:36px;padding:4px 10px;cursor:pointer;font-family:var(--font-math);font-size:16px}
+.key:hover{background:var(--chip-hover)}
+.keys .hint{margin-left:4px}
+.solve{font-size:14px;display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:10px;background:var(--chip)}
+.solve:empty{display:none}
+.solve.err{background:transparent;border:1px solid var(--bad);color:var(--ink)}
+.solve .sols{display:flex;gap:6px;flex-wrap:wrap}
+.chipbtn{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:3px 12px;cursor:pointer;font-family:var(--font-num);font-size:14px}
+.chipbtn[aria-current="true"]{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+
+/* Values */
+.vals{display:flex;flex-direction:column}
+.vhead,.vrow{display:grid;grid-template-columns:28px minmax(0,1fr) minmax(76px,auto) 84px;gap:10px;align-items:center}
+.vhead{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);padding-bottom:6px;border-bottom:1px solid var(--line)}
+.vhead span:nth-child(3),.vhead span:nth-child(4){text-align:right}
+.vrow{padding:9px 0;border-bottom:1px solid var(--grid)}
+.vrow:last-child{border-bottom:0}
+.vname{display:flex;flex-direction:column;min-width:0}
+.vname .fn{font-family:var(--font-math);font-size:17px;line-height:1.2}
+.vname .d{font-size:12px;color:var(--muted);line-height:1.35}
+.vex{text-align:right;font-family:var(--font-math);font-size:17px}
+.vdec{text-align:right;font-family:var(--font-num);font-size:14.5px;font-variant-numeric:tabular-nums}
+.vex .none,.vdec .none{color:var(--faint);font-family:var(--font-ui);font-size:13px}
+.undef{font-family:var(--font-ui);font-size:12.5px;color:var(--bad)}
+.sw{position:relative;width:22px;height:22px;display:inline-block;cursor:pointer}
+.sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.sw .box{position:absolute;inset:0;border-radius:6px;border:2px solid var(--c);background:transparent;transition:background .15s}
+.sw input:checked + .box{background:var(--c)}
+.sw input:checked + .box::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid var(--panel);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.sw input:focus-visible + .box{outline:2px solid var(--focus);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* fractions & roots */
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.05;font-size:.92em}
+.frac > span{padding:0 2px}
+.frac .num{border-bottom:1.3px solid currentColor;padding-bottom:1px}
+.frac .den{padding-top:1px}
+.sq .rad{border-top:1.3px solid currentColor;padding-left:1px}
+.neg{margin-right:1px}
+
+/* Insights */
+.facts{display:flex;flex-direction:column;gap:12px}
+.fact{display:grid;grid-template-columns:118px minmax(0,1fr);gap:12px;align-items:baseline;padding-bottom:12px;border-bottom:1px solid var(--grid)}
+.fact:last-child{border-bottom:0;padding-bottom:0}
+@media (max-width:460px){.fact{grid-template-columns:1fr;gap:4px}}
+.fact .k{font-size:12.5px;color:var(--muted);font-weight:500}
+.fact .v{font-size:14.5px}
+.fact .v .f{font-family:var(--font-num);font-size:13.5px;font-variant-numeric:tabular-nums}
+.signs{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.sign{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;font-size:13px;background:var(--chip)}
+.sign .math{font-size:15px}
+.sign b{font-family:var(--font-num);font-weight:600}
+.sign.pos b{color:var(--ok)} .sign.neg b{color:var(--bad)} .sign.zero b{color:var(--muted)} .sign.nd b{color:var(--bad)}
+.mirrors{display:flex;flex-direction:column;gap:6px}
+.mbtn{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:7px 12px;cursor:pointer;text-align:left;font-size:14px}
+.mbtn:hover{background:var(--chip)}
+.mbtn .r{font-family:var(--font-num);font-size:13.5px;color:var(--muted);white-space:nowrap}
+.mbtn[aria-pressed="true"]{border-color:var(--c);box-shadow:inset 4px 0 0 var(--c)}
+.mbtn[aria-pressed="true"] .r{color:var(--c)}
+
+/* Graph */
+.sec-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 24px}
+.sec-h h2{font-size:22px;font-weight:800;letter-spacing:-.01em}
+.sec-h p{color:var(--muted);max-width:64ch}
+.graphbox{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px;overflow-x:auto}
+#graph{display:block;width:100%;min-width:560px;height:auto;cursor:crosshair;touch-action:pan-x pan-y}
+.g-grid{stroke:var(--grid);stroke-width:1}
+.g-axis{stroke:var(--muted);stroke-width:1.2}
+.g-tick{fill:var(--faint);font-family:var(--font-num);font-size:11px}
+.g-curve{fill:none;stroke-width:2.6;stroke-linejoin:round}
+.g-curve.sin{stroke:var(--sin)} .g-curve.cos{stroke:var(--cos)} .g-curve.tan{stroke:var(--tan)}
+.g-asym{stroke:var(--tan);stroke-width:1;stroke-dasharray:3 5;opacity:.7}
+.g-mark{stroke:var(--ink);stroke-width:1.4;stroke-dasharray:2 3}
+.g-dot{stroke:var(--panel);stroke-width:2}
+.g-dot.sin{fill:var(--sin)} .g-dot.cos{fill:var(--cos)} .g-dot.tan{fill:var(--tan)}
+.g-lbl{font-family:var(--font-math);font-size:14px}
+.g-lbl.sin{fill:var(--sin)} .g-lbl.cos{fill:var(--cos)} .g-lbl.tan{fill:var(--tan)}
+.g-alpha{fill:var(--ink);font-family:var(--font-num);font-size:11.5px}
+
+/* Bottom grid */
+.duo{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:900px){.duo{grid-template-columns:minmax(0,1fr)}}
+.tablebox{overflow-x:auto}
+table.merk{border-collapse:collapse;width:100%;min-width:420px}
+table.merk th,table.merk td{padding:8px 6px;text-align:center;border-bottom:1px solid var(--grid)}
+table.merk th[scope=row]{text-align:left;font-weight:500;color:var(--muted);font-size:13px;white-space:nowrap}
+table.merk thead th{padding:0 2px 6px}
+table.merk td{font-family:var(--font-math);font-size:17px}
+table.merk td.small{font-size:14px;color:var(--muted)}
+table.merk .colbtn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:4px 0;width:100%;cursor:pointer;font-family:var(--font-num);font-size:13.5px}
+table.merk .colbtn:hover{background:var(--chip)}
+table.merk .on{background:color-mix(in srgb, var(--hl) 28%, transparent)}
+table.merk thead .on .colbtn{border-color:var(--ink);font-weight:600}
+table.merk tr.sin th[scope=row]{color:var(--sin)} table.merk tr.cos th[scope=row]{color:var(--cos)} table.merk tr.tan th[scope=row]{color:var(--tan)}
+.merknote{font-size:13.5px;color:var(--muted)}
+.merknote b{color:var(--ink);font-weight:600}
+
+.quiz-q{font-size:20px;font-family:var(--font-math)}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.qopt{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:10px 8px;cursor:pointer;font-family:var(--font-math);font-size:19px;min-height:56px;display:flex;align-items:center;justify-content:center}
+.qopt:hover:not(:disabled){background:var(--chip)}
+.qopt:disabled{cursor:default}
+.qopt.ok{border-color:var(--ok);box-shadow:inset 0 0 0 1.5px var(--ok)}
+.qopt.bad{border-color:var(--bad);box-shadow:inset 0 0 0 1.5px var(--bad);opacity:.8}
+.qopt .undef{font-size:14px;color:inherit}
+.quiz-fb{font-size:14px}
+.quiz-fb:empty{display:none}
+.quiz-fb b.ok{color:var(--ok)} .quiz-fb b.bad{color:var(--bad)}
+.quiz-foot{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.score{margin-left:auto;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+.learn{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 28px}
+@media (max-width:900px){.learn{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.learn{grid-template-columns:minmax(0,1fr)}}
+.learn article{border-top:3px solid var(--c,var(--ink));padding-top:12px;display:flex;flex-direction:column;gap:6px}
+.learn h3{font-size:16px;font-weight:600}
+.learn p{font-size:14px;color:var(--muted);max-width:60ch}
+.learn .math{color:var(--ink);font-size:15.5px}
+footer{font-size:12.5px;color:var(--faint)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Einheitskreis-Labor <span class="math">r = 1</span></h1>
+      <p>Zieh den gelben Punkt P über den Kreis, tipp einen Winkel ein oder setz einen Wert für sin, cos oder tan ein. Alle Strecken, Werte und Kurven rechnen und zeichnen sich sofort mit.</p>
+    </div>
+    <div class="unitbox">Winkel anzeigen in
+      <div class="seg" role="group" aria-label="Winkeleinheit">
+        <button type="button" id="uDeg" aria-pressed="true">Grad</button>
+        <button type="button" id="uRad" aria-pressed="false">Bogenmaß</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="lab">
+    <section class="stage" aria-label="Einheitskreis">
+      <div class="readout">
+        <div class="coord" id="readCoord"></div>
+        <div class="ang" id="readAng"></div>
+      </div>
+      <svg id="circle" viewBox="-230 -230 460 460" role="img" aria-label="Einheitskreis mit Punkt P">
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" class="axis-head"/></marker>
+        </defs>
+        <g id="gGrid"></g>
+        <g id="gQuads"></g>
+        <g id="gAxes"></g>
+        <line id="tanAxis" class="helper" x1="150" y1="-228" x2="150" y2="228"/>
+        <line id="cotAxis" class="helper" x1="-228" y1="-150" x2="228" y2="-150"/>
+        <circle class="unit" cx="0" cy="0" r="150"/>
+        <g id="gTicks"></g>
+        <polygon id="tri" class="tri" points="0,0 0,0 0,0"/>
+        <path id="arc" class="arc" d=""/>
+        <text id="arcLbl" class="arclbl" text-anchor="middle">α</text>
+        <line id="secBand" class="band sec"/>
+        <line id="cscBand" class="band csc"/>
+        <g id="gGhosts"></g>
+        <line id="tanRay" class="ray tan"/>
+        <line id="cotRay" class="ray cot"/>
+        <line id="cosSeg" class="seg-l cos"/>
+        <line id="sinSeg" class="seg-l sin"/>
+        <line id="tanSeg" class="seg-l tan"/>
+        <line id="cotSeg" class="seg-l cot"/>
+        <line id="radius" class="radius"/>
+        <circle class="origin" cx="0" cy="0" r="3"/>
+        <circle id="tanPt" class="pt-s tan" r="5"/>
+        <circle id="cotPt" class="pt-s cot" r="5"/>
+        <text id="oneLbl" class="fnl one" text-anchor="middle">1</text>
+        <text id="cosLbl" class="fnl cos" text-anchor="middle">cos α</text>
+        <text id="sinLbl" class="fnl sin">sin α</text>
+        <text id="tanLbl" class="fnl tan">tan α</text>
+        <text id="cotLbl" class="fnl cot" text-anchor="middle">cot α</text>
+        <text id="tLbl" class="fnl tan" text-anchor="start">T</text>
+        <text id="cLbl" class="fnl cot" text-anchor="middle">C</text>
+        <text id="oLbl" class="fnl pt" x="-16" y="18">O</text>
+        <g id="handle" tabindex="0" role="slider" aria-label="Punkt P, Winkel α" aria-valuemin="0" aria-valuemax="360">
+          <circle class="halo" r="17"/>
+          <circle class="dot" r="7.5"/>
+        </g>
+        <text id="pLbl" class="fnl pt" text-anchor="middle">P</text>
+      </svg>
+      <div class="controls">
+        <button type="button" class="btn primary" id="play" aria-pressed="false">▶ Drehen</button>
+        <button type="button" class="btn" data-step="-15">−15°</button>
+        <button type="button" class="btn" data-step="-1">−1°</button>
+        <button type="button" class="btn" data-step="1">+1°</button>
+        <button type="button" class="btn" data-step="15">+15°</button>
+        <label class="toggle"><input type="checkbox" id="snap" checked> Einrasten</label>
+      </div>
+    </section>
+
+    <div class="panel">
+      <section class="block" aria-labelledby="hAngle">
+        <div class="bh"><h2 id="hAngle">Winkel α</h2><span class="hint">auch Rechnungen wie 180/4 oder 5π/6</span></div>
+        <div class="row2">
+          <label class="field"><span>in Grad</span><input class="inp" id="inDeg" type="text" inputmode="decimal" autocomplete="off" spellcheck="false"></label>
+          <label class="field"><span>im Bogenmaß</span><input class="inp" id="inRad" type="text" autocomplete="off" spellcheck="false"></label>
+        </div>
+        <input type="range" id="slider" min="0" max="360" step="0.1" aria-label="Winkel α in Grad">
+        <p class="note" id="angleNote"></p>
+      </section>
+
+      <section class="block" aria-labelledby="hInv">
+        <div class="bh"><h2 id="hInv">Wert einsetzen</h2></div>
+        <p class="hint">Gib einen Wert ein, der Kreis sucht den passenden Winkel. Erlaubt sind z. B. 0,5 · 1/2 · √3/2 · −√2/2 · sqrt(3)</p>
+        <div class="inv">
+          <label class="field sin"><span>sin α =</span><input class="inp" id="inSin" type="text" autocomplete="off" spellcheck="false"></label>
+          <label class="field cos"><span>cos α =</span><input class="inp" id="inCos" type="text" autocomplete="off" spellcheck="false"></label>
+          <label class="field tan"><span>tan α =</span><input class="inp" id="inTan" type="text" autocomplete="off" spellcheck="false"></label>
+        </div>
+        <div class="keys" aria-label="Sonderzeichen einfügen">
+          <button type="button" class="key" data-ins="√">√</button>
+          <button type="button" class="key" data-ins="/">/</button>
+          <button type="button" class="key" data-ins="−">−</button>
+          <button type="button" class="key" data-ins="π">π</button>
+          <span class="hint">tippt ins zuletzt gewählte Feld</span>
+        </div>
+        <div class="solve" id="solve" aria-live="polite"></div>
+      </section>
+
+      <section class="block" aria-labelledby="hVals">
+        <div class="bh"><h2 id="hVals">Alle Werte</h2><span class="hint">Kästchen: im Kreis zeigen</span></div>
+        <div class="vals" id="vals">
+          <div class="vhead"><span></span><span>Funktion</span><span>exakt</span><span>dezimal</span></div>
+        </div>
+      </section>
+
+      <section class="block" aria-labelledby="hFacts">
+        <div class="bh"><h2 id="hFacts">Was gerade gilt</h2></div>
+        <div class="facts">
+          <div class="fact"><div class="k">Lage von P</div><div class="v"><div id="fQuad"></div><div class="signs" id="fSigns"></div></div></div>
+          <div class="fact"><div class="k">Bezugswinkel</div><div class="v" id="fRef"></div></div>
+          <div class="fact"><div class="k">Pythagoras</div><div class="v" id="fPyth"></div></div>
+          <div class="fact"><div class="k">Tangens</div><div class="v" id="fTan"></div></div>
+          <div class="fact"><div class="k">Gleicher Wert bei</div><div class="v"><div class="mirrors" id="mirrors"></div></div></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <section aria-labelledby="hGraph" style="display:flex;flex-direction:column;gap:12px">
+    <div class="sec-h">
+      <h2 id="hGraph">Vom Kreis zur Kurve</h2>
+      <p>Läuft P einmal herum, zeichnet seine Höhe die Sinuskurve und seine x-Koordinate die Kosinuskurve. Tipp in die Grafik, um α zu setzen.</p>
+    </div>
+    <div class="graphbox"><svg id="graph" viewBox="0 0 760 270" role="img" aria-label="Graphen von Sinus, Kosinus und Tangens von 0 bis 360 Grad"></svg></div>
+  </section>
+
+  <div class="duo">
+    <section class="block" aria-labelledby="hMerk">
+      <div class="bh"><h2 id="hMerk">Merktabelle</h2><span class="hint">Spalte antippen setzt α</span></div>
+      <div class="tablebox"><table class="merk" id="merk"></table></div>
+      <p class="merknote"><b>Merkregel für den Sinus:</b> unter der Wurzel zählt man 0, 1, 2, 3, 4 hoch und teilt alles durch 2. Beim Kosinus läuft dieselbe Reihe rückwärts. Die markierte Spalte ist der Bezugswinkel des aktuellen α: Mit ihr bekommst du auch Winkel über 90°.</p>
+    </section>
+
+    <section class="block" aria-labelledby="hQuiz">
+      <div class="bh"><h2 id="hQuiz">Kurz testen</h2><span class="score" id="score">0 von 0 richtig</span></div>
+      <div class="quiz-q" id="quizQ"></div>
+      <div class="quiz-opts" id="quizOpts"></div>
+      <p class="quiz-fb" id="quizFb" aria-live="polite"></p>
+      <div class="quiz-foot">
+        <button type="button" class="btn" id="quizShow">Am Kreis zeigen</button>
+        <button type="button" class="btn primary" id="quizNext">Nächste Frage</button>
+      </div>
+    </section>
+  </div>
+
+  <section aria-labelledby="hLearn" style="display:flex;flex-direction:column;gap:16px">
+    <div class="sec-h"><h2 id="hLearn">So liest du den Kreis</h2></div>
+    <div class="learn">
+      <article style="--c:var(--ink)"><h3>Der Radius ist 1</h3><p>Im Dreieck aus O, P und dem Fußpunkt auf der x-Achse ist die Hypotenuse immer 1. Deshalb ist <span class="math">sin α = Gegenkathete / 1</span> einfach die Höhe von P.</p></article>
+      <article style="--c:var(--cos)"><h3>P hat die Koordinaten (cos α | sin α)</h3><p>Die x-Koordinate von P ist der Kosinus, die y-Koordinate der Sinus. Mehr steckt nicht dahinter, auch nicht bei Winkeln über 90°.</p></article>
+      <article style="--c:var(--tan)"><h3>Tangens an der Tangente</h3><p>Verlängert man OP bis zur senkrechten Geraden <span class="math">x = 1</span>, liegt der Schnittpunkt T auf Höhe <span class="math">tan α = sin α / cos α</span>. Das folgt aus dem Strahlensatz.</p></article>
+      <article style="--c:var(--sin)"><h3>Vorzeichen kommen von den Koordinaten</h3><p>Links von der y-Achse ist cos α negativ, unterhalb der x-Achse ist sin α negativ. Der Bezugswinkel liefert den Betrag, der Quadrant das Vorzeichen.</p></article>
+      <article style="--c:var(--hl)"><h3>sin²α + cos²α = 1</h3><p>Das ist der Satz des Pythagoras im Dreieck mit Hypotenuse 1. Kennst du sin α, bekommst du cos α bis auf das Vorzeichen geschenkt.</p></article>
+      <article style="--c:var(--cot)"><h3>Alles wiederholt sich</h3><p>Nach 360° (also 2π) ist P wieder am Start, sin und cos wiederholen sich. Der Tangens wiederholt sich schon nach 180°, weil P und sein Gegenpunkt dieselbe Gerade durch O haben.</p></article>
+    </div>
+  </section>
+  <footer>Gezeichnet mit Radius 1 Einheit ≙ 150 Pixel. Karos: 0,1 Einheiten.</footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const R = 150, LIM = 1.5;
+  const $ = (id) => document.getElementById(id);
+  const NS = "http://www.w3.org/2000/svg";
+  const KEY = [0,30,45,60,90,120,135,150,180,210,225,240,270,300,315,330];
+  const FNS = ["sin","cos","tan","cot","sec","csc"];
+
+  const S = {
+    deg: 30, unit: "deg", snap: true,
+    show: { sin:true, cos:true, tan:true, cot:false, sec:false, csc:false },
+    mirror: { sin:false, cos:false, tan:false },
+    solved: null, playing: false
+  };
+
+  // ---------- math helpers ----------
+  const norm = (d) => ((d % 360) + 360) % 360;
+  const clean = (x) => Math.abs(x) < 1e-12 ? 0 : x;
+  const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+  const round6 = (x) => Math.round(x * 1e6) / 1e6;
+  function trig(d) {
+    const r = d * Math.PI / 180;
+    const s = clean(Math.sin(r)), c = clean(Math.cos(r));
+    return {
+      s, c,
+      sin: s, cos: c,
+      tan: c === 0 ? null : clean(s / c),
+      cot: s === 0 ? null : clean(c / s),
+      sec: c === 0 ? null : 1 / c,
+      csc: s === 0 ? null : 1 / s
+    };
+  }
+  function special(d) {
+    const n = norm(d), m = Math.round(n / 15) * 15;
+    return Math.abs(n - m) < 1e-7 ? m % 360 : null;
+  }
+  const refAngle = (n) => n <= 90 ? n : n <= 180 ? 180 - n : n <= 270 ? n - 180 : 360 - n;
+
+  const SIN_EX = {0:"0",15:"(√6−√2)/4",30:"1/2",45:"√2/2",60:"√3/2",75:"(√6+√2)/4",90:"1"};
+  const TAN_EX = {0:"0",15:"2−√3",30:"√3/3",45:"1",60:"√3",75:"2+√3",90:null};
+  const CSC_EX = {0:null,15:"√6+√2",30:"2",45:"√2",60:"2√3/3",75:"√6−√2",90:"1"};
+
+  // returns null if not a special angle, otherwise {str} where str === null means "not defined"
+  function exactOf(fn, d) {
+    const n = special(d);
+    if (n === null) return null;
+    const rf = refAngle(n), t = trig(n);
+    const base = fn === "sin" ? SIN_EX[rf] : fn === "cos" ? SIN_EX[90 - rf]
+      : fn === "tan" ? TAN_EX[rf] : fn === "cot" ? TAN_EX[90 - rf]
+      : fn === "csc" ? CSC_EX[rf] : CSC_EX[90 - rf];
+    if (base === null || base === undefined) return { str: null };
+    if (base === "0") return { str: "0" };
+    return { str: (t[fn] < 0 ? "−" : "") + base };
+  }
+
+  // ---------- formatting ----------
+  const de = (s) => s.replace(".", ",").replace(/^-/, "−");
+  function fmt(x, dec = 4) {
+    if (x === null || x === undefined) return "–";
+    if (Math.abs(x) < 5 * Math.pow(10, -dec - 1)) x = 0;
+    return de(x.toFixed(dec));
+  }
+  function fmtShort(x, maxDec = 2) {
+    const f = Math.pow(10, maxDec);
+    let r = Math.round(x * f) / f;
+    if (Object.is(r, -0)) r = 0;
+    return de(String(r));
+  }
+  const gcd = (a, b) => b ? gcd(b, a % b) : a;
+  function piFrac(d) {
+    const k = Math.round(d / 15);
+    if (k === 0) return "0";
+    let num = Math.abs(k), den = 12;
+    const g = gcd(num, den); num /= g; den /= g;
+    return (k < 0 ? "−" : "") + (num === 1 ? "" : num) + "π" + (den === 1 ? "" : "/" + den);
+  }
+  const isMult15 = (d) => Math.abs(d / 15 - Math.round(d / 15)) < 1e-7;
+  function radText(d) { return isMult15(d) ? piFrac(d) : fmt(d * Math.PI / 180, 4); }
+  function angText(d) { return S.unit === "deg" ? fmtShort(d, 1) + "°" : radText(d); }
+  function angHTML(d) { return S.unit === "deg" ? fmtShort(d, 1) + "°" : (isMult15(d) ? mathHTML(piFrac(d)) : fmt(d * Math.PI / 180, 4)); }
+
+  function rt(s) { return s.replace(/√(\d+)/g, '<span class="sq">√<span class="rad">$1</span></span>'); }
+  function mathHTML(str) {
+    if (str === null) return '<span class="undef">nicht definiert</span>';
+    const neg = str.startsWith("−");
+    const s = neg ? str.slice(1) : str;
+    const k = s.lastIndexOf("/");
+    let body;
+    if (k > 0) {
+      let num = s.slice(0, k), den = s.slice(k + 1);
+      if (num.startsWith("(") && num.endsWith(")")) num = num.slice(1, -1);
+      body = `<span class="frac"><span class="num">${rt(num)}</span><span class="den">${rt(den)}</span></span>`;
+    } else body = rt(s);
+    return (neg ? '<span class="neg">−</span>' : "") + body;
+  }
+
+  // ---------- expression parser (no eval) ----------
+  function parseExpr(input) {
+    const src = String(input).toLowerCase()
+      .replace(/\s+/g, "").replace(/,/g, ".").replace(/[−–]/g, "-")
+      .replace(/[·×]/g, "*").replace(/:/g, "/").replace(/°/g, "")
+      .replace(/sqrt/g, "√").replace(/wurzel/g, "√").replace(/pi/g, "π");
+    if (!src) return NaN;
+    let i = 0;
+    function primary() {
+      const ch = src[i];
+      if (ch === "(") { i++; const v = expr(); if (src[i] !== ")") throw 0; i++; return v; }
+      if (ch === "π") { i++; return Math.PI; }
+      if (ch === "√") { i++; const v = primary(); if (v < 0) throw 0; return Math.sqrt(v); }
+      const m = /^(\d+\.?\d*|\.\d+)/.exec(src.slice(i));
+      if (m) { i += m[0].length; return parseFloat(m[0]); }
+      throw 0;
+    }
+    function unary() {
+      if (src[i] === "-") { i++; return -unary(); }
+      if (src[i] === "+") { i++; return unary(); }
+      return primary();
+    }
+    function term() {
+      let v = unary();
+      for (;;) {
+        const ch = src[i];
+        if (ch === "*") { i++; v *= unary(); }
+        else if (ch === "/") { i++; v /= unary(); }
+        else if (ch !== undefined && /[\d.(π√]/.test(ch)) { v *= primary(); }
+        else return v;
+      }
+    }
+    function expr() {
+      let v = term();
+      for (;;) {
+        if (src[i] === "+") { i++; v += term(); }
+        else if (src[i] === "-") { i++; v -= term(); }
+        else return v;
+      }
+    }
+    try {
+      const v = expr();
+      if (i !== src.length || !isFinite(v)) return NaN;
+      return v;
+    } catch (e) { return NaN; }
+  }
+
+  // ---------- svg helpers ----------
+  function el(tag, attrs, parent) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function line(e, x1, y1, x2, y2) {
+    e.setAttribute("x1", x1.toFixed(2)); e.setAttribute("y1", y1.toFixed(2));
+    e.setAttribute("x2", x2.toFixed(2)); e.setAttribute("y2", y2.toFixed(2));
+  }
+  function pos(e, x, y) { e.setAttribute("x", x.toFixed(2)); e.setAttribute("y", y.toFixed(2)); }
+  function vis(e, on) { if (on) e.removeAttribute("visibility"); else e.setAttribute("visibility", "hidden"); }
+
+  // ---------- static circle parts ----------
+  const svg = $("circle");
+  (function buildStatic() {
+    const g = $("gGrid");
+    for (let v = -225; v <= 225; v += 15) {
+      el("line", { class: "gridline", x1: v, y1: -228, x2: v, y2: 228 }, g);
+      el("line", { class: "gridline", x1: -228, y1: v, x2: 228, y2: v }, g);
+    }
+    const a = $("gAxes");
+    el("line", { class: "axis", x1: -222, y1: 0, x2: 222, y2: 0, "marker-end": "url(#ah)" }, a);
+    el("line", { class: "axis", x1: 0, y1: 222, x2: 0, y2: -222, "marker-end": "url(#ah)" }, a);
+    const tx = el("text", { class: "axlbl", x: 214, y: 20, "text-anchor": "end" }, a); tx.textContent = "x";
+    const ty = el("text", { class: "axlbl", x: 10, y: -210 }, a); ty.textContent = "y";
+    [[-1,"−1"],[-0.5,"−0,5"],[0.5,"0,5"],[1,"1"]].forEach(([v, t]) => {
+      el("line", { class: "axis", x1: v * R, y1: -4, x2: v * R, y2: 4 }, a);
+      el("line", { class: "axis", x1: -4, y1: -v * R, x2: 4, y2: -v * R }, a);
+      const lx = el("text", { class: "tickl", x: v * R + (v === 1 ? -4 : v === -1 ? 4 : 0), y: 16, "text-anchor": v === 1 ? "end" : v === -1 ? "start" : "middle" }, a); lx.textContent = t;
+      const ly = el("text", { class: "tickl", x: -8, y: -v * R + (v === 1 ? 12 : v === -1 ? -5 : 4), "text-anchor": "end" }, a); ly.textContent = t;
+    });
+    const q = $("gQuads");
+    [["I",200,-200],["II",-200,-200],["III",-200,212],["IV",200,212]].forEach(([t, x, y], i) => {
+      const e = el("text", { class: "quad", x, y, "text-anchor": "middle", id: "q" + (i + 1) }, q); e.textContent = t;
+    });
+  })();
+
+  const tickLabels = [];
+  function buildTicks() {
+    const g = $("gTicks");
+    g.textContent = "";
+    tickLabels.length = 0;
+    KEY.forEach((k) => {
+      const r = k * Math.PI / 180, x = Math.cos(r) * R, y = -Math.sin(r) * R;
+      const hit = el("circle", { class: "tickhit", cx: x, cy: y, r: 11, "data-angle": k }, g);
+      hit.appendChild(el("title", {})).textContent = angText(k) + " setzen";
+      el("circle", { class: "tickdot", cx: x, cy: y, r: 3.4, "pointer-events": "none" }, g);
+      const lr = R + 24;
+      const t = el("text", { class: "angl", x: (Math.cos(r) * lr).toFixed(1), y: (-Math.sin(r) * lr + 4).toFixed(1), "text-anchor": "middle", "pointer-events": "none" }, g);
+      t.textContent = S.unit === "deg" ? k + "°" : piFrac(k);
+      tickLabels.push({ k, t });
+    });
+  }
+
+  // ghosts
+  const ghosts = {};
+  ["sin","cos","tan"].forEach((fn) => {
+    const g = el("g", { class: "g-" + fn }, $("gGhosts"));
+    ghosts[fn] = {
+      g,
+      ln: el("line", { class: "ghost-ln" }, g),
+      pt: el("circle", { class: "ghost-pt", r: 6.5 }, g),
+      lbl: el("text", { class: "ghost-lbl", "text-anchor": "middle" }, g)
+    };
+  });
+
+  // ---------- panel: value rows & mirrors ----------
+  const FN_INFO = {
+    sin: ["sin α", "y-Koordinate von P · Gegenkathete / Hypotenuse", "var(--sin)"],
+    cos: ["cos α", "x-Koordinate von P · Ankathete / Hypotenuse", "var(--cos)"],
+    tan: ["tan α", "sin α / cos α · Höhe von T auf der Geraden x = 1", "var(--tan)"],
+    cot: ["cot α", "cos α / sin α · Stelle von C auf der Geraden y = 1", "var(--cot)"],
+    sec: ["sec α", "1 / cos α · Länge der Strecke OT", "var(--sec)"],
+    csc: ["csc α", "1 / sin α · Länge der Strecke OC", "var(--csc)"]
+  };
+  const valEls = {};
+  FNS.forEach((fn) => {
+    const [name, desc, col] = FN_INFO[fn];
+    const row = document.createElement("div");
+    row.className = "vrow";
+    row.innerHTML = `<label class="sw" style="--c:${col}"><input type="checkbox" id="show-${fn}" ${S.show[fn] ? "checked" : ""}><span class="box"></span><span class="sr">${name} im Kreis zeigen</span></label>
+      <div class="vname"><span class="fn" style="color:${col}">${name}</span><span class="d">${desc}</span></div>
+      <div class="vex" id="ex-${fn}"></div><div class="vdec" id="dec-${fn}"></div>`;
+    $("vals").appendChild(row);
+    valEls[fn] = { ex: row.querySelector(".vex"), dec: row.querySelector(".vdec") };
+    row.querySelector("input").addEventListener("change", (e) => {
+      S.show[fn] = e.target.checked;
+      if (fn === "tan" || fn === "sin" || fn === "cos") buildGraph();
+      update();
+    });
+  });
+
+  const MIRROR = {
+    sin: { label: "Gleicher Sinus", rule: "180° − α", f: (n) => 180 - n, col: "var(--sin)" },
+    cos: { label: "Gleicher Kosinus", rule: "360° − α", f: (n) => 360 - n, col: "var(--cos)" },
+    tan: { label: "Gleicher Tangens", rule: "α + 180°", f: (n) => n + 180, col: "var(--tan)" }
+  };
+  const mirrorBtns = {};
+  ["sin","cos","tan"].forEach((fn) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "mbtn"; b.style.setProperty("--c", MIRROR[fn].col);
+    b.setAttribute("aria-pressed", "false");
+    b.innerHTML = `<span class="l"></span><span class="r"></span>`;
+    b.addEventListener("click", () => { S.mirror[fn] = !S.mirror[fn]; update(); });
+    $("mirrors").appendChild(b);
+    mirrorBtns[fn] = b;
+  });
+
+  // ---------- setting the angle ----------
+  function setAngle(d, opts = {}) {
+    S.deg = round6(d);
+    if (!opts.keepSolved) S.solved = null;
+    if (!opts.fromPlay) stopPlay();
+    update(opts);
+  }
+  function snapDeg(d) {
+    d = norm(d);
+    if (S.snap) {
+      for (const k of KEY.concat([360])) if (Math.abs(d - k) < 3) return k % 360;
+    }
+    return Math.round(d * 10) / 10 % 360;
+  }
+
+  // ---------- main render ----------
+  function update(opts = {}) {
+    const d = S.deg, n = norm(d), t = trig(d), sp = special(d);
+    const { s, c } = t;
+    const Px = c * R, Py = -s * R;
+
+    // triangle, segments, radius
+    $("tri").setAttribute("points", `0,0 ${Px.toFixed(2)},0 ${Px.toFixed(2)},${Py.toFixed(2)}`);
+    vis($("tri"), S.show.sin || S.show.cos);
+    line($("cosSeg"), 0, 0, Px, 0); vis($("cosSeg"), S.show.cos);
+    line($("sinSeg"), Px, 0, Px, Py); vis($("sinSeg"), S.show.sin);
+    line($("radius"), 0, 0, Px, Py);
+    $("handle").setAttribute("transform", `translate(${Px.toFixed(2)} ${Py.toFixed(2)})`);
+    $("handle").setAttribute("aria-valuenow", n.toFixed(1));
+    $("handle").setAttribute("aria-valuetext", fmtShort(n, 1) + " Grad");
+
+    // labels
+    const pl = $("pLbl"), po = 30;
+    pos(pl, c * (R + po) , -s * (R + po) + 6);
+    const oneL = $("oneLbl");
+    pos(oneL, (c / 2 - 0.09 * s) * R, -(s / 2 + 0.09 * c) * R + 5);
+    const cl = $("cosLbl");
+    pos(cl, Px / 2, s >= 0 ? 20 : -10);
+    vis(cl, S.show.cos && Math.abs(c) > 0.12);
+    const sl = $("sinLbl");
+    sl.setAttribute("text-anchor", c >= 0 ? "start" : "end");
+    pos(sl, Px + (c >= 0 ? 9 : -9), Py / 2 + 5);
+    vis(sl, S.show.sin && Math.abs(s) > 0.1);
+
+    // angle arc
+    const theta = Math.abs(d) <= 360 ? d : n;
+    const rA = 40;
+    const arc = $("arc"), al = $("arcLbl");
+    if (Math.abs(theta) < 0.05) { arc.setAttribute("d", ""); vis(al, false); }
+    else {
+      if (Math.abs(theta) >= 359.95) {
+        const sw = theta > 0 ? 0 : 1;
+        arc.setAttribute("d", `M ${rA} 0 A ${rA} ${rA} 0 1 ${sw} ${-rA} 0 A ${rA} ${rA} 0 1 ${sw} ${rA} 0 Z`);
+      } else {
+        const a = theta * Math.PI / 180;
+        arc.setAttribute("d", `M 0 0 L ${rA} 0 A ${rA} ${rA} 0 ${Math.abs(theta) > 180 ? 1 : 0} ${theta > 0 ? 0 : 1} ${(rA * Math.cos(a)).toFixed(2)} ${(-rA * Math.sin(a)).toFixed(2)} Z`);
+      }
+      const m = theta / 2 * Math.PI / 180, lr = rA + 14;
+      pos(al, Math.cos(m) * lr, -Math.sin(m) * lr + 5);
+      vis(al, Math.abs(theta) > 8);
+    }
+
+    // tangent
+    const showTan = S.show.tan && t.tan !== null;
+    vis($("tanAxis"), S.show.tan || S.show.sec);
+    let Tend = null;
+    if (t.tan !== null) {
+      const tv = t.tan, k = Math.min(1, LIM / Math.abs(tv));
+      Tend = [k * R, -k * tv * R];
+      const clipped = k < 1;
+      line($("tanSeg"), R, 0, R, -clamp(tv, -LIM, LIM) * R);
+      line($("tanRay"), Px, Py, Tend[0], Tend[1]);
+      $("tanPt").setAttribute("cx", R); $("tanPt").setAttribute("cy", (-tv * R).toFixed(2));
+      vis($("tanPt"), (showTan || S.show.sec) && !clipped);
+      const tl = $("tanLbl");
+      tl.textContent = "tan α" + (clipped ? (tv > 0 ? " ↑" : " ↓") : "");
+      pos(tl, R + 9, -clamp(tv, -LIM, LIM) / 2 * R + 5);
+      tl.setAttribute("text-anchor", "start");
+      vis(tl, showTan && Math.abs(tv) > 0.1);
+      pos($("tLbl"), R + 9, -tv * R + (tv >= 0 ? -6 : 16));
+      vis($("tLbl"), (showTan || S.show.sec) && !clipped);
+    }
+    vis($("tanSeg"), showTan);
+    vis($("tanRay"), (showTan || S.show.sec) && t.tan !== null);
+    if (t.tan === null) { vis($("tanPt"), false); vis($("tanLbl"), false); vis($("tLbl"), false); }
+
+    // cotangent
+    const showCot = S.show.cot && t.cot !== null;
+    vis($("cotAxis"), S.show.cot || S.show.csc);
+    let Cend = null;
+    if (t.cot !== null) {
+      const cv = t.cot, k = Math.min(1, LIM / Math.abs(cv));
+      Cend = [k * cv * R, -k * R];
+      const clipped = k < 1;
+      line($("cotSeg"), 0, -R, clamp(cv, -LIM, LIM) * R, -R);
+      line($("cotRay"), Px, Py, Cend[0], Cend[1]);
+      $("cotPt").setAttribute("cx", (cv * R).toFixed(2)); $("cotPt").setAttribute("cy", -R);
+      vis($("cotPt"), (showCot || S.show.csc) && !clipped);
+      const ctl = $("cotLbl");
+      ctl.textContent = (clipped && cv < 0 ? "← " : "") + "cot α" + (clipped && cv > 0 ? " →" : "");
+      pos(ctl, clamp(cv, -LIM, LIM) / 2 * R, -R - 9);
+      vis(ctl, showCot && Math.abs(cv) > 0.15);
+      pos($("cLbl"), cv * R, -R - 12);
+      vis($("cLbl"), (showCot || S.show.csc) && !clipped && Math.abs(cv) > 0.1);
+    }
+    vis($("cotSeg"), showCot);
+    vis($("cotRay"), (showCot || S.show.csc) && t.cot !== null);
+    if (t.cot === null) { vis($("cotPt"), false); vis($("cotLbl"), false); vis($("cLbl"), false); }
+
+    // sec / csc bands
+    if (Tend) line($("secBand"), 0, 0, Tend[0], Tend[1]);
+    vis($("secBand"), S.show.sec && !!Tend);
+    if (Cend) line($("cscBand"), 0, 0, Cend[0], Cend[1]);
+    vis($("cscBand"), S.show.csc && !!Cend);
+
+    // quadrant highlight
+    const onAxis = Math.abs(n % 90) < 1e-7 || Math.abs(n % 90 - 90) < 1e-7;
+    const quad = onAxis ? 0 : Math.floor(n / 90) + 1;
+    for (let i = 1; i <= 4; i++) $("q" + i).classList.toggle("on", i === quad);
+
+    // tick labels near P dim
+    tickLabels.forEach(({ k, t: te }) => {
+      let diff = Math.abs(k - n); diff = Math.min(diff, 360 - diff);
+      te.classList.toggle("dim", diff < 9);
+    });
+
+    // ghosts
+    const activeGhost = [];
+    ["sin","cos","tan"].forEach((fn) => {
+      const gh = ghosts[fn];
+      const on = S.mirror[fn] || (S.solved && S.solved.fn === fn);
+      const gA = norm(round6(MIRROR[fn].f(n)));
+      const same = Math.min(Math.abs(gA - n), 360 - Math.abs(gA - n)) < 1e-6;
+      if (!on || same) { vis(gh.g, false); return; }
+      vis(gh.g, true);
+      const gt = trig(gA), gx = gt.c * R, gy = -gt.s * R;
+      gh.pt.setAttribute("cx", gx.toFixed(2)); gh.pt.setAttribute("cy", gy.toFixed(2));
+      line(gh.ln, Px, Py, gx, gy);
+      pos(gh.lbl, gt.c * (R + 30), -gt.s * (R + 30) + 4);
+      gh.lbl.textContent = angText(gA);
+      activeGhost.push(gA);
+    });
+    tickLabels.forEach(({ k, t: te }) => {
+      if (activeGhost.some((g) => { let df = Math.abs(k - g); df = Math.min(df, 360 - df); return df < 9; })) te.classList.add("dim");
+    });
+
+    // readouts
+    $("readCoord").innerHTML = `<span class="lab-p">P</span>(<span class="c">${fmt(c, 3)}</span> | <span class="s">${fmt(s, 3)}</span>)`;
+    $("readAng").innerHTML = `<b>α</b> = ${angHTML(d)}`;
+
+    // inputs
+    const active = document.activeElement;
+    if (active !== $("inDeg")) $("inDeg").value = fmtShort(d, 2);
+    if (active !== $("inRad")) $("inRad").value = radText(d);
+    $("inDeg").classList.remove("err"); $("inRad").classList.remove("err");
+    $("slider").value = n;
+    ["sin","cos","tan"].forEach((fn) => {
+      const inp = $("in" + fn[0].toUpperCase() + fn.slice(1));
+      if (active === inp) return;
+      inp.classList.remove("err");
+      const ex = exactOf(fn, d);
+      if (ex) inp.value = ex.str === null ? "nicht definiert" : ex.str;
+      else inp.value = t[fn] === null ? "nicht definiert" : fmt(t[fn], 4);
+    });
+
+    // angle note
+    let note = "";
+    if (d >= 360 || d < 0) {
+      const turns = Math.floor(d / 360);
+      note = d < 0
+        ? `Negative Winkel werden im Uhrzeigersinn gemessen. ${fmtShort(d,2)}° landet am selben Punkt wie ${fmtShort(n,2)}°.`
+        : `${fmtShort(d,2)}° sind ${turns} volle Umdrehung${turns > 1 ? "en" : ""} plus ${fmtShort(n,2)}°. Alle Werte sind dieselben wie bei ${fmtShort(n,2)}°.`;
+    }
+    $("angleNote").textContent = note;
+
+    // values table
+    FNS.forEach((fn) => {
+      const ex = exactOf(fn, d), v = t[fn];
+      valEls[fn].ex.innerHTML = ex ? mathHTML(ex.str) : '<span class="none">–</span>';
+      valEls[fn].dec.innerHTML = v === null ? '<span class="undef">n. def.</span>' : fmt(v, 4);
+    });
+
+    // facts
+    const axisNames = { 0: "auf der positiven x-Achse", 90: "auf der positiven y-Achse", 180: "auf der negativen x-Achse", 270: "auf der negativen y-Achse" };
+    const qRange = { 1: "0° < α < 90°", 2: "90° < α < 180°", 3: "180° < α < 270°", 4: "270° < α < 360°" };
+    const roman = ["", "I", "II", "III", "IV"];
+    $("fQuad").textContent = quad ? `${roman[quad]}. Quadrant (${qRange[quad]})` : `P liegt ${axisNames[Math.round(n) % 360]}.`;
+    const sg = (v) => v === null ? ["nd", "n. def."] : v > 0 ? ["pos", "+"] : v < 0 ? ["neg", "−"] : ["zero", "0"];
+    $("fSigns").innerHTML = ["sin","cos","tan"].map((fn) => {
+      const [cls, txt] = sg(t[fn]);
+      return `<span class="sign ${cls}"><span class="math">${fn}</span><b>${txt}</b></span>`;
+    }).join("");
+
+    const rf = round6(refAngle(n));
+    let refTxt;
+    if (quad === 1) refTxt = `Im I. Quadranten ist α selbst der Bezugswinkel. Das rechtwinklige Dreieck liegt ganz normal da.`;
+    else if (!quad) refTxt = `Auf den Achsen gibt es kein Dreieck. Lies die Werte direkt ab: P(${fmtShort(c,0)} | ${fmtShort(s,0)}).`;
+    else {
+      const how = quad === 2 ? "180° − α" : quad === 3 ? "α − 180°" : "360° − α";
+      const sS = s > 0 ? "+" : "−", cS = c > 0 ? "+" : "−", tS = t.tan > 0 ? "+" : "−";
+      const r = fmtShort(rf, 1) + "°";
+      refTxt = `α′ = ${how} = <b>${r}</b>. Gleiche Beträge wie bei ${r}, das Vorzeichen kommt vom Quadranten:<br><span class="f">sin α = ${sS}sin ${r} · cos α = ${cS}cos ${r} · tan α = ${tS}tan ${r}</span>`;
+    }
+    $("fRef").innerHTML = refTxt;
+    $("fPyth").innerHTML = `<span class="f">sin²α + cos²α = ${fmt(s*s)} + ${fmt(c*c)} = ${fmt(s*s + c*c)}</span><br><span class="hint">Gilt für jeden Winkel, weil der Radius 1 ist.</span>`;
+    $("fTan").innerHTML = t.tan === null
+      ? `<span class="undef">nicht definiert</span>: cos α = 0, und durch 0 kann man nicht teilen. OP läuft parallel zur Geraden x = 1 und trifft sie nie.`
+      : `<span class="f">tan α = sin α / cos α = ${fmt(s)} / ${fmt(c)} = ${fmt(t.tan)}</span>`;
+
+    ["sin","cos","tan"].forEach((fn) => {
+      const b = mirrorBtns[fn], M = MIRROR[fn];
+      const gA = norm(round6(M.f(n)));
+      const same = Math.min(Math.abs(gA - n), 360 - Math.abs(gA - n)) < 1e-6;
+      const on = S.mirror[fn] || (S.solved && S.solved.fn === fn);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+      b.querySelector(".l").textContent = `${M.label} (${M.rule})`;
+      b.querySelector(".r").textContent = same ? "nur dieser Punkt" : angText(gA);
+    });
+
+    // solve message
+    renderSolve(d);
+
+    // graph + merk table
+    updateGraph(n, t);
+    updateMerk(sp !== null ? refAngle(sp) : null);
+  }
+
+  // ---------- inverse solving ----------
+  const INV_ERR = {
+    sin: "Der Sinus ist die y-Koordinate eines Punktes auf dem Einheitskreis. Die liegt immer zwischen −1 und 1.",
+    cos: "Der Kosinus ist die x-Koordinate eines Punktes auf dem Einheitskreis. Die liegt immer zwischen −1 und 1."
+  };
+  function solveFor(fn, v) {
+    let a1, a2;
+    if (fn === "sin") { a1 = norm(round6(Math.asin(v) * 180 / Math.PI)); a2 = norm(round6(180 - a1)); }
+    else if (fn === "cos") { a1 = norm(round6(Math.acos(v) * 180 / Math.PI)); a2 = norm(round6(360 - a1)); }
+    else { a1 = norm(round6(Math.atan(v) * 180 / Math.PI)); a2 = norm(round6(a1 + 180)); }
+    const sols = Math.abs(a1 - a2) < 1e-6 ? [a1] : [a1, a2].sort((x, y) => x - y);
+    return sols;
+  }
+  function onInv(fn, inp) {
+    const raw = inp.value.trim();
+    if (!raw) { S.solved = null; inp.classList.remove("err"); update(); return; }
+    const v = parseExpr(raw);
+    if (isNaN(v)) {
+      inp.classList.add("err");
+      S.solved = { fn, error: "Das kann ich nicht lesen. Beispiele: 0,5 · 1/2 · √3/2 · −√2/2" };
+      renderSolve(S.deg); return;
+    }
+    if ((fn === "sin" || fn === "cos") && Math.abs(v) > 1 + 1e-12) {
+      inp.classList.add("err");
+      S.solved = { fn, error: `${fn} α = ${fmtShort(v, 4)} gibt es nicht. ${INV_ERR[fn]}` };
+      renderSolve(S.deg); return;
+    }
+    inp.classList.remove("err");
+    const vv = clamp(v, -1e9, 1e9);
+    const sols = solveFor(fn, (fn === "tan") ? vv : clamp(vv, -1, 1));
+    S.solved = { fn, value: v, raw, sols };
+    stopPlay();
+    S.deg = sols[0];
+    update();
+  }
+  function renderSolve(d) {
+    const box = $("solve");
+    const so = S.solved;
+    box.classList.remove("err");
+    if (!so) { box.innerHTML = ""; return; }
+    if (so.error) { box.classList.add("err"); box.textContent = so.error; return; }
+    const n = norm(d);
+    const why = so.fn === "sin" ? "Beide Punkte liegen auf derselben Höhe."
+      : so.fn === "cos" ? "Beide Punkte liegen genau übereinander, sie haben dieselbe x-Koordinate."
+      : "Beide Punkte liegen sich gegenüber auf derselben Geraden durch O. Der Tangens wiederholt sich alle 180°.";
+    const head = so.sols.length === 1
+      ? `<span><span class="math">${so.fn} α = ${escapeHTML(so.raw)}</span> hat zwischen 0° und 360° genau eine Lösung:</span>`
+      : `<span><span class="math">${so.fn} α = ${escapeHTML(so.raw)}</span> hat zwischen 0° und 360° zwei Lösungen. ${why}</span>`;
+    box.innerHTML = head + `<div class="sols">${so.sols.map((a) =>
+      `<button type="button" class="chipbtn" data-sol="${a}" aria-current="${Math.abs(a - n) < 1e-6 ? "true" : "false"}">α = ${angText(a)}</button>`).join("")}</div>`;
+  }
+  function escapeHTML(s) { return s.replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch])); }
+  $("solve").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-sol]");
+    if (b) setAngle(parseFloat(b.dataset.sol), { keepSolved: true });
+  });
+
+  let lastInv = $("inSin");
+  [["sin", $("inSin")], ["cos", $("inCos")], ["tan", $("inTan")]].forEach(([fn, inp]) => {
+    inp.addEventListener("focus", () => { lastInv = inp; inp.select(); });
+    inp.addEventListener("input", () => onInv(fn, inp));
+    inp.addEventListener("blur", () => { if (!inp.classList.contains("err")) update(); });
+    inp.addEventListener("keydown", (e) => { if (e.key === "Enter") inp.blur(); });
+  });
+  document.querySelectorAll(".key").forEach((k) => {
+    k.addEventListener("mousedown", (e) => e.preventDefault());
+    k.addEventListener("click", () => {
+      const inp = lastInv, ins = k.dataset.ins;
+      const focused = document.activeElement === inp;
+      const a = focused ? inp.selectionStart : 0;
+      const b = focused ? inp.selectionEnd : inp.value.length;
+      inp.value = inp.value.slice(0, a) + ins + inp.value.slice(b);
+      if (!focused) inp.focus();
+      const p = a + ins.length;
+      try { inp.setSelectionRange(p, p); } catch (e) {}
+      inp.dispatchEvent(new Event("input"));
+    });
+  });
+
+  // ---------- angle inputs ----------
+  $("inDeg").addEventListener("input", (e) => {
+    const v = parseExpr(e.target.value);
+    if (isNaN(v)) { e.target.classList.add("err"); return; }
+    e.target.classList.remove("err");
+    setAngle(v);
+  });
+  $("inRad").addEventListener("input", (e) => {
+    const v = parseExpr(e.target.value);
+    if (isNaN(v)) { e.target.classList.add("err"); return; }
+    e.target.classList.remove("err");
+    setAngle(v * 180 / Math.PI);
+  });
+  ["inDeg","inRad"].forEach((id) => {
+    $(id).addEventListener("focus", (e) => e.target.select());
+    $(id).addEventListener("blur", () => update());
+    $(id).addEventListener("keydown", (e) => { if (e.key === "Enter") e.target.blur(); });
+  });
+  $("slider").addEventListener("input", (e) => setAngle(parseFloat(e.target.value)));
+  document.querySelectorAll("[data-step]").forEach((b) => {
+    b.addEventListener("click", () => setAngle(norm(S.deg + parseFloat(b.dataset.step))));
+  });
+  $("snap").addEventListener("change", (e) => { S.snap = e.target.checked; });
+
+  // ---------- dragging on the circle ----------
+  function svgPoint(svgEl, e) {
+    const pt = svgEl.createSVGPoint();
+    pt.x = e.clientX; pt.y = e.clientY;
+    return pt.matrixTransform(svgEl.getScreenCTM().inverse());
+  }
+  let dragging = false;
+  function angleFromEvent(e) {
+    const p = svgPoint(svg, e);
+    if (Math.hypot(p.x, p.y) < 6) return null;
+    return Math.atan2(-p.y, p.x) * 180 / Math.PI;
+  }
+  svg.addEventListener("pointerdown", (e) => {
+    const a = e.target.getAttribute && e.target.getAttribute("data-angle");
+    if (a !== null && a !== undefined) { setAngle(parseFloat(a)); return; }
+    const ang = angleFromEvent(e);
+    if (ang === null) return;
+    dragging = true;
+    svg.setPointerCapture(e.pointerId);
+    $("handle").style.cursor = "grabbing";
+    setAngle(snapDeg(ang));
+    e.preventDefault();
+  });
+  svg.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    const ang = angleFromEvent(e);
+    if (ang !== null) setAngle(snapDeg(ang));
+  });
+  const endDrag = () => { dragging = false; $("handle").style.cursor = ""; };
+  svg.addEventListener("pointerup", endDrag);
+  svg.addEventListener("pointercancel", endDrag);
+  $("handle").addEventListener("keydown", (e) => {
+    const step = e.shiftKey ? 15 : 1;
+    let d = null;
+    if (e.key === "ArrowRight" || e.key === "ArrowUp") d = norm(S.deg) + step;
+    if (e.key === "ArrowLeft" || e.key === "ArrowDown") d = norm(S.deg) - step;
+    if (e.key === "Home") d = 0;
+    if (d !== null) { e.preventDefault(); setAngle(norm(Math.round(d * 10) / 10)); }
+  });
+
+  // ---------- play ----------
+  let lastTs = 0;
+  function frame(ts) {
+    if (!S.playing) return;
+    if (lastTs) {
+      let d = norm(S.deg) + (ts - lastTs) * 0.04;
+      if (d >= 360) d -= 360;
+      S.deg = d;
+      update();
+    }
+    lastTs = ts;
+    requestAnimationFrame(frame);
+  }
+  function stopPlay() {
+    if (!S.playing) return;
+    S.playing = false;
+    $("play").textContent = "▶ Drehen";
+    $("play").setAttribute("aria-pressed", "false");
+  }
+  $("play").addEventListener("click", () => {
+    if (S.playing) { stopPlay(); S.deg = Math.round(S.deg * 10) / 10; update(); return; }
+    S.playing = true; S.solved = null; lastTs = 0;
+    $("play").textContent = "❚❚ Anhalten";
+    $("play").setAttribute("aria-pressed", "true");
+    requestAnimationFrame(frame);
+  });
+
+  // ---------- unit toggle ----------
+  function setUnit(u) {
+    S.unit = u;
+    $("uDeg").setAttribute("aria-pressed", u === "deg" ? "true" : "false");
+    $("uRad").setAttribute("aria-pressed", u === "rad" ? "true" : "false");
+    buildTicks(); buildGraph(); buildMerk(); update();
+    try { localStorage.setItem("ek-unit", u); } catch (e) {}
+  }
+  $("uDeg").addEventListener("click", () => setUnit("deg"));
+  $("uRad").addEventListener("click", () => setUnit("rad"));
+
+  // ---------- graph ----------
+  const gsvg = $("graph");
+  const G = { W: 760, H: 270, l: 50, r: 18, t: 18, b: 46, ymax: 1.25 };
+  const gx = (a) => G.l + a / 360 * (G.W - G.l - G.r);
+  const gy = (v) => G.t + (G.ymax - v) / (2 * G.ymax) * (G.H - G.t - G.b);
+  const gEls = {};
+  function buildGraph() {
+    G.ymax = S.show.tan ? 2.2 : 1.25;
+    gsvg.textContent = "";
+    const defs = el("defs", {}, gsvg);
+    const cp = el("clipPath", { id: "gclip" }, defs);
+    el("rect", { x: G.l, y: G.t - 2, width: G.W - G.l - G.r, height: G.H - G.t - G.b + 4 }, cp);
+    // grid
+    for (let a = 0; a <= 360; a += 30) {
+      el("line", { class: "g-grid", x1: gx(a), y1: G.t, x2: gx(a), y2: G.H - G.b, "stroke-opacity": a % 90 ? 0.55 : 1 }, gsvg);
+    }
+    const ystep = G.ymax > 2 ? 1 : 0.5;
+    for (let v = -Math.floor(G.ymax / ystep) * ystep; v <= G.ymax + 1e-9; v += ystep) {
+      el("line", { class: v === 0 ? "g-axis" : "g-grid", x1: G.l, y1: gy(v), x2: G.W - G.r, y2: gy(v) }, gsvg);
+      const tl = el("text", { class: "g-tick", x: G.l - 8, y: gy(v) + 4, "text-anchor": "end" }, gsvg);
+      tl.textContent = fmtShort(v, 1);
+    }
+    el("line", { class: "g-axis", x1: G.l, y1: G.t, x2: G.l, y2: G.H - G.b }, gsvg);
+    for (let a = 0; a <= 360; a += 90) {
+      const tl = el("text", { class: "g-tick", x: gx(a), y: G.H - G.b + 18, "text-anchor": "middle" }, gsvg);
+      tl.textContent = S.unit === "deg" ? a + "°" : piFrac(a);
+    }
+    for (let a = 30; a < 360; a += 30) {
+      if (a % 90 === 0) continue;
+      const tl = el("text", { class: "g-tick", x: gx(a), y: G.H - G.b + 18, "text-anchor": "middle", opacity: 0.6, "font-size": 9.5 }, gsvg);
+      tl.textContent = S.unit === "deg" ? a + "°" : piFrac(a);
+    }
+    const ax = el("text", { class: "g-tick", x: G.W - G.r, y: G.H - 8, "text-anchor": "end" }, gsvg);
+    ax.textContent = "Winkel α →";
+    // curves
+    const plot = el("g", { "clip-path": "url(#gclip)" }, gsvg);
+    const curve = (f) => { let s = ""; for (let a = 0; a <= 360; a += 1) s += (a ? "L" : "M") + gx(a).toFixed(1) + " " + gy(f(a)).toFixed(1); return s; };
+    if (S.show.tan) {
+      [90, 270].forEach((a) => el("line", { class: "g-asym", x1: gx(a), y1: G.t, x2: gx(a), y2: G.H - G.b }, plot));
+      let d = "";
+      [[0, 90], [90, 270], [270, 360]].forEach(([a0, a1]) => {
+        let first = true;
+        const s0 = a0 === 0 ? 0 : a0 + 0.05, s1 = a1 === 360 ? 360 : a1 - 0.05;
+        for (let a = s0; a <= s1 + 1e-9; a += (Math.abs(a - 90) < 12 || Math.abs(a - 270) < 12) ? 0.05 : 0.5) {
+          const v = clamp(Math.tan(a * Math.PI / 180), -G.ymax * 1.6, G.ymax * 1.6);
+          d += (first ? "M" : "L") + gx(a).toFixed(1) + " " + gy(v).toFixed(1);
+          first = false;
+        }
+      });
+      el("path", { class: "g-curve tan", d }, plot);
+    }
+    if (S.show.cos) el("path", { class: "g-curve cos", d: curve((a) => Math.cos(a * Math.PI / 180)) }, plot);
+    if (S.show.sin) el("path", { class: "g-curve sin", d: curve((a) => Math.sin(a * Math.PI / 180)) }, plot);
+    // curve labels
+    if (S.show.sin) { const t = el("text", { class: "g-lbl sin", x: gx(90) + 6, y: gy(1) - 6 }, gsvg); t.textContent = "sin"; }
+    if (S.show.cos) { const t = el("text", { class: "g-lbl cos", x: gx(0) + 8, y: gy(1) - 6 }, gsvg); t.textContent = "cos"; }
+    if (S.show.tan) { const t = el("text", { class: "g-lbl tan", x: gx(60) + 6, y: gy(Math.min(G.ymax - 0.25, 1.9)) }, gsvg); t.textContent = "tan"; }
+    // marker
+    gEls.mark = el("line", { class: "g-mark", y1: G.t, y2: G.H - G.b }, gsvg);
+    gEls.alpha = el("text", { class: "g-alpha", y: G.t - 5, "text-anchor": "middle" }, gsvg);
+    gEls.tan = el("circle", { class: "g-dot tan", r: 5.5 }, gsvg);
+    gEls.cos = el("circle", { class: "g-dot cos", r: 5.5 }, gsvg);
+    gEls.sin = el("circle", { class: "g-dot sin", r: 5.5 }, gsvg);
+  }
+  function updateGraph(n, t) {
+    if (!gEls.mark) return;
+    const x = gx(n);
+    line(gEls.mark, x, G.t, x, G.H - G.b);
+    gEls.alpha.setAttribute("x", clamp(x, G.l + 20, G.W - G.r - 20).toFixed(1));
+    gEls.alpha.textContent = "α = " + angText(n);
+    ["sin","cos","tan"].forEach((fn) => {
+      const v = t[fn];
+      const on = S.show[fn] && v !== null && Math.abs(v) <= G.ymax;
+      vis(gEls[fn], on);
+      if (on) { gEls[fn].setAttribute("cx", x.toFixed(1)); gEls[fn].setAttribute("cy", gy(v).toFixed(1)); }
+    });
+  }
+  let gDrag = false;
+  function graphAngle(e) {
+    const p = svgPoint(gsvg, e);
+    return clamp((p.x - G.l) / (G.W - G.l - G.r) * 360, 0, 360);
+  }
+  gsvg.addEventListener("pointerdown", (e) => {
+    gDrag = e.pointerType === "mouse";
+    if (gDrag) gsvg.setPointerCapture(e.pointerId);
+    const a = graphAngle(e);
+    setAngle(a >= 359.95 ? 0 : snapDeg(a));
+  });
+  gsvg.addEventListener("pointermove", (e) => {
+    if (!gDrag) return;
+    const a = graphAngle(e);
+    setAngle(a >= 359.95 ? 0 : snapDeg(a));
+  });
+  gsvg.addEventListener("pointerup", () => { gDrag = false; });
+
+  // ---------- Merktabelle ----------
+  const MCOLS = [0, 30, 45, 60, 90];
+  function buildMerk() {
+    const tb = $("merk");
+    const head = `<thead><tr><th></th>${MCOLS.map((a) => `<th data-col="${a}"><button type="button" class="colbtn" data-set="${a}">${S.unit === "deg" ? a + "°" : piFrac(a)}</button></th>`).join("")}</tr></thead>`;
+    const rowOf = (cls, label, cells, small) => `<tr class="${cls}"><th scope="row">${label}</th>${cells.map((c, i) => `<td data-col="${MCOLS[i]}" class="${small ? "small" : ""}">${c}</td>`).join("")}</tr>`;
+    const trick = MCOLS.map((a, i) => `<span class="frac"><span class="num">${rt("√" + i)}</span><span class="den">2</span></span>`);
+    const other = MCOLS.map((a) => S.unit === "deg" ? mathHTML(piFrac(a)) : a + "°");
+    tb.innerHTML = head + "<tbody>" +
+      rowOf("", S.unit === "deg" ? "Bogenmaß" : "Grad", other, true) +
+      rowOf("", "Merkform sin", trick, true) +
+      rowOf("sin", "sin α", MCOLS.map((a) => mathHTML(exactOf("sin", a).str))) +
+      rowOf("cos", "cos α", MCOLS.map((a) => mathHTML(exactOf("cos", a).str))) +
+      rowOf("tan", "tan α", MCOLS.map((a) => { const s = exactOf("tan", a).str; return s === null ? '<span class="undef">n. def.</span>' : mathHTML(s); })) +
+      "</tbody>";
+  }
+  function updateMerk(rf) {
+    $("merk").querySelectorAll("[data-col]").forEach((c) => c.classList.toggle("on", rf !== null && +c.dataset.col === rf));
+  }
+  $("merk").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-set]");
+    if (b) setAngle(parseFloat(b.dataset.set));
+  });
+
+  // ---------- Quiz ----------
+  const POOL_SC = ["0","1/2","√2/2","√3/2","1","−1/2","−√2/2","−√3/2","−1"];
+  const POOL_T = ["0","√3/3","1","√3","−√3/3","−1","−√3","UNDEF"];
+  const Q = { a: 0, fn: "sin", correct: "", done: false, right: 0, total: 0 };
+  const shuffle = (arr) => { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; };
+  const optHTML = (k) => k === "UNDEF" ? '<span class="undef">nicht definiert</span>' : mathHTML(k);
+  function newQuestion() {
+    let a, fn;
+    do { a = KEY[Math.floor(Math.random() * KEY.length)]; fn = ["sin","cos","tan"][Math.floor(Math.random() * 3)]; }
+    while (a === Q.a && fn === Q.fn);
+    Q.a = a; Q.fn = fn; Q.done = false;
+    const ex = exactOf(fn, a).str;
+    Q.correct = ex === null ? "UNDEF" : ex;
+    const pool = fn === "tan" ? POOL_T : POOL_SC;
+    const flip = Q.correct === "UNDEF" || Q.correct === "0" ? null : Q.correct.startsWith("−") ? Q.correct.slice(1) : "−" + Q.correct;
+    const rest = shuffle(pool.filter((p) => p !== Q.correct && p !== flip));
+    const opts = shuffle([Q.correct].concat(flip && pool.includes(flip) ? [flip] : [], rest).slice(0, 4));
+    $("quizQ").innerHTML = `Welcher Wert ist ${fn} ${S.unit === "deg" ? a + "°" : mathHTML(piFrac(a))}?`;
+    $("quizOpts").innerHTML = opts.map((o) => `<button type="button" class="qopt" data-opt="${o}">${optHTML(o)}</button>`).join("");
+    $("quizFb").innerHTML = "";
+  }
+  $("quizOpts").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-opt]");
+    if (!b || Q.done) return;
+    Q.done = true; Q.total++;
+    const ok = b.dataset.opt === Q.correct;
+    if (ok) Q.right++;
+    $("quizOpts").querySelectorAll(".qopt").forEach((o) => {
+      o.disabled = true;
+      if (o.dataset.opt === Q.correct) o.classList.add("ok");
+      else if (o === b) o.classList.add("bad");
+    });
+    const n = Q.a, t = trig(n), q = n % 90 === 0 ? 0 : Math.floor(n / 90) + 1;
+    const roman = ["", "I", "II", "III", "IV"];
+    const val = Q.correct === "UNDEF" ? "nicht definiert" : Q.correct;
+    let why;
+    if (!q) {
+      why = `Bei ${n}° liegt P auf einer Achse: P(${exactOf("cos", n).str} | ${exactOf("sin", n).str}).` + (Q.fn === "tan" && t.tan === null ? " Weil cos α = 0 ist, gibt es keinen Tangens." : "");
+    } else {
+      const v = t[Q.fn];
+      why = `P liegt im ${roman[q]}. Quadranten, dort ist ${Q.fn} ${v > 0 ? "positiv" : "negativ"}. Der Bezugswinkel ist ${refAngle(n)}°, und ${Q.fn} ${refAngle(n)}° = ${exactOf(Q.fn, refAngle(n)).str}.`;
+    }
+    $("quizFb").innerHTML = `<b class="${ok ? "ok" : "bad"}">${ok ? "Richtig." : "Nicht ganz."}</b> ${Q.fn} ${n}° = ${val}. ${why}`;
+    $("score").textContent = `${Q.right} von ${Q.total} richtig`;
+  });
+  $("quizNext").addEventListener("click", newQuestion);
+  $("quizShow").addEventListener("click", () => {
+    setAngle(Q.a);
+    if (window.matchMedia("(max-width: 900px)").matches) svg.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+
+  // ---------- init ----------
+  try { if (localStorage.getItem("ek-unit") === "rad") S.unit = "rad"; } catch (e) {}
+  $("uDeg").setAttribute("aria-pressed", S.unit === "deg" ? "true" : "false");
+  $("uRad").setAttribute("aria-pressed", S.unit === "rad" ? "true" : "false");
+  buildTicks();
+  buildGraph();
+  buildMerk();
+  newQuestion();
+  update();
+})();
+</script>
