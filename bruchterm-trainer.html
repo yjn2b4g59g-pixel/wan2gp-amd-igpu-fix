@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#020617">
+<title>Bruchterm-Trainer</title>
+<!-- Eingebettetes, vorkompiliertes Tailwind CSS v3 (nur die verwendeten Klassen) – funktioniert offline -->
+<style id="tailwind">*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.pointer-events-auto{pointer-events:auto}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0}.inset-x-0{left:0;right:0}.bottom-0{bottom:0}.left-1\/2{left:50%}.top-0{top:0}.top-20{top:5rem}.z-30{z-index:30}.z-50{z-index:50}.z-\[60\]{z-index:60}.z-\[70\]{z-index:70}.-mx-4{margin-left:-1rem;margin-right:-1rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.ml-auto{margin-left:auto}.mt-0\.5{margin-top:.125rem}.mt-1{margin-top:.25rem}.mt-1\.5{margin-top:.375rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-1\.5{height:.375rem}.h-10{height:2.5rem}.h-11{height:2.75rem}.h-2{height:.5rem}.h-6{height:1.5rem}.h-9{height:2.25rem}.h-full{height:100%}.h-px{height:1px}.max-h-\[88vh\]{max-height:88vh}.min-h-\[3\.25rem\]{min-height:3.25rem}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-14{width:3.5rem}.w-24{width:6rem}.w-36{width:9rem}.w-4{width:1rem}.w-6{width:1.5rem}.w-9{width:2.25rem}.w-\[10\.5rem\]{width:10.5rem}.w-full{width:100%}.min-w-0{min-width:0}.min-w-max{min-width:-moz-max-content;min-width:max-content}.max-w-3xl{max-width:48rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.snap-x{scroll-snap-type:x var(--tw-scroll-snap-strictness)}.snap-start{scroll-snap-align:start}.list-inside{list-style-position:inside}.list-decimal{list-style-type:decimal}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-6{grid-template-columns:repeat(6,minmax(0,1fr))}.flex-wrap{flex-wrap:wrap}.place-items-center{place-items:center}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.25rem*var(--tw-space-y-reverse))}.space-y-1\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.375rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.375rem*var(--tw-space-y-reverse))}.space-y-2>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.5rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.5rem*var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:.25rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-xl{border-radius:.75rem}.rounded-t-3xl{border-top-left-radius:1.5rem;border-top-right-radius:1.5rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-dashed{border-style:dashed}.border-amber-400\/25{border-color:rgba(251,191,36,.25)}.border-amber-400\/30{border-color:rgba(251,191,36,.3)}.border-amber-400\/40{border-color:rgba(251,191,36,.4)}.border-cyan-400\/25{border-color:rgba(34,211,238,.25)}.border-emerald-400{--tw-border-opacity:1;border-color:rgb(52 211 153/var(--tw-border-opacity,1))}.border-emerald-400\/25{border-color:rgba(52,211,153,.25)}.border-emerald-400\/30{border-color:rgba(52,211,153,.3)}.border-emerald-400\/40{border-color:rgba(52,211,153,.4)}.border-indigo-400\/25{border-color:rgba(129,140,248,.25)}.border-indigo-400\/30{border-color:rgba(129,140,248,.3)}.border-indigo-400\/70{border-color:rgba(129,140,248,.7)}.border-orange-400\/30{border-color:rgba(251,146,60,.3)}.border-rose-300\/30{border-color:rgba(253,164,175,.3)}.border-rose-400\/25{border-color:rgba(251,113,133,.25)}.border-rose-400\/40{border-color:rgba(251,113,133,.4)}.border-rose-400\/50{border-color:rgba(251,113,133,.5)}.border-sky-400{--tw-border-opacity:1;border-color:rgb(56 189 248/var(--tw-border-opacity,1))}.border-sky-400\/40{border-color:rgba(56,189,248,.4)}.border-slate-400\/25{border-color:rgba(148,163,184,.25)}.border-slate-600{--tw-border-opacity:1;border-color:rgb(71 85 105/var(--tw-border-opacity,1))}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85/var(--tw-border-opacity,1))}.border-slate-700\/60{border-color:rgba(51,65,85,.6)}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59/var(--tw-border-opacity,1))}.border-slate-800\/80{border-color:rgba(30,41,59,.8)}.border-violet-400\/25{border-color:rgba(167,139,250,.25)}.bg-amber-400\/10{background-color:rgba(251,191,36,.1)}.bg-amber-400\/5{background-color:rgba(251,191,36,.05)}.bg-amber-500\/10{background-color:rgba(245,158,11,.1)}.bg-amber-500\/5{background-color:rgba(245,158,11,.05)}.bg-black\/70{background-color:rgba(0,0,0,.7)}.bg-cyan-500\/5{background-color:rgba(6,182,212,.05)}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129/var(--tw-bg-opacity,1))}.bg-emerald-500\/10{background-color:rgba(16,185,129,.1)}.bg-emerald-500\/15{background-color:rgba(16,185,129,.15)}.bg-emerald-500\/5{background-color:rgba(16,185,129,.05)}.bg-emerald-500\/60{background-color:rgba(16,185,129,.6)}.bg-indigo-500{--tw-bg-opacity:1;background-color:rgb(99 102 241/var(--tw-bg-opacity,1))}.bg-indigo-500\/15{background-color:rgba(99,102,241,.15)}.bg-indigo-500\/20{background-color:rgba(99,102,241,.2)}.bg-indigo-500\/5{background-color:rgba(99,102,241,.05)}.bg-orange-500\/15{background-color:rgba(249,115,22,.15)}.bg-rose-400\/15{background-color:rgba(251,113,133,.15)}.bg-rose-400\/70{background-color:rgba(251,113,133,.7)}.bg-rose-500\/10{background-color:rgba(244,63,94,.1)}.bg-rose-500\/5{background-color:rgba(244,63,94,.05)}.bg-sky-500{--tw-bg-opacity:1;background-color:rgb(14 165 233/var(--tw-bg-opacity,1))}.bg-sky-500\/10{background-color:rgba(14,165,233,.1)}.bg-slate-500\/5{background-color:rgba(100,116,139,.05)}.bg-slate-700{--tw-bg-opacity:1;background-color:rgb(51 65 85/var(--tw-bg-opacity,1))}.bg-slate-700\/70{background-color:rgba(51,65,85,.7)}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59/var(--tw-bg-opacity,1))}.bg-slate-800\/40{background-color:rgba(30,41,59,.4)}.bg-slate-800\/60{background-color:rgba(30,41,59,.6)}.bg-slate-800\/80{background-color:rgba(30,41,59,.8)}.bg-slate-800\/95{background-color:rgba(30,41,59,.95)}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42/var(--tw-bg-opacity,1))}.bg-slate-900\/60{background-color:rgba(15,23,42,.6)}.bg-slate-900\/70{background-color:rgba(15,23,42,.7)}.bg-slate-900\/95{background-color:rgba(15,23,42,.95)}.bg-slate-950\/50{background-color:rgba(2,6,23,.5)}.bg-slate-950\/60{background-color:rgba(2,6,23,.6)}.bg-slate-950\/70{background-color:rgba(2,6,23,.7)}.bg-slate-950\/80{background-color:rgba(2,6,23,.8)}.bg-violet-500\/5{background-color:rgba(139,92,246,.05)}.bg-gradient-to-br{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right,var(--tw-gradient-stops))}.from-emerald-300{--tw-gradient-from:#6ee7b7 var(--tw-gradient-from-position);--tw-gradient-to:rgba(110,231,183,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-emerald-400{--tw-gradient-from:#34d399 var(--tw-gradient-from-position);--tw-gradient-to:rgba(52,211,153,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-indigo-400{--tw-gradient-from:#818cf8 var(--tw-gradient-from-position);--tw-gradient-to:rgba(129,140,248,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-indigo-500{--tw-gradient-from:#6366f1 var(--tw-gradient-from-position);--tw-gradient-to:rgba(99,102,241,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.via-cyan-300{--tw-gradient-to:rgba(103,232,249,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#67e8f9 var(--tw-gradient-via-position),var(--tw-gradient-to)}.to-cyan-400{--tw-gradient-to:#22d3ee var(--tw-gradient-to-position)}.to-emerald-400{--tw-gradient-to:#34d399 var(--tw-gradient-to-position)}.to-emerald-500{--tw-gradient-to:#10b981 var(--tw-gradient-to-position)}.to-indigo-300{--tw-gradient-to:#a5b4fc var(--tw-gradient-to-position)}.to-violet-500{--tw-gradient-to:#8b5cf6 var(--tw-gradient-to-position)}.bg-clip-text{-webkit-background-clip:text;background-clip:text}.p-0{padding:0}.p-1{padding:.25rem}.p-3{padding:.75rem}.p-3\.5{padding:.875rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.px-1{padding-left:.25rem;padding-right:.25rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.pb-1{padding-bottom:.25rem}.pb-28{padding-bottom:7rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}.font-serif{font-family:ui-serif,Georgia,Cambria,Times New Roman,Times,serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-5xl{font-size:3rem;line-height:1}.text-\[1\.55rem\]{font-size:1.55rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-\[15px\]{font-size:15px}.text-\[17px\]{font-size:17px}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.italic{font-style:italic}.tabular-nums{--tw-numeric-spacing:tabular-nums;font-variant-numeric:var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-.025em}.tracking-wider{letter-spacing:.05em}.tracking-widest{letter-spacing:.1em}.text-amber-200{--tw-text-opacity:1;color:rgb(253 230 138/var(--tw-text-opacity,1))}.text-amber-300{--tw-text-opacity:1;color:rgb(252 211 77/var(--tw-text-opacity,1))}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36/var(--tw-text-opacity,1))}.text-amber-50{--tw-text-opacity:1;color:rgb(255 251 235/var(--tw-text-opacity,1))}.text-amber-50\/90{color:rgba(255,251,235,.9)}.text-cyan-200{--tw-text-opacity:1;color:rgb(165 243 252/var(--tw-text-opacity,1))}.text-emerald-100{--tw-text-opacity:1;color:rgb(209 250 229/var(--tw-text-opacity,1))}.text-emerald-200{--tw-text-opacity:1;color:rgb(167 243 208/var(--tw-text-opacity,1))}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153/var(--tw-text-opacity,1))}.text-indigo-200{--tw-text-opacity:1;color:rgb(199 210 254/var(--tw-text-opacity,1))}.text-indigo-300{--tw-text-opacity:1;color:rgb(165 180 252/var(--tw-text-opacity,1))}.text-orange-200{--tw-text-opacity:1;color:rgb(254 215 170/var(--tw-text-opacity,1))}.text-rose-200{--tw-text-opacity:1;color:rgb(254 205 211/var(--tw-text-opacity,1))}.text-rose-300{--tw-text-opacity:1;color:rgb(253 164 175/var(--tw-text-opacity,1))}.text-rose-50{--tw-text-opacity:1;color:rgb(255 241 242/var(--tw-text-opacity,1))}.text-sky-200{--tw-text-opacity:1;color:rgb(186 230 253/var(--tw-text-opacity,1))}.text-sky-200\/70{color:rgba(186,230,253,.7)}.text-sky-50{--tw-text-opacity:1;color:rgb(240 249 255/var(--tw-text-opacity,1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249/var(--tw-text-opacity,1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240/var(--tw-text-opacity,1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225/var(--tw-text-opacity,1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184/var(--tw-text-opacity,1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139/var(--tw-text-opacity,1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.text-slate-950{--tw-text-opacity:1;color:rgb(2 6 23/var(--tw-text-opacity,1))}.text-transparent{color:transparent}.text-violet-200{--tw-text-opacity:1;color:rgb(221 214 254/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.underline{text-decoration-line:underline}.line-through{text-decoration-line:line-through}.decoration-dotted{text-decoration-style:dotted}.underline-offset-4{text-underline-offset:4px}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.placeholder-slate-600::-moz-placeholder{--tw-placeholder-opacity:1;color:rgb(71 85 105/var(--tw-placeholder-opacity,1))}.placeholder-slate-600::placeholder{--tw-placeholder-opacity:1;color:rgb(71 85 105/var(--tw-placeholder-opacity,1))}.opacity-50{opacity:.5}.opacity-70{opacity:.7}.shadow{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color)}.shadow,.shadow-2xl{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgba(0,0,0,.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-black\/40{--tw-shadow-color:rgba(0,0,0,.4);--tw-shadow:var(--tw-shadow-colored)}.shadow-emerald-900\/30{--tw-shadow-color:rgba(6,78,59,.3);--tw-shadow:var(--tw-shadow-colored)}.shadow-indigo-900\/30{--tw-shadow-color:rgba(49,46,129,.3);--tw-shadow:var(--tw-shadow-colored)}.shadow-indigo-900\/40{--tw-shadow-color:rgba(49,46,129,.4);--tw-shadow:var(--tw-shadow-colored)}.outline-none{outline:2px solid transparent;outline-offset:2px}.outline{outline-style:solid}.ring-4{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.ring-indigo-500\/25{--tw-ring-color:rgba(99,102,241,.25)}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur{--tw-backdrop-blur:blur(8px)}.backdrop-blur,.backdrop-blur-sm{-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ease-out{transition-timing-function:cubic-bezier(0,0,.2,1)}.hover\:border-slate-500:hover{--tw-border-opacity:1;border-color:rgb(100 116 139/var(--tw-border-opacity,1))}.hover\:bg-amber-400\/20:hover{background-color:rgba(251,191,36,.2)}.hover\:bg-indigo-500\/30:hover{background-color:rgba(99,102,241,.3)}.hover\:bg-slate-700:hover{--tw-bg-opacity:1;background-color:rgb(51 65 85/var(--tw-bg-opacity,1))}.hover\:bg-slate-800:hover{--tw-bg-opacity:1;background-color:rgb(30 41 59/var(--tw-bg-opacity,1))}.hover\:bg-slate-800\/70:hover{background-color:rgba(30,41,59,.7)}.hover\:from-indigo-400:hover{--tw-gradient-from:#818cf8 var(--tw-gradient-from-position);--tw-gradient-to:rgba(129,140,248,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.hover\:to-violet-400:hover{--tw-gradient-to:#a78bfa var(--tw-gradient-to-position)}.hover\:text-rose-300:hover{--tw-text-opacity:1;color:rgb(253 164 175/var(--tw-text-opacity,1))}.hover\:text-slate-200:hover{--tw-text-opacity:1;color:rgb(226 232 240/var(--tw-text-opacity,1))}.hover\:text-slate-300:hover{--tw-text-opacity:1;color:rgb(203 213 225/var(--tw-text-opacity,1))}.hover\:brightness-110:hover{--tw-brightness:brightness(1.1);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.focus\:border-indigo-400:focus{--tw-border-opacity:1;border-color:rgb(129 140 248/var(--tw-border-opacity,1))}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\:ring-indigo-500\/30:focus{--tw-ring-color:rgba(99,102,241,.3)}@media (min-width:640px){.sm\:inset-0{inset:0}.sm\:mx-0{margin-left:0;margin-right:0}.sm\:block{display:block}.sm\:inline{display:inline}.sm\:grid{display:grid}.sm\:hidden{display:none}.sm\:w-32{width:8rem}.sm\:w-6{width:1.5rem}.sm\:w-auto{width:auto}.sm\:max-w-2xl{max-width:42rem}.sm\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.sm\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.sm\:place-items-center{place-items:center}.sm\:overflow-visible{overflow:visible}.sm\:rounded-3xl{border-radius:1.5rem}.sm\:p-6{padding:1.5rem}.sm\:px-0{padding-left:0;padding-right:0}.sm\:py-5{padding-top:1.25rem;padding-bottom:1.25rem}.sm\:text-\[2rem\]{font-size:2rem}}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { color-scheme: dark; }
+  html, body { background: #020617; color: #e2e8f0; }
+  body { font-family: Inter, system-ui, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      radial-gradient(60rem 30rem at 10% -10%, rgba(99,102,241,.14), transparent 60%),
+      radial-gradient(50rem 30rem at 110% 10%, rgba(16,185,129,.10), transparent 60%);
+  }
+
+  /* ---------- Mathe-Satz ---------- */
+  .math { font-family: 'Cambria Math', 'STIX Two Math', 'Latin Modern Math', 'Cambria', 'Times New Roman', serif;
+          white-space: nowrap; line-height: 1.25; display: inline-block; }
+  .math .mv { font-style: italic; }
+  .math .mo { margin: 0 .24em; }
+  .math .mneg { margin-right: .06em; }
+  .math .mp { font-weight: 300; }
+  .math sup { font-size: .66em; position: relative; top: -.62em; vertical-align: baseline; line-height: 0; margin-left: .03em; }
+  .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 .12em; }
+  .frac > span { display: block; padding: 0 .2em; }
+  .frac > .fn { border-bottom: .065em solid currentColor; padding-bottom: .1em; }
+  .frac > .fd { padding-top: .1em; }
+  .hint-text .math, .fb-text .math { font-size: 1.08em; }
+  .scroll-x { overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; padding-top: .3em; padding-bottom: .15em; }
+  .no-scrollbar { scrollbar-width: none; } .no-scrollbar::-webkit-scrollbar { display: none; }
+  .center-max { width: max-content; margin: 0 auto; }
+
+  /* ---------- Animationen ---------- */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .fade-in { animation: fadeUp .35s ease-out both; }
+  @keyframes pop { 0% { transform: scale(.7); opacity: 0; } 60% { transform: scale(1.06); opacity: 1; } 100% { transform: scale(1); } }
+  .pop-in { animation: pop .5s cubic-bezier(.2,.9,.3,1.2) both; }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
+  .shake { animation: shake .38s ease-in-out; }
+  @keyframes glow { 0% { box-shadow: 0 0 0 0 rgba(16,185,129,.55); } 100% { box-shadow: 0 0 0 16px rgba(16,185,129,0); } }
+  .glow { animation: glow .8s ease-out; }
+  @keyframes floatUp { 0% { opacity: 0; transform: translate(-50%, 0) scale(.8); } 15% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -56px) scale(1.15); } }
+  .float-pts { position: fixed; pointer-events: none; font-weight: 800; font-size: 1.1rem; color: #6ee7b7; text-shadow: 0 2px 12px rgba(16,185,129,.5); animation: floatUp 1.15s ease-out forwards; z-index: 80; }
+  @keyframes toastIn { from { opacity: 0; transform: translate(-50%, -12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  .toast { animation: toastIn .3s ease-out both; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+  /* ---------- Tasten ---------- */
+  .key { user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  .key:active { transform: translateY(1px) scale(.97); }
+  input#inp { caret-color: #a5b4fc; }
+  .chip-tag { letter-spacing: .02em; }
+  button:focus-visible, input:focus-visible { outline: 2px solid #818cf8; outline-offset: 2px; }
+</style>
+</head>
+<body class="min-h-screen antialiased">
+
+<div id="app" class="max-w-3xl mx-auto px-4 pb-28">
+  <!-- Kopfzeile -->
+  <header class="sticky top-0 z-30 -mx-4 px-4 py-3 bg-slate-950/80 backdrop-blur border-b border-slate-800/80">
+    <div class="flex items-center gap-3">
+      <div class="shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-emerald-500 grid place-items-center shadow-lg shadow-indigo-900/40">
+        <span class="math text-white text-[15px] leading-none"><span class="frac"><span class="fn">a</span><span class="fd">b</span></span></span>
+      </div>
+      <div class="min-w-0">
+        <h1 class="font-extrabold tracking-tight text-slate-100 leading-tight">Bruchterm-Trainer</h1>
+        <p class="text-[11px] text-slate-400 leading-tight truncate">Faktorisieren · Kürzen · Hauptnenner</p>
+      </div>
+      <div class="ml-auto flex items-center gap-1.5 text-sm">
+        <span title="Punkte" class="px-2 py-1 rounded-lg bg-slate-800/80 border border-slate-700/60 font-semibold tabular-nums">⭐ <span id="st-points">0</span></span>
+        <span title="Serie ohne Lösung-Anzeigen" class="px-2 py-1 rounded-lg bg-slate-800/80 border border-slate-700/60 font-semibold tabular-nums">🔥 <span id="st-streak">0</span></span>
+        <span title="Gelöste Aufgaben" class="hidden sm:inline px-2 py-1 rounded-lg bg-slate-800/80 border border-slate-700/60 font-semibold tabular-nums">✅ <span id="st-solved">0</span></span>
+        <button id="btnCheat" title="Spickzettel" class="w-9 h-9 rounded-lg bg-slate-800/80 border border-slate-700/60 hover:bg-slate-700">📘</button>
+        <button id="btnStats" title="Statistik & Fehler-Analyse" class="w-9 h-9 rounded-lg bg-slate-800/80 border border-slate-700/60 hover:bg-slate-700">📊</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Level-Auswahl -->
+  <section class="mt-4">
+    <div id="levels" class="no-scrollbar flex gap-2 overflow-x-auto snap-x -mx-4 px-4 pb-1 sm:grid sm:grid-cols-5 sm:overflow-visible sm:mx-0 sm:px-0"></div>
+  </section>
+
+  <!-- Modus -->
+  <section class="mt-3 flex flex-wrap items-center gap-2">
+    <div class="inline-flex p-1 rounded-xl bg-slate-900 border border-slate-800 text-sm" role="tablist">
+      <button data-mode="steps" class="mode-btn px-3 py-1.5 rounded-lg font-medium">🪜 <span class="sm:hidden">Schritte</span><span class="hidden sm:inline">Schritt für Schritt</span></button>
+      <button data-mode="direct" class="mode-btn px-3 py-1.5 rounded-lg font-medium">🎯 <span class="sm:hidden">Ergebnis</span><span class="hidden sm:inline">Nur Ergebnis</span></button>
+    </div>
+    <button id="btnNew" class="ml-auto text-sm px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300">↻ <span class="hidden sm:inline">Neue Aufgabe</span><span class="sm:hidden">Neu</span></button>
+  </section>
+
+  <main id="task" class="mt-4"></main>
+
+  <p class="mt-8 text-center text-xs text-slate-600">Tipp: <kbd class="px-1 rounded bg-slate-800 text-slate-400">Enter</kbd> prüft · Die Vorschau zeigt, wie die App deine Eingabe liest.</p>
+</div>
+
+<!-- Modal -->
+<div id="modal" class="fixed inset-0 z-50 hidden">
+  <div id="modalBg" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+  <div class="absolute inset-x-0 bottom-0 sm:inset-0 sm:grid sm:place-items-center p-0 sm:p-6 pointer-events-none">
+    <div class="pointer-events-auto w-full sm:max-w-2xl max-h-[88vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl bg-slate-900 border border-slate-700 shadow-2xl fade-in">
+      <div class="sticky top-0 flex items-center justify-between px-5 py-4 bg-slate-900/95 backdrop-blur border-b border-slate-800">
+        <h2 id="modalTitle" class="font-bold text-lg"></h2>
+        <button id="modalClose" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-slate-700" aria-label="Schließen">✕</button>
+      </div>
+      <div id="modalBody" class="p-5"></div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="fixed top-20 left-1/2 z-[70] hidden"></div>
+<canvas id="confetti" class="fixed inset-0 pointer-events-none z-[60]"></canvas>
+
+<script>
+'use strict';
+/* =====================================================================
+   0. Hilfsfunktionen
+   ===================================================================== */
+const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const gcdN = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a; };
+const lcmN = (a, b) => a / gcdN(a, b) * b;
+const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const bgcd = (a, b) => { if (a < 0n) a = -a; if (b < 0n) b = -b; while (b) [a, b] = [b, a % b]; return a; };
+const babs = a => a < 0n ? -a : a;
+
+/* =====================================================================
+   1. Polynome (exakt, BigInt) und rationale Funktionen
+   ===================================================================== */
+const P = {
+  key(e) { return Object.keys(e).filter(k => e[k]).sort().map(k => k + e[k]).join(''); },
+  addTerm(M, e, c) {
+    if (c === 0n) return;
+    const k = P.key(e), cur = M.get(k);
+    if (cur) { const nc = cur.c + c; if (nc === 0n) M.delete(k); else M.set(k, { c: nc, e: cur.e }); }
+    else { const ce = {}; for (const v in e) if (e[v]) ce[v] = e[v]; M.set(k, { c, e: ce }); }
+  },
+  c(n) { const M = new Map(); P.addTerm(M, {}, BigInt(n)); return M; },
+  v(x) { const M = new Map(); P.addTerm(M, { [x]: 1 }, 1n); return M; },
+  add(A, B) { const M = new Map(); for (const t of A.values()) P.addTerm(M, t.e, t.c); for (const t of B.values()) P.addTerm(M, t.e, t.c); return M; },
+  scale(A, s) { const M = new Map(); for (const t of A.values()) P.addTerm(M, t.e, t.c * s); return M; },
+  divConst(A, s) { const M = new Map(); for (const t of A.values()) P.addTerm(M, t.e, t.c / s); return M; },
+  neg(A) { return P.scale(A, -1n); },
+  sub(A, B) { return P.add(A, P.neg(B)); },
+  mul(A, B) {
+    const M = new Map();
+    for (const a of A.values()) for (const b of B.values()) {
+      const e = { ...a.e }; for (const v in b.e) e[v] = (e[v] || 0) + b.e[v];
+      P.addTerm(M, e, a.c * b.c);
+    }
+    return M;
+  },
+  pow(A, n) { let R = P.c(1); for (let i = 0; i < n; i++) R = P.mul(R, A); return R; },
+  isZero(A) { return A.size === 0; },
+  eq(A, B) { return P.isZero(P.sub(A, B)); },
+  tdeg(t) { let s = 0; for (const v in t.e) s += t.e[v]; return s; },
+  deg(A) { let d = 0; for (const t of A.values()) d = Math.max(d, P.tdeg(t)); return d; },
+  isConst(A) { return P.deg(A) === 0; },
+  constVal(A) { const t = A.get(''); return t ? t.c : 0n; },
+  content(A) { let g = 0n; for (const t of A.values()) g = bgcd(g, t.c); return g; },
+  vars(A) { const s = new Set(); for (const t of A.values()) for (const v in t.e) s.add(v); return [...s]; },
+  evalAt(A, vals) { let s = 0n; for (const t of A.values()) { let p = t.c; for (const v in t.e) p *= vals[v] ** BigInt(t.e[v]); s += p; } return s; },
+  primitive(A) { const g = P.content(A); return g > 1n ? P.divConst(A, g) : A; },
+  /** A = λ·B ?  liefert [zähler, nenner] von λ oder null */
+  ratio(A, B) {
+    if (P.isZero(B)) return null;
+    if (P.isZero(A)) return [0n, 1n];
+    if (A.size !== B.size) return null;
+    let a0 = null, b0 = null;
+    for (const [k, tb] of B) {
+      const ta = A.get(k); if (!ta) return null;
+      if (a0 === null) { a0 = ta.c; b0 = tb.c; } else if (ta.c * b0 !== tb.c * a0) return null;
+    }
+    const g = bgcd(a0, b0); let n = a0 / g, d = b0 / g; if (d < 0n) { n = -n; d = -d; }
+    return [n, d];
+  },
+};
+function termCmp(s, t) {
+  const d = P.tdeg(t) - P.tdeg(s); if (d) return d;
+  const vs = [...new Set([...Object.keys(s.e), ...Object.keys(t.e)])].sort();
+  for (const v of vs) { const x = (t.e[v] || 0) - (s.e[v] || 0); if (x) return x; }
+  return 0;
+}
+
+const ONE = () => ({ n: P.c(1), d: P.c(1) });
+const RF = {
+  add(A, B) {
+    if (P.eq(A.d, B.d)) return { n: P.add(A.n, B.n), d: A.d };
+    return { n: P.add(P.mul(A.n, B.d), P.mul(B.n, A.d)), d: P.mul(A.d, B.d) };
+  },
+  neg(A) { return { n: P.neg(A.n), d: A.d }; },
+  sub(A, B) { return RF.add(A, RF.neg(B)); },
+  mul(A, B) { return { n: P.mul(A.n, B.n), d: P.mul(A.d, B.d) }; },
+  div(A, B) {
+    if (P.isZero(B.n)) throw new Error('Division durch 0 – ein Nenner darf nicht null werden.');
+    return { n: P.mul(A.n, B.d), d: P.mul(A.d, B.n) };
+  },
+  pow(A, e) {
+    if (e >= 0) return { n: P.pow(A.n, e), d: P.pow(A.d, e) };
+    if (P.isZero(A.n)) throw new Error('Division durch 0.');
+    return { n: P.pow(A.d, -e), d: P.pow(A.n, -e) };
+  },
+  inv(A) { return { n: A.d, d: A.n }; },
+  eq(A, B) { return P.eq(P.mul(A.n, B.d), P.mul(B.n, A.d)); },
+  ratio(A, B) { return P.ratio(P.mul(A.n, B.d), P.mul(B.n, A.d)); },
+  /** „so wie hingeschrieben“: Grad Zähler + Grad Nenner (ohne Kürzen) */
+  deg(A) { return (P.isZero(A.n) ? 0 : P.deg(A.n)) + P.deg(A.d); },
+};
+
+/* =====================================================================
+   2. Parser:  +,-  <  :  <  *  <  /  <  unäres -  <  implizites Mal  <  ^
+   „3x(x+1)/(x-1)(x+1)“ wird so gelesen, wie man es meint.
+   ===================================================================== */
+function tokenize(src) {
+  const s = src.replace(/[−–—]/g, '-').replace(/[·×∙⋅•]/g, '*').replace(/÷/g, ':').replace(/,/g, '.')
+    .replace(/[\[{]/g, '(').replace(/[\]}]/g, ')')
+    .replace(/²/g, '^2').replace(/³/g, '^3').replace(/⁴/g, '^4').replace(/⁵/g, '^5');
+  const toks = []; let i = 0;
+  while (i < s.length) {
+    const c = s[i];
+    if (/\s/.test(c)) { i++; continue; }
+    if (/[0-9.]/.test(c)) {
+      let j = i; while (j < s.length && /[0-9.]/.test(s[j])) j++;
+      const str = s.slice(i, j);
+      if (!/^(\d+(\.\d+)?|\.\d+)$/.test(str)) throw new Error(`„${str}“ ist keine gültige Zahl.`);
+      toks.push({ k: 'num', v: str }); i = j; continue;
+    }
+    if (/[a-zA-Z]/.test(c)) { toks.push({ k: 'var', v: c.toLowerCase() }); i++; continue; }
+    if ('+-*/:^()'.includes(c)) { toks.push({ k: c }); i++; continue; }
+    throw new Error(`Das Zeichen „${c}“ kenne ich nicht.`);
+  }
+  return toks;
+}
+function numNode(str) {
+  if (str.includes('.')) {
+    const [a, b] = str.split('.');
+    return { t: 'num', s: str, n: BigInt((a || '0') + b), d: 10n ** BigInt(b.length) };
+  }
+  return { t: 'num', s: str, n: BigInt(str), d: 1n };
+}
+function parse(src) {
+  const toks = tokenize(src); let p = 0;
+  if (!toks.length) throw new Error('Noch nichts eingegeben.');
+  const is = k => toks[p] && toks[p].k === k;
+  const need = op => { if (!toks[p]) throw new Error(`Nach „${op}“ fehlt noch etwas.`); };
+  function expr() {
+    let l = colon();
+    while (is('+') || is('-')) { const op = toks[p++].k; need(op); const r = colon(); l = { t: op === '+' ? 'add' : 'sub', a: l, b: r }; }
+    return l;
+  }
+  function colon() { let l = mul(); while (is(':')) { p++; need(':'); const r = mul(); l = { t: 'div', a: l, b: r, colon: true }; } return l; }
+  function mul() { let l = div(); while (is('*')) { p++; need('·'); const r = div(); l = { t: 'mul', a: l, b: r, imp: false }; } return l; }
+  function div() { let l = unary(); while (is('/')) { p++; need('/'); const r = unary(); l = { t: 'div', a: l, b: r }; } return l; }
+  function unary() {
+    if (is('-')) { p++; need('−'); return { t: 'neg', a: unary() }; }
+    if (is('+')) { p++; need('+'); return unary(); }
+    return imp();
+  }
+  const startsPrimary = () => toks[p] && (toks[p].k === 'num' || toks[p].k === 'var' || toks[p].k === '(');
+  function imp() { let l = pow(); while (startsPrimary()) { const r = pow(); l = { t: 'mul', a: l, b: r, imp: true }; } return l; }
+  function pow() {
+    const b = primary();
+    if (!is('^')) return b;
+    p++;
+    const expErr = new Error('Als Exponent geht nur eine ganze Zahl, z. B. x^2.');
+    let sign = 1; if (is('-')) { p++; sign = -1; }
+    let e;
+    if (is('num')) { const s = toks[p++].v; if (s.includes('.')) throw expErr; e = parseInt(s, 10); }
+    else if (is('(')) {
+      p++; const en = expr(); if (!is(')')) throw new Error('Nach dem Exponenten fehlt „)“.'); p++;
+      const r = toRF(en);
+      if (!P.isConst(r.n) || !P.isConst(r.d)) throw expErr;
+      const nv = P.constVal(r.n), dv = P.constVal(r.d);
+      if (dv === 0n || nv % dv !== 0n) throw expErr;
+      e = Number(nv / dv);
+    } else throw expErr;
+    e *= sign;
+    if (Math.abs(e) > 12) throw new Error('Der Exponent ist zu groß.');
+    return { t: 'pow', a: b, e };
+  }
+  function primary() {
+    const t = toks[p];
+    if (!t) throw new Error('Am Ende fehlt noch etwas.');
+    if (t.k === 'num') { p++; return numNode(t.v); }
+    if (t.k === 'var') { p++; return { t: 'var', n: t.v }; }
+    if (t.k === '(') {
+      p++; if (is(')')) throw new Error('Da ist eine leere Klammer „()“.');
+      const e = expr(); if (!is(')')) throw new Error('Eine schließende Klammer „)“ fehlt.'); p++; return e;
+    }
+    if (t.k === ')') throw new Error('Eine „)“ zu viel – oder davor fehlt etwas.');
+    const nm = { '*': '·', '/': '/', ':': ':', '^': '^' }[t.k] || t.k;
+    throw new Error(`„${nm}“ steht an einer Stelle, an der etwas fehlt.`);
+  }
+  const res = expr();
+  if (p < toks.length) {
+    if (toks[p].k === ')') throw new Error('Zu viele schließende Klammern „)“.');
+    throw new Error('Die Eingabe hat ein überzähliges Zeichen.');
+  }
+  return res;
+}
+function toRF(n) {
+  switch (n.t) {
+    case 'num': return { n: P.c(n.n), d: P.c(n.d) };
+    case 'var': return { n: P.v(n.n), d: P.c(1) };
+    case 'add': return RF.add(toRF(n.a), toRF(n.b));
+    case 'sub': return RF.sub(toRF(n.a), toRF(n.b));
+    case 'mul': return RF.mul(toRF(n.a), toRF(n.b));
+    case 'div': return RF.div(toRF(n.a), toRF(n.b));
+    case 'neg': return RF.neg(toRF(n.a));
+    case 'pow': return RF.pow(toRF(n.a), n.e);
+  }
+  throw new Error('Unbekannter Ausdruck.');
+}
+
+/* =====================================================================
+   3. Darstellung (HTML-Mathesatz) und Rück-Serialisierung als Eingabe
+   ===================================================================== */
+function prec(n) {
+  if (n.t === 'div') return n.colon ? 2 : 4;
+  if (n.t === 'mul') return n.imp ? 6 : 3;
+  return { add: 1, sub: 1, neg: 5, pow: 7, num: 8, var: 8 }[n.t];
+}
+const isSum = n => n.t === 'add' || n.t === 'sub';
+const startsWithNum = n => n.t === 'num' || ((n.t === 'mul' || n.t === 'pow') && startsWithNum(n.a));
+function Rw(n, w) { return w ? `<span class="mp">(</span>${R(n)}<span class="mp">)</span>` : R(n); }
+function R(n) {
+  switch (n.t) {
+    case 'num': return `<span class="mn">${n.s.replace('.', ',')}</span>`;
+    case 'var': return `<span class="mv">${n.n}</span>`;
+    case 'add': return `${R(n.a)}<span class="mo">+</span>${Rw(n.b, n.b.t === 'neg')}`;
+    case 'sub': return `${R(n.a)}<span class="mo">−</span>${Rw(n.b, isSum(n.b) || n.b.t === 'neg')}`;
+    case 'neg': return `<span class="mneg">−</span>${Rw(n.a, isSum(n.a) || n.a.t === 'neg' || (n.a.t === 'div' && n.a.colon) || (n.a.t === 'mul' && !n.a.imp))}`;
+    case 'mul': {
+      const wrap = x => isSum(x) || x.t === 'neg' || (x.t === 'div' && x.colon);
+      const sep = (!n.imp || n.a.t === 'div' || n.b.t === 'div' || startsWithNum(n.b)) ? '<span class="mo">·</span>' : '';
+      return Rw(n.a, wrap(n.a)) + sep + Rw(n.b, wrap(n.b));
+    }
+    case 'div':
+      if (n.colon) return Rw(n.a, isSum(n.a)) + '<span class="mo">:</span>' + Rw(n.b, isSum(n.b) || n.b.t === 'neg' || (n.b.t === 'div' && n.b.colon));
+      return `<span class="frac"><span class="fn">${R(n.a)}</span><span class="fd">${R(n.b)}</span></span>`;
+    case 'pow': {
+      const w = !(n.a.t === 'var' || (n.a.t === 'num' && !n.a.s.includes('.')));
+      return `${Rw(n.a, w)}<sup>${n.e < 0 ? '−' + (-n.e) : n.e}</sup>`;
+    }
+  }
+  return '';
+}
+/** Mathe-Snippet aus Eingabe-String */
+function M(str) { try { return `<span class="math">${R(parse(str))}</span>`; } catch (e) { return `<span class="math">${esc(str)}</span>`; } }
+function Meq(...parts) { return parts.map(M).join(' <span class="text-slate-400">=</span> '); }
+function Mnode(n, paren) { return `<span class="math">${paren && isSum(n) ? '(' + R(n) + ')' : R(n)}</span>`; }
+
+function Sw(n, w) { return w ? `(${ser(n)})` : ser(n); }
+function ser(n) {
+  switch (n.t) {
+    case 'num': return n.s;
+    case 'var': return n.n;
+    case 'add': return `${ser(n.a)} + ${Sw(n.b, n.b.t === 'neg')}`;
+    case 'sub': return `${ser(n.a)} - ${Sw(n.b, isSum(n.b) || n.b.t === 'neg')}`;
+    case 'neg': return `-${Sw(n.a, prec(n.a) < 6)}`;
+    case 'mul':
+      if (n.imp) {
+        const sa = Sw(n.a, prec(n.a) < 6); let sb = Sw(n.b, prec(n.b) < 6);
+        if (/^[0-9.]/.test(sb)) sb = `(${sb})`;
+        return sa + sb;
+      }
+      return `${Sw(n.a, prec(n.a) < 3)} · ${Sw(n.b, prec(n.b) <= 3)}`;
+    case 'div':
+      if (n.colon) return `${Sw(n.a, prec(n.a) < 2)} : ${Sw(n.b, prec(n.b) <= 2)}`;
+      return `${Sw(n.a, prec(n.a) < 5)}/${Sw(n.b, prec(n.b) < 7)}`;
+    case 'pow': return `${Sw(n.a, !(n.a.t === 'var' || (n.a.t === 'num' && !n.a.s.includes('.'))))}^${n.e < 0 ? '(' + n.e + ')' : n.e}`;
+  }
+  return '';
+}
+function polyHTML(A) {
+  if (P.isZero(A)) return '<span class="math">0</span>';
+  const ts = [...A.values()].sort(termCmp);
+  let out = '';
+  ts.forEach((t, i) => {
+    const neg = t.c < 0n, c = babs(t.c), vs = Object.keys(t.e).sort();
+    let body = ''; for (const v of vs) body += `<span class="mv">${v}</span>` + (t.e[v] > 1 ? `<sup>${t.e[v]}</sup>` : '');
+    const cs = (c === 1n && vs.length) ? '' : String(c);
+    out += (i === 0 ? (neg ? '<span class="mneg">−</span>' : '') : `<span class="mo">${neg ? '−' : '+'}</span>`) + cs + body;
+  });
+  return `<span class="math">${out}</span>`;
+}
+function rfHTML(r) {
+  if (P.isConst(r.d) && P.constVal(r.d) === 1n) return polyHTML(r.n);
+  return `<span class="math"><span class="frac"><span class="fn">${polyHTML(r.n)}</span><span class="fd">${polyHTML(r.d)}</span></span></span>`;
+}
+
+/* =====================================================================
+   4. Struktur-Analyse des Syntaxbaums
+   ===================================================================== */
+function walk(n, f) { f(n); if (n.a) walk(n.a, f); if (n.b) walk(n.b, f); }
+function countDivs(n) { let c = 0; walk(n, x => { if (x.t === 'div') c++; }); return c; }
+function hasColon(n) { let c = false; walk(n, x => { if (x.t === 'div' && x.colon) c = true; }); return c; }
+function hasDivByFraction(n) { let r = false; walk(n, x => { if (x.t === 'div' && (x.colon || countDivs(x.b) > 0)) r = true; }); return r; }
+function stripNeg(n) { while (n.t === 'neg') n = n.a; return n; }
+function termsOf(n) { return isSum(n) ? [...termsOf(n.a), ...termsOf(n.b)] : [n]; }
+/** Summanden „wie geschrieben“: eine geklammerte Summe rechts (z. B. nach einem Minus) bleibt ein Summand */
+function termsLit(n) { return isSum(n) ? [...termsLit(n.a), n.b] : [n]; }
+function signedTerms(n, s = 1, out = []) {
+  if (n.t === 'add') { signedTerms(n.a, s, out); signedTerms(n.b, s, out); }
+  else if (n.t === 'sub') { signedTerms(n.a, s, out); signedTerms(n.b, -s, out); }
+  else if (n.t === 'neg') signedTerms(n.a, -s, out);
+  else out.push({ s, node: n });
+  return out;
+}
+function isSingleFraction(n) { const top = stripNeg(n); return isSum(top) ? countDivs(top) === 0 : countDivs(top) <= 1; }
+function hasSumInside(n) { let r = false; walk(n, x => { if (isSum(x)) r = true; }); return r; }
+function complexity(n) { return termsOf(n).reduce((s, t) => s + RF.deg(toRF(t)), 0); }
+function denPoly(n) {
+  const top = stripNeg(n);
+  if (top.t === 'div' && !top.colon) { const r = toRF(top.b); return P.isConst(r.d) ? r.n : null; }
+  return countDivs(top) ? null : P.c(1);
+}
+/** Alle Summen, die als FAKTOR auftreten (mit Rolle Zähler/Nenner) */
+function sumFactors(n, role = 'top', out = []) {
+  switch (n.t) {
+    case 'add': case 'sub':
+      if (role === 'top') { sumFactors(n.a, 'top', out); sumFactors(n.b, 'top', out); } else out.push({ node: n, role });
+      break;
+    case 'neg': sumFactors(n.a, role, out); break;
+    case 'mul': { const r = role === 'top' ? 'num' : role; sumFactors(n.a, r, out); sumFactors(n.b, r, out); break; }
+    case 'div': { const r = role === 'top' ? 'num' : role; sumFactors(n.a, r, out); sumFactors(n.b, r === 'num' ? 'den' : 'num', out); break; }
+    case 'pow': sumFactors(n.a, role === 'top' ? 'num' : role, out); break;
+  }
+  return out;
+}
+const bigSqrt = c => BigInt(Math.round(Math.sqrt(Number(c))));
+/** Ist das Polynom fertig zerlegt? null = ja, sonst Grund */
+function analyzeFactor(poly, known) {
+  if (poly.size <= 1) return null;
+  const g = P.content(poly); if (g > 1n) return { reason: 'content', g };
+  const mono = {};
+  for (const v of P.vars(poly)) { let m = Infinity; for (const t of poly.values()) m = Math.min(m, t.e[v] || 0); if (m > 0) mono[v] = m; }
+  if (Object.keys(mono).length) return { reason: 'mono', mono };
+  if (P.deg(poly) <= 1) return null;
+  if (known.some(k => P.eq(k, poly) || P.eq(k, P.neg(poly)))) return null;
+  const ts = [...poly.values()].sort(termCmp);
+  const sq = t => { const c = babs(t.c), r = bigSqrt(c); return r * r === c && Object.values(t.e).every(e => e % 2 === 0); };
+  if (ts.length === 2 && ts.every(sq) && (ts[0].c < 0n) !== (ts[1].c < 0n)) return { reason: 'binom3' };
+  if (ts.length === 3 && sq(ts[0]) && sq(ts[2]) && (ts[0].c > 0n) === (ts[2].c > 0n) &&
+      babs(ts[1].c) === 2n * bigSqrt(babs(ts[0].c)) * bigSqrt(babs(ts[2].c))) return { reason: 'binom12' };
+  if (ts.length === 4) return { reason: 'group' };
+  return { reason: 'other' };
+}
+function findNonAtomic(ast, mode, known) {
+  for (const f of sumFactors(ast)) {
+    if (mode === 'den' && f.role !== 'den') continue;
+    let r; try { r = toRF(f.node); } catch (e) { continue; }
+    if (!P.isConst(r.d)) continue;
+    const info = analyzeFactor(r.n, known);
+    if (info) return { node: f.node, info };
+  }
+  return null;
+}
+function nonAtomicMsg(na) {
+  const f = Mnode(na.node, true), i = na.info;
+  switch (i.reason) {
+    case 'content': return `Im Faktor ${f} ist jeder Summand durch <b>${i.g}</b> teilbar – klammere ${i.g} aus.`;
+    case 'mono': { const m = new Map(); P.addTerm(m, i.mono, 1n); return `Jeder Summand von ${f} enthält ${polyHTML(m)} – klammere ${polyHTML(m)} aus.`; }
+    case 'binom3': return `${f} ist eine Differenz zweier Quadrate → <b>3. binomische Formel</b>: ${Meq('a^2-b^2', '(a-b)(a+b)')}.`;
+    case 'binom12': return `${f} ist ein Binom-Quadrat → <b>1./2. binomische Formel</b>: ${Meq('a^2+2ab+b^2', '(a+b)^2')}.`;
+    case 'group': return `${f} hat vier Summanden → <b>Gruppieren</b>: je zwei zusammenfassen, ausklammern, dann gemeinsame Klammer ausklammern.`;
+    default: return `${f} lässt sich noch weiter zerlegen. Versuch es mit Ausklammern oder einer binomischen Formel.`;
+  }
+}
+function fracParts(n) {
+  let list;
+  if (isSum(n)) list = termsOf(n);
+  else { list = []; (function fl(x) { if (x.t === 'mul' && !x.imp) { fl(x.a); fl(x.b); } else list.push(x); })(n); }
+  return list.map(x => { x = stripNeg(x); return (x.t === 'div' && !x.colon) ? { n: x.a, d: x.b } : { n: x, d: null }; });
+}
+/** Welcher Zähler/Nenner hat sich beim Faktorisieren verändert? */
+function partMismatch(refAst, ast) {
+  const A = fracParts(refAst), B = fracParts(ast);
+  if (A.length !== B.length) return null;
+  for (let i = 0; i < A.length; i++) for (const w of ['n', 'd']) {
+    const ra = A[i][w] ? toRF(A[i][w]) : ONE(), rb = B[i][w] ? toRF(B[i][w]) : ONE();
+    if (RF.eq(ra, rb)) continue;
+    const Z = w === 'n' ? 'Zähler' : 'Nenner';
+    const where = A.length > 1 ? `Im ${i + 1}. Bruch stimmt der ${Z}` : `Der ${Z} stimmt`;
+    if (RF.eq(RF.neg(ra), rb)) return { status: 'error', tag: 'vorzeichen', msg: `${where} bis aufs <b>Vorzeichen</b>. Wenn du z. B. ${M('a-x')} zu ${M('x-a')} umdrehst, musst du ein Minus davorschreiben: ${Meq('a-x', '-(x-a)')}.` };
+    let msg = `${where} nicht mehr: ${B[i][w] ? Mnode(B[i][w]) : '1'} ergibt ausmultipliziert ${rfHTML(rb)} – vorher stand dort aber ${rfHTML(ra)}.`;
+    if (ra.n.size === 2 && rb.n.size === 3) msg += ` <br>Tipp: ${Meq('(a-b)^2', 'a^2-2ab+b^2')} hat ein Mittelglied, ${M('a^2-b^2')} hat keins – dafür brauchst du ${M('(a-b)(a+b)')}.`;
+    return { status: 'error', tag: 'binomi', msg };
+  }
+  return null;
+}
+/** Beim Vorab-Vereinfachen: welcher Summand hat seinen Wert verändert? */
+function termValueMismatch(refAst, ast) {
+  const A = signedTerms(refAst), B = signedTerms(ast);
+  if (A.length !== B.length) return null;
+  for (let i = 0; i < A.length; i++) {
+    const va = toRF(A[i].node), vb = toRF(B[i].node);
+    const a = A[i].s < 0 ? RF.neg(va) : va, b = B[i].s < 0 ? RF.neg(vb) : vb;
+    if (RF.eq(a, b)) continue;
+    if (RF.eq(RF.neg(a), b)) return { status: 'error', tag: 'vorzeichen', msg: `Beim ${i + 1}. Summanden ist das <b>Vorzeichen</b> gekippt. Denk an ${Meq('a-x', '-(x-a)')}.` };
+    return { status: 'error', tag: 'kuerzen', msg: `Beim ${i + 1}. Summanden hat sich der Wert verändert: ${Mnode(B[i].node)} ist nicht dasselbe wie ${Mnode(A[i].node)}. Kürzen darfst du nur <b>Faktoren</b>, die oben UND unten stehen.` };
+  }
+  return null;
+}
+function intRoots(poly) {
+  const vs = P.vars(poly); if (vs.length !== 1) return [];
+  const v = vs[0], out = [];
+  for (let r = -12; r <= 12; r++) if (P.evalAt(poly, { [v]: BigInt(r) }) === 0n) out.push(r);
+  return out;
+}
+const linLabel = (v, r) => r === 0 ? M(v) : M(`(${v}${r > 0 ? '-' : '+'}${Math.abs(r)})`);
+function commonFactorHint(rf) {
+  const vs = [...new Set([...P.vars(rf.n), ...P.vars(rf.d)])];
+  if (vs.length !== 1) return '';
+  const v = vs[0];
+  for (let r = -12; r <= 12; r++) {
+    const val = { [v]: BigInt(r) };
+    if (P.evalAt(rf.n, val) === 0n && P.evalAt(rf.d, val) === 0n) return ` ${linLabel(v, r)} steht noch im Zähler <b>und</b> im Nenner.`;
+  }
+  return '';
+}
+
+/* =====================================================================
+   5. Fehler-Kategorien (für Rückmeldung & Statistik)
+   ===================================================================== */
+const TAGS = {
+  'hn-bei-mal':        { label: 'Hauptnenner bei Mal/Geteilt', tip: 'Einen Hauptnenner brauchst du NUR bei + und −. Bei · und : direkt faktorisieren und kürzen.', lvl: 1 },
+  'summanden':         { label: 'Aus Summen gekürzt', tip: 'Nur Faktoren kürzen! Erst Zähler und Nenner in Produkte zerlegen.', lvl: 1 },
+  'ausmultipliziert':  { label: 'Unnötig ausmultipliziert', tip: 'Faktoren stehen lassen – Ausmultiplizieren versteckt, was sich kürzen lässt.', lvl: 1 },
+  'nicht-faktorisiert':{ label: 'Nicht fertig faktorisiert', tip: 'Checkliste: 1. Ausklammern 2. Binomische Formel 3. Gruppieren.', lvl: 3 },
+  'binomi':            { label: 'Binomische Formel / Faktorisierung', tip: 'a² − b² = (a−b)(a+b) hat KEIN Mittelglied. (a−b)² = a² − 2ab + b² schon.', lvl: 1 },
+  'kehrwert':          { label: 'Kehrwert-Fehler', tip: 'Nur den Bruch HINTER dem „:“ umdrehen, dann multiplizieren.', lvl: 1 },
+  'vorzeichen':        { label: 'Vorzeichenfehler', tip: 'a − x = −(x − a). Das Minus bleibt übrig!', lvl: 4 },
+  'minus-klammer':     { label: 'Minus vor der Klammer', tip: 'Ein Minus vor einem Bruch gilt für den ganzen Zähler – Klammer setzen!', lvl: 2 },
+  'zaehler-nenner':    { label: 'Zähler+Zähler, Nenner+Nenner', tip: 'Brüche addiert man nur mit gleichem Nenner: Hauptnenner bilden.', lvl: 2 },
+  'erweitern':         { label: 'Zähler nicht erweitert', tip: 'Was du unten dranmultiplizierst, muss auch oben dran.', lvl: 2 },
+  'kgv':               { label: 'Zu großer Hauptnenner', tip: 'Nenner faktorisieren, jeden Faktor nur in seiner höchsten Potenz nehmen.', lvl: 2 },
+  'nicht-gekuerzt':    { label: 'Nicht fertig gekürzt', tip: 'Am Ende immer prüfen: Steht ein Faktor oben UND unten?', lvl: 1 },
+  'hn-statt-trick':    { label: 'Trick übersehen', tip: 'Vor dem Hauptnenner: Lässt sich jeder Bruch einzeln kürzen oder umdrehen?', lvl: 4 },
+  'operation':         { label: 'Rechenart verwechselt', tip: 'Erst fragen: Mal/Geteilt oder Plus/Minus? Davon hängt alles ab.', lvl: 1 },
+  'kreuz':             { label: 'Über Kreuz bei Plus/Minus', tip: 'Über Kreuz kürzen geht nur bei der Multiplikation.', lvl: 2 },
+  'potenzen':          { label: 'Potenzen falsch gekürzt', tip: 'x²/x = x und x/x² = 1/x – zähle die Faktoren.', lvl: 1 },
+  'zahlen':            { label: 'Zahlenfaktor falsch', tip: 'Zahlen kürzt man wie Variablen: durch den ggT teilen.', lvl: 1 },
+  'kuerzen':           { label: 'Falsch gekürzt', tip: 'Nur identische Faktoren kürzen – (x+a) und (x−a) sind verschieden!', lvl: 1 },
+};
+
+/* =====================================================================
+   6. Aufgaben-Vorlagen
+   ===================================================================== */
+const cf = (c, s) => c === 1 ? s : c === -1 ? '-' + s : `${c}${s}`;
+const pm = n => n < 0 ? `-${-n}` : `+${n}`;
+function linStr(c1, c0, v = 'x') { let s = c1 === 0 ? '' : cf(c1, v); if (c0 !== 0) s += s ? pm(c0) : String(c0); return s || '0'; }
+const frStr = (num, den) => den === 1 ? num : `${num}/${den}`;
+
+const T = [];
+const tpl = (level, id, gen) => T.push({ level, id, gen });
+
+/* ---------- Level 1: Multiplikation & Division ---------- */
+tpl(1, 'l1-binom3', () => {
+  const a = ri(2, 6), k = pick([2, 3, 4, 5]);
+  const m = pick([2, 3, 4, 6, 8, 9, 10, 12, 15].filter(v => v !== k)), g = gcdN(m, k), Mm = m / g, K = k / g, A2 = a * a;
+  return {
+    level: 1, kind: 'mul', name: 'Multiplikation · 3. binomische Formel', skill: '3. binomische Formel, über Kreuz kürzen',
+    prompt: `(x^2-${A2})/(${k}x)·(${m}x^2)/(x+${a})`,
+    factored: `(x-${a})(x+${a})/(${k}x)·(${m}x^2)/(x+${a})`,
+    combined: `${m}x^2(x-${a})(x+${a})/(${k}x(x+${a}))`,
+    final: frStr(cf(Mm, `x(x-${a})`), K),
+    hints: {
+      factor: [`Schau dir den ersten Zähler ${M(`x^2-${A2}`)} an: ${A2} ist eine Quadratzahl, und es gibt kein Glied mit nur x. Welche binomische Formel passt?`,
+               `3. binomische Formel: ${Meq('a^2-b^2', '(a-b)(a+b)')}. Hier ist a = x und b = ${a}.`],
+      final: [`Suche Faktoren, die oben UND unten stehen. Welche Klammer taucht doppelt auf? Und was bleibt von ${M(`${m}x^2/(${k}x)`)} übrig?`,
+               `${M(`(x+${a})`)} kürzt sich komplett, aus ${M(`${m}x^2/(${k}x)`)} wird ${M(frStr(cf(Mm, 'x'), K))}.`],
+    },
+    errors: [
+      { e: `(x-${a})^2/(${k}x)·(${m}x^2)/(x+${a})`, tag: 'binomi', msg: `${Meq(`(x-${a})^2`, `x^2-${2 * a}x+${A2}`)} – da ist ein Mittelglied zu viel! Ohne Mittelglied ist es die 3. binomische Formel: ${M(`(x-${a})(x+${a})`)}.` },
+      { e: frStr(cf(Mm, `(x-${a})`), K), tag: 'potenzen', msg: `Fast! Aber ${Meq('x^2/x', 'x')} – beim Kürzen bleibt ein x im Zähler übrig.` },
+      { e: frStr(cf(Mm, `x(x+${a})`), K), tag: 'kuerzen', msg: `Du hast die falsche Klammer behalten: ${M(`(x+${a})`)} steht oben und unten und kürzt sich weg – übrig bleibt ${M(`(x-${a})`)}.` },
+    ],
+  };
+});
+
+tpl(1, 'l1-binom1', () => {
+  const a = ri(1, 5), c = pick([2, 3, 4, 5]), d = ri(2, 9), g = gcdN(d, c), D = d / g, C = c / g, A2 = a * a;
+  const den = (s) => C === 1 ? `(x${s}${a})` : `(${C}(x${s}${a}))`;
+  return {
+    level: 1, kind: 'mul', name: 'Multiplikation · 1. binomische Formel & Ausklammern', skill: '1. und 3. binomische Formel, Ausklammern',
+    prompt: `(x^2+${2 * a}x+${A2})/(${c}x+${c * a})·${d}/(x^2-${A2})`,
+    factored: `(x+${a})^2/(${c}(x+${a}))·${d}/((x-${a})(x+${a}))`,
+    combined: `${d}(x+${a})^2/(${c}(x+${a})(x-${a})(x+${a}))`,
+    final: `${D}/${den('-')}`,
+    hints: {
+      factor: [`Drei Stellen zum Zerlegen: Der erste Zähler hat drei Glieder – prüfe die 1. binomische Formel ${Meq('(a+b)^2', 'a^2+2ab+b^2')}. Im ersten Nenner kannst du ausklammern. Und der zweite Nenner?`,
+               `${Meq(`x^2+${2 * a}x+${A2}`, `(x+${a})^2`)}, &nbsp;${Meq(`${c}x+${c * a}`, `${c}(x+${a})`)}, &nbsp;${Meq(`x^2-${A2}`, `(x-${a})(x+${a})`)}`],
+      final: [`${M(`(x+${a})`)} steht im Zähler zweimal (als Quadrat) – und im Nenner auch zweimal. Was bleibt übrig?`,
+               `Nach dem Kürzen bleibt oben nur ${d}, unten ${M(`${c}(x-${a})`)}.${g > 1 ? ` Und ${d} und ${c} kannst du noch durch ${g} kürzen.` : ''}`],
+    },
+    errors: [
+      { e: `${D}/${den('+')}`, tag: 'kuerzen', msg: `Du hast die falsche Klammer übrig gelassen – ${M(`(x+${a})`)} kürzt sich komplett weg, ${M(`(x-${a})`)} bleibt im Nenner.` },
+      { e: `${d}/(${c}(x-${a})(x+${a}))`, tag: 'kuerzen', msg: `${Meq(`(x+${a})^2`, `(x+${a})(x+${a})`)} – damit kannst du <b>zwei</b> Faktoren ${M(`(x+${a})`)} im Nenner kürzen, nicht nur einen.` },
+      { e: `(x+${a})^2/(${c}(x+${a}))·${d}/(x-${a})^2`, tag: 'binomi', msg: `${M(`x^2-${A2}`)} ist NICHT ${M(`(x-${a})^2`)} – das wäre ${M(`x^2-${2 * a}x+${A2}`)}. Ohne Mittelglied: ${M(`(x-${a})(x+${a})`)}.` },
+    ],
+  };
+});
+
+tpl(1, 'l1-div', () => {
+  const a = ri(1, 6), p = pick([2, 3, 4, 5, 6]), q = ri(2, 9), g = gcdN(q, p), Q = q / g, Pp = p / g;
+  const num = cf(Q, `(x+${a})`), den = Pp === 1 ? 'x' : `(${Pp}x)`;
+  return {
+    level: 1, kind: 'div', name: 'Division · Kehrwert & 3. binomische Formel', skill: 'Kehrwert, 3. binomische Formel, Potenzen kürzen',
+    prompt: `(x^2-${a * a})/(${p}x^2):(x-${a})/(${q}x)`,
+    kehrwert: `(x^2-${a * a})/(${p}x^2)·(${q}x)/(x-${a})`,
+    factored: `(x-${a})(x+${a})/(${p}x^2)·(${q}x)/(x-${a})`,
+    combined: `${q}x(x-${a})(x+${a})/(${p}x^2(x-${a}))`,
+    final: `${num}/${den}`,
+    hints: {
+      kehrwert: [`Durch einen Bruch teilt man, indem man mit seinem Kehrwert multipliziert. Welcher Bruch wird umgedreht?`,
+                 `Nur der zweite Bruch wird umgedreht: aus ${M(`(x-${a})/(${q}x)`)} wird ${M(`(${q}x)/(x-${a})`)} – und aus „:“ wird „·“.`],
+      factor: [`Nur ein Zähler lässt sich zerlegen: ${M(`x^2-${a * a}`)}. Welche binomische Formel hat kein Mittelglied?`,
+               `${Meq(`x^2-${a * a}`, `(x-${a})(x+${a})`)}`],
+      final: [`${M(`(x-${a})`)} kürzt sich. Und bei ${M('x/x^2')}: Wie viele x bleiben übrig – und wo?`,
+              `${Meq('x/x^2', '1/x')}, also bleibt ein x im Nenner.${g > 1 ? ` Die Zahlen ${q} und ${p} kannst du durch ${g} kürzen.` : ''}`],
+    },
+    errors: [
+      { e: `${num}/${Pp}`, tag: 'potenzen', msg: `${Meq('x/x^2', '1/x')} – im Nenner bleibt ein x übrig.` },
+    ],
+  };
+});
+
+tpl(1, 'l1-div2', () => {
+  const k = ri(2, 9); let m = ri(2, 9); while (m === k) m = ri(2, 9);
+  const g = gcdN(k, m), K = k / g, Mm = m / g;
+  return {
+    level: 1, kind: 'div', name: 'Division · zwei Variablen', skill: 'Kehrwert, Ausklammern, 3. binomische Formel',
+    prompt: `(${k}a+${k}b)/(a^2-b^2):${m}/(a-b)`,
+    kehrwert: `(${k}a+${k}b)/(a^2-b^2)·(a-b)/${m}`,
+    factored: `${k}(a+b)/((a-b)(a+b))·(a-b)/${m}`,
+    combined: `${k}(a+b)(a-b)/(${m}(a-b)(a+b))`,
+    final: Mm === 1 ? `${K}` : `${K}/${Mm}`,
+    hints: {
+      kehrwert: [`Geteilt durch einen Bruch = mal seinen Kehrwert.`, `Aus ${M(`${m}/(a-b)`)} wird ${M(`(a-b)/${m}`)}.`],
+      factor: [`Im ersten Zähler steckt in jedem Summanden die ${k} – ausklammern! Der Nenner ist eine alte Bekannte.`,
+               `${Meq(`${k}a+${k}b`, `${k}(a+b)`)} und ${Meq('a^2-b^2', '(a-b)(a+b)')}`],
+      final: [`Schau genau: Jede Klammer kommt oben und unten vor …`,
+              `Alle Klammern kürzen sich weg! Übrig bleibt ${M(`${k}/${m}`)}${g > 1 ? ' – und das kannst du noch kürzen' : ''}.`],
+    },
+    errors: [
+      { e: `${k}/(${m}(a-b)^2)`, tag: 'kehrwert', msg: `Da ist der Kehrwert verloren gegangen: ${M('(a-b)')} gehört nach dem Umdrehen in den <b>Zähler</b>, nicht in den Nenner.` },
+    ],
+  };
+});
+
+tpl(1, 'l1-sign', () => {
+  const a = ri(1, 6), k = pick([2, 3, 4, 5]), m = ri(2, 9), g = gcdN(m, k), Mm = m / g, K = k / g;
+  const den = K === 1 ? `(x+${a})` : `(${K}(x+${a}))`;
+  return {
+    level: 1, kind: 'mul', name: 'Multiplikation · Vorzeichen-Trick', skill: 'a − x = −(x − a), 3. binomische Formel',
+    prompt: `(${a}-x)/(${k}x)·(${m}x^2)/(x^2-${a * a})`,
+    factored: `-(x-${a})/(${k}x)·(${m}x^2)/((x-${a})(x+${a}))`,
+    combined: `-${m}x^2(x-${a})/(${k}x(x-${a})(x+${a}))`,
+    final: `-${cf(Mm, 'x')}/${den}`,
+    hints: {
+      factor: [`Der zweite Nenner ist eine Differenz von Quadraten. Und schau dir den ersten Zähler ${M(`${a}-x`)} genau an – fast wie ${M(`x-${a}`)}, nur verdreht …`,
+               `${Meq(`${a}-x`, `-(x-${a})`)} (−1 ausklammern!) und ${Meq(`x^2-${a * a}`, `(x-${a})(x+${a})`)}`],
+      final: [`Kürze ${M(`(x-${a})`)} – das Minus, das du ausgeklammert hast, bleibt vor dem Bruch stehen.`,
+              `Aus ${M(`${m}x^2/(${k}x)`)} wird ${M(frStr(cf(Mm, 'x'), K))}, und vorne bleibt ein Minus.`],
+    },
+    errors: [
+      { e: `${cf(Mm, 'x')}/${den}`, tag: 'vorzeichen', msg: `So knapp! ${Meq(`${a}-x`, `-(x-${a})`)} – beim Kürzen bleibt ein <b>Minuszeichen</b> übrig.` },
+    ],
+  };
+});
+
+tpl(1, 'l1-auskl', () => {
+  const a = ri(1, 6), k = ri(2, 9), m = ri(2, 9), g = gcdN(k, m), K = k / g, Mm = m / g;
+  return {
+    level: 1, kind: 'mul', name: 'Multiplikation · Ausklammern', skill: 'Ausklammern, 3. binomische Formel, Summanden-Falle',
+    prompt: `(x^2+${cf(a, 'x')})/(x^2-${a * a})·(${k}x-${k * a})/(${m}x^2)`,
+    factored: `x(x+${a})/((x-${a})(x+${a}))·${k}(x-${a})/(${m}x^2)`,
+    combined: `${k}x(x+${a})(x-${a})/(${m}x^2(x-${a})(x+${a}))`,
+    final: `${K}/${Mm === 1 ? 'x' : `(${Mm}x)`}`,
+    hints: {
+      factor: [`In beiden Zählern steckt ein gemeinsamer Faktor – ausklammern! Und der erste Nenner ist eine binomische Formel.`,
+               `${Meq(`x^2+${cf(a, 'x')}`, `x(x+${a})`)}, &nbsp;${Meq(`${k}x-${k * a}`, `${k}(x-${a})`)}, &nbsp;${Meq(`x^2-${a * a}`, `(x-${a})(x+${a})`)}`],
+      final: [`Beide Klammern kürzen sich. Was bleibt von ${M(`${k}x/(${m}x^2)`)}?`, `${Meq('x/x^2', '1/x')}${g > 1 ? `, und ${k}/${m} lässt sich durch ${g} kürzen.` : '.'}`],
+    },
+    errors: [
+      { e: `${K}/${Mm}`, tag: 'potenzen', msg: `${M('x/x^2')} ist nicht 1, sondern ${M('1/x')} – ein x bleibt im Nenner.` },
+      { e: `-x/${a}·${k}(x-${a})/(${m}x^2)`, tag: 'summanden', msg: `Achtung: ${M('x^2')} in ${M(`x^2+${cf(a, 'x')}`)} und in ${M(`x^2-${a * a}`)} ist ein <b>Summand</b>, kein Faktor – den darfst du nicht wegkürzen! Erst faktorisieren, dann kürzen.` },
+    ],
+  };
+});
+
+/* ---------- Level 2: Addition & Subtraktion ---------- */
+tpl(2, 'l2-binom3', () => {
+  const a = ri(1, 5), q = ri(1, 5); let p = ri(1, 9); while (p === 2 * q * a || p === q * a) p = ri(1, 9);
+  const A2 = a * a, H = `(x-${a})(x+${a})`, Z = `${p}+${cf(q, `(x-${a})`)}`;
+  return {
+    level: 2, kind: 'add', name: 'Addition · Hauptnenner mit binomischer Formel', skill: 'Nenner faktorisieren, Hauptnenner, erweitern',
+    prompt: `${p}/(x^2-${A2})+${q}/(x+${a})`,
+    factored: `${p}/(${H})+${q}/(x+${a})`,
+    hn: H,
+    combined: `(${Z})/(${H})`,
+    final: `(${linStr(q, p - q * a)})/(${H})`,
+    hints: {
+      factor: [`Bei Plus/Minus zählen zuerst die Nenner: Lässt sich ${M(`x^2-${A2}`)} zerlegen?`, `${Meq(`x^2-${A2}`, H)} (3. binomische Formel)`],
+      hn: [`Der Hauptnenner muss jeden Nenner enthalten – aber jeden Faktor nur so oft wie nötig.`,
+           `${M(`(x+${a})`)} steckt schon in ${M(H)}. Du brauchst also nichts Neues.`],
+      combine: [`Der erste Bruch hat schon den Hauptnenner. Dem zweiten fehlt der Faktor ${M(`(x-${a})`)} – den musst du auch OBEN dranmultiplizieren.`,
+                `Neuer Zähler: ${M(Z)}`],
+      final: [`Löse die Klammer im Zähler auf und fasse zusammen. Danach: Lässt sich noch etwas kürzen?`,
+              `${Meq(Z, linStr(q, p - q * a))} – kürzen geht hier nicht mehr.`],
+    },
+    errors: q > 1 ? [
+      { e: `(${p}+${q}x-${a})/(${H})`, tag: 'erweitern', msg: `Beim Erweitern muss der GANZE Faktor multipliziert werden: ${Meq(`${q}(x-${a})`, `${q}x-${q * a}`)} – nicht ${M(`${q}x-${a}`)}. Klammer setzen!` },
+    ] : [],
+  };
+});
+
+tpl(2, 'l2-minus', () => {
+  const a = ri(1, 4), b = ri(1, 5), c = ri(1, 5), H = `(x-${a})(x+${a})`;
+  return {
+    level: 2, kind: 'add', skipFactor: true, name: 'Subtraktion · Minus-Falle', skill: 'Hauptnenner, Minus vor dem Bruch',
+    prompt: `(x+${b})/(x-${a})-(x-${c})/(x+${a})`,
+    hn: H,
+    combined: `((x+${b})(x+${a})-(x-${c})(x-${a}))/(${H})`,
+    final: `(${linStr(2 * a + b + c, a * (b - c))})/(${H})`,
+    hints: {
+      hn: [`Beide Nenner sind schon fertig zerlegt und haben keinen gemeinsamen Faktor. Was heißt das für den Hauptnenner?`,
+           `Hauptnenner = ${M(H)} – einfach das Produkt, weil nichts doppelt vorkommt.`],
+      combine: [`Erweitere den ersten Bruch mit ${M(`(x+${a})`)}, den zweiten mit ${M(`(x-${a})`)}. Setz die Zähler in Klammern – besonders hinter dem Minus!`,
+                M(`((x+${b})(x+${a})-(x-${c})(x-${a}))/(${H})`)],
+      final: [`Multipliziere beide Produkte aus. Das zweite Produkt erst komplett in einer Klammer ausrechnen, DANN das Minus auflösen – jedes Vorzeichen dreht sich um!`,
+              `${Meq(`(x+${b})(x+${a})`, `x^2+${a + b}x+${a * b}`)} und ${Meq(`(x-${c})(x-${a})`, `x^2-${a + c}x+${a * c}`)}`],
+    },
+    errors: [
+      { e: `(${linStr(b - c, a * b + a * c)})/(${H})`, tag: 'minus-klammer', msg: `Minus-Falle! Das Minus vor dem zweiten Bruch gilt für den GANZEN Zähler: ${Meq(`-(x-${c})(x-${a})`, `-(x^2-${a + c}x+${a * c})`, `-x^2+${a + c}x-${a * c}`)}. Setz beim Zusammenfassen immer eine Klammer!` },
+    ],
+  };
+});
+
+tpl(2, 'l2-hn3', () => {
+  const a = ri(1, 5), k = ri(1, 6), m = ri(1, 6), H = `x(x-${a})(x+${a})`, Z = `${cf(k, `(x+${a})`)}+${cf(m, 'x')}`;
+  return {
+    level: 2, kind: 'add', name: 'Addition · drei verschiedene Faktoren', skill: 'Ausklammern, 3. binomische Formel, Hauptnenner',
+    prompt: `${k}/(x^2-${cf(a, 'x')})+${m}/(x^2-${a * a})`,
+    factored: `${k}/(x(x-${a}))+${m}/((x-${a})(x+${a}))`,
+    hn: H,
+    combined: `(${Z})/(${H})`,
+    final: `(${linStr(k + m, k * a)})/(${H})`,
+    hints: {
+      factor: [`Zwei Nenner, zwei Werkzeuge: Im ersten kannst du etwas ausklammern, der zweite ist eine binomische Formel.`,
+               `${Meq(`x^2-${cf(a, 'x')}`, `x(x-${a})`)} und ${Meq(`x^2-${a * a}`, `(x-${a})(x+${a})`)}`],
+      hn: [`Sammle alle verschiedenen Faktoren: ${M('x')}, ${M(`(x-${a})`)}, ${M(`(x+${a})`)} … Kommt einer doppelt vor?`,
+           `${M(`(x-${a})`)} steckt in beiden Nennern – in den Hauptnenner kommt er trotzdem nur einmal: ${M(H)}.`],
+      combine: [`Dem ersten Bruch fehlt ${M(`(x+${a})`)}, dem zweiten fehlt ${M('x')}. Zähler und Nenner jeweils damit multiplizieren.`, M(`(${Z})/(${H})`)],
+      final: [`Ausmultiplizieren, zusammenfassen – dann prüfen, ob der Zähler einen Faktor des Nenners enthält.`,
+              `${Meq(Z, linStr(k + m, k * a))} – kürzen geht nicht.`],
+    },
+    errors: [],
+  };
+});
+
+tpl(2, 'l2-binom1', () => {
+  const a = ri(1, 5), p = ri(1, 9), q = ri(1, 5), A2 = a * a, H = `(x+${a})^2`, Z = `${p}-${cf(q, `(x+${a})`)}`;
+  return {
+    level: 2, kind: 'add', name: 'Subtraktion · Binom im Nenner', skill: '1. binomische Formel, Hauptnenner mit Potenz, Minus-Klammer',
+    prompt: `${p}/(x^2+${2 * a}x+${A2})-${q}/(x+${a})`,
+    factored: `${p}/${H}-${q}/(x+${a})`,
+    hn: H,
+    combined: `(${Z})/${H}`,
+    final: `(${linStr(-q, p - q * a)})/${H}`,
+    hints: {
+      factor: [`Der erste Nenner hat drei Glieder – steckt da eine binomische Formel drin?`, Meq(`x^2+${2 * a}x+${A2}`, H)],
+      hn: [`${M(`(x+${a})`)} ist in ${M(H)} schon enthalten. Brauchst du noch mehr?`, `Hauptnenner: ${M(H)} – nicht ${M(`(x+${a})^3`)}!`],
+      combine: [`Der zweite Bruch braucht noch einen Faktor ${M(`(x+${a})`)} – oben und unten.`, M(`(${Z})/${H}`)],
+      final: [`Löse die Klammer auf: Vor ${M(cf(q, `(x+${a})`))} steht ein Minus!`, Meq(Z, linStr(-q, p - q * a))],
+    },
+    errors: [
+      { e: `(${linStr(-q, p + q * a)})/${H}`, tag: 'minus-klammer', msg: `Minus-Falle: ${Meq(`-${cf(q, `(x+${a})`)}`, linStr(-q, -q * a))}. Das Minus gilt für BEIDE Summanden in der Klammer!` },
+    ],
+  };
+});
+
+tpl(2, 'l2-kgv', () => {
+  const [k, m] = pick([[4, 6], [6, 9], [4, 10], [6, 8], [10, 15], [6, 4], [9, 6], [8, 12], [6, 10], [12, 8]]);
+  const a = ri(1, 6), b = ri(1, 6), L = lcmN(k, m), fk = L / k, fm = L / m;
+  const c1 = fk - fm, c0 = fk * a + fm * b, g = gcdN(gcdN(Math.abs(c1), c0), L);
+  const Z = `${cf(fk, `(x+${a})`)}-${cf(fm, `(x-${b})`)}`;
+  return {
+    level: 2, kind: 'add', skipFactor: true, name: 'Subtraktion · kgV bei Zahlen', skill: 'kgV statt Produkt, Minus-Klammer, Zahlen kürzen',
+    prompt: `(x+${a})/(${k}x)-(x-${b})/(${m}x)`,
+    hn: `${L}x`,
+    combined: `(${Z})/(${L}x)`,
+    final: `(${linStr(c1 / g, c0 / g)})/${L / g === 1 ? 'x' : `(${L / g}x)`}`,
+    hints: {
+      hn: [`Bei Zahlen gilt: kleinstes gemeinsames Vielfaches (kgV) von ${k} und ${m} – nicht einfach ${k} · ${m} = ${k * m}.`,
+           `kgV(${k}, ${m}) = ${L}. Das x brauchst du nur einmal: Hauptnenner ${M(`${L}x`)}.`],
+      combine: [`Erweitere den ersten Bruch mit ${fk}, den zweiten mit ${fm}.`, M(`(${Z})/(${L}x)`)],
+      final: [`Klammern auflösen (Minus beachten!), zusammenfassen – und dann prüfen, ob sich die Zahlen noch kürzen lassen.`,
+              `Zähler: ${M(linStr(c1, c0))}${g > 1 ? ` – alles durch ${g} teilbar, also kürzen!` : ''}`],
+    },
+    errors: [
+      { e: `(${linStr(c1, fk * a - fm * b)})/(${L}x)`, tag: 'minus-klammer', msg: `Minus-Falle: ${Meq(`-${cf(fm, `(x-${b})`)}`, linStr(-fm, fm * b))}. Das Minus dreht auch das Vorzeichen vor der ${b} um!` },
+    ],
+  };
+});
+
+/* ---------- Level 3: Endgegner ---------- */
+tpl(3, 'l3-x4', () => {
+  const a = ri(1, 3), k = pick([2, 3, 4, 5]), m = ri(2, 9), g = gcdN(m, k), Mm = m / g, K = k / g, a2 = a * a, a4 = a2 * a2;
+  const den = K === 1 ? `(x-${a})` : `(${K}(x-${a}))`;
+  return {
+    level: 3, kind: 'mul', name: 'Endgegner · x⁴ − a⁴', skill: '3. binomische Formel zweimal, 2. binomische Formel, Ausklammern',
+    prompt: `(x^4-${a4})/(${k}x^2+${k * a2})·(${m}x)/(x^2-${2 * a}x+${a2})`,
+    factored: `(x^2+${a2})(x-${a})(x+${a})/(${k}(x^2+${a2}))·(${m}x)/(x-${a})^2`,
+    combined: `${m}x(x^2+${a2})(x-${a})(x+${a})/(${k}(x^2+${a2})(x-${a})^2)`,
+    final: `${cf(Mm, `x(x+${a})`)}/${den}`,
+    hints: {
+      factor: [`${M(`x^4-${a4}`)} ist eine Differenz von Quadraten: ${M(`(x^2)^2-${a2}^2`)}. Also 3. binomische Formel – und danach vielleicht gleich nochmal! Im ersten Nenner: ausklammern. Zweiter Nenner: 2. binomische Formel.`,
+               `${Meq(`x^4-${a4}`, `(x^2-${a2})(x^2+${a2})`, `(x-${a})(x+${a})(x^2+${a2})`)}. ${M(`x^2+${a2}`)} lässt sich NICHT weiter zerlegen. Außerdem ${Meq(`${k}x^2+${k * a2}`, `${k}(x^2+${a2})`)} und ${Meq(`x^2-${2 * a}x+${a2}`, `(x-${a})^2`)}.`],
+      final: [`Kürze alles, was oben und unten steht: ${M(`(x^2+${a2})`)} und ein ${M(`(x-${a})`)} …`,
+              `Oben bleibt ${M(cf(m, `x(x+${a})`))}, unten ${M(`${k}(x-${a})`)}${g > 1 ? ' – dann noch die Zahlen kürzen' : ''}.`],
+    },
+    errors: [
+      { e: frStr(cf(Mm, `x(x+${a})`), K), tag: 'kuerzen', msg: `${Meq(`(x-${a})^2`, `(x-${a})(x-${a})`)} – oben steht nur ein ${M(`(x-${a})`)}, also bleibt unten einer übrig.` },
+    ],
+  };
+});
+
+tpl(3, 'l3-group', () => {
+  const a = ri(1, 4); let b = ri(1, 4); while (b === a) b = ri(1, 4);
+  const k = pick([2, 3, 4]), m = ri(2, 9), g = gcdN(m, k), Mm = m / g, K = k / g, b2 = b * b;
+  const Z1 = `x^3+${cf(a, 'x^2')}-${cf(b2, 'x')}-${a * b2}`;
+  return {
+    level: 3, kind: 'div', name: 'Endgegner · Gruppieren', skill: 'Gruppieren, Kehrwert, 1. und 3. binomische Formel',
+    prompt: `(${Z1})/(${k}x-${k * b}):(x^2+${2 * b}x+${b2})/(${m}x)`,
+    kehrwert: `(${Z1})/(${k}x-${k * b})·(${m}x)/(x^2+${2 * b}x+${b2})`,
+    factored: `(x+${a})(x-${b})(x+${b})/(${k}(x-${b}))·(${m}x)/(x+${b})^2`,
+    combined: `${m}x(x+${a})(x-${b})(x+${b})/(${k}(x-${b})(x+${b})^2)`,
+    final: `${cf(Mm, `x(x+${a})`)}/${K === 1 ? `(x+${b})` : `(${K}(x+${b}))`}`,
+    hints: {
+      kehrwert: [`Erst die Division loswerden: mit dem Kehrwert des zweiten Bruchs multiplizieren.`, `Aus ${M(`(x^2+${2 * b}x+${b2})/(${m}x)`)} wird ${M(`(${m}x)/(x^2+${2 * b}x+${b2})`)}.`],
+      factor: [`Vier Summanden im ersten Zähler? <b>Gruppieren!</b> Fasse die ersten beiden und die letzten beiden zusammen und klammere jeweils aus.`,
+               `${Meq(Z1, `x^2(x+${a})-${cf(b2, `(x+${a})`)}`, `(x+${a})(x^2-${b2})`, `(x+${a})(x-${b})(x+${b})`)}. Im Nenner: ${Meq(`${k}x-${k * b}`, `${k}(x-${b})`)} und ${Meq(`x^2+${2 * b}x+${b2}`, `(x+${b})^2`)}.`],
+      final: [`${M(`(x-${b})`)} kürzt sich ganz, von ${M(`(x+${b})^2`)} bleibt ein Faktor übrig.`,
+              `Oben: ${M(cf(m, `x(x+${a})`))}, unten: ${M(`${k}(x+${b})`)}${g > 1 ? ' – Zahlen noch kürzen!' : ''}`],
+    },
+    errors: [],
+  };
+});
+
+tpl(3, 'l3-three', () => {
+  const a = ri(1, 5); let c = ri(1, 7); while (c === 2 * a) c = ri(1, 7);
+  const H = `(x-${a})(x+${a})`;
+  return {
+    level: 3, kind: 'add', name: 'Endgegner · drei Brüche', skill: 'Hauptnenner für drei Brüche, doppelte Minus-Falle',
+    prompt: `(2x+${c})/(x^2-${a * a})-1/(x-${a})-1/(x+${a})`,
+    factored: `(2x+${c})/(${H})-1/(x-${a})-1/(x+${a})`,
+    hn: H,
+    combined: `(2x+${c}-(x+${a})-(x-${a}))/(${H})`,
+    final: `${c}/(${H})`,
+    hints: {
+      factor: [`Nur ein Nenner lässt sich zerlegen – welcher, und mit welcher Formel?`, Meq(`x^2-${a * a}`, H)],
+      hn: [`Alle drei Nenner stecken in einem gemeinsamen Produkt drin.`, `Hauptnenner: ${M(H)}`],
+      combine: [`Der erste Bruch passt schon. Der zweite braucht ${M(`(x+${a})`)}, der dritte ${M(`(x-${a})`)}. Klammern um die Zähler hinter den Minuszeichen!`,
+                M(`(2x+${c}-(x+${a})-(x-${a}))/(${H})`)],
+      final: [`Löse die Minus-Klammern vorsichtig auf: ${Meq(`-(x+${a})`, `-x-${a}`)} und ${Meq(`-(x-${a})`, `-x+${a}`)}. Was passiert mit den x?`,
+              `Alle x heben sich auf – übrig bleibt nur ${c} im Zähler.`],
+    },
+    errors: [
+      { e: `${c + 2 * a}/(${H})`, tag: 'minus-klammer', msg: `Minus-Falle! ${Meq(`-(x+${a})`, `-x-${a}`)} – nicht ${M(`-x+${a}`)}. Das Minus gilt für beide Summanden.` },
+      { e: `${c - 2 * a}/(${H})`, tag: 'minus-klammer', msg: `Minus-Falle! ${Meq(`-(x-${a})`, `-x+${a}`)} – aus „−${a}“ in der Klammer wird „+${a}“.` },
+    ],
+  };
+});
+
+tpl(3, 'l3-x4b', () => {
+  const a = ri(1, 3), k = ri(2, 9), a2 = a * a, a4 = a2 * a2;
+  return {
+    level: 3, kind: 'mul', name: 'Endgegner · Binom mit x²', skill: 'Binomische Formel mit x², 3. binomische Formel, Potenzen',
+    prompt: `(x^4-${2 * a2}x^2+${a4})/(x^3+${cf(a, 'x^2')})·(${k}x)/(x^2-${2 * a}x+${a2})`,
+    factored: `(x-${a})^2(x+${a})^2/(x^2(x+${a}))·(${k}x)/(x-${a})^2`,
+    combined: `${k}x(x-${a})^2(x+${a})^2/(x^2(x+${a})(x-${a})^2)`,
+    final: `${k}(x+${a})/x`,
+    hints: {
+      factor: [`Der erste Zähler ist eine binomische Formel mit ${M('x^2')} statt x: ${M(`(x^2)^2-2·${a2}·x^2+${a2}^2`)}. Und danach geht's noch weiter! Im ersten Nenner: ${M('x^2')} ausklammern.`,
+               `${Meq(`x^4-${2 * a2}x^2+${a4}`, `(x^2-${a2})^2`, `(x-${a})^2(x+${a})^2`)}. Außerdem ${Meq(`x^3+${cf(a, 'x^2')}`, `x^2(x+${a})`)} und ${Meq(`x^2-${2 * a}x+${a2}`, `(x-${a})^2`)}.`],
+      final: [`${M(`(x-${a})^2`)} kürzt sich komplett, von ${M(`(x+${a})^2`)} bleibt einer. Und ${M('x/x^2')}?`, `${Meq('x/x^2', '1/x')} – ein x bleibt im Nenner.`],
+    },
+    errors: [
+      { e: `${k}(x+${a})`, tag: 'potenzen', msg: `${Meq('x/x^2', '1/x')} – im Nenner bleibt ein x übrig.` },
+    ],
+  };
+});
+
+tpl(3, 'l3-xy', () => {
+  const m = ri(1, 3), k = ri(2, 9), my = cf(m, 'y'), m2y2 = cf(m * m, 'y^2'), mxy2 = cf(m, 'xy^2'), m2xy = cf(2 * m, 'xy');
+  return {
+    level: 3, kind: 'mul', name: 'Endgegner · zwei Variablen', skill: 'Binomische Formeln mit zwei Variablen, Ausklammern von xy',
+    prompt: `(x^2-${m2y2})/(x^2y+${mxy2})·(${k}xy)/(x^2-${m2xy}+${m2y2})`,
+    factored: `(x-${my})(x+${my})/(xy(x+${my}))·(${k}xy)/(x-${my})^2`,
+    combined: `${k}xy(x-${my})(x+${my})/(xy(x+${my})(x-${my})^2)`,
+    final: `${k}/(x-${my})`,
+    hints: {
+      factor: [`Drei Werkzeuge auf einmal: 3. binomische Formel, Ausklammern (was steckt in beiden Summanden von ${M(`x^2y+${mxy2}`)}?) und 2. binomische Formel.`,
+               `${Meq(`x^2-${m2y2}`, `(x-${my})(x+${my})`)}; &nbsp;${Meq(`x^2y+${mxy2}`, `xy(x+${my})`)}; &nbsp;${Meq(`x^2-${m2xy}+${m2y2}`, `(x-${my})^2`)}`],
+      final: [`Kürze ${M(`(x+${my})`)}, ${M('xy')} und einen Faktor ${M(`(x-${my})`)}.`, `Übrig bleibt ${M(`${k}/(x-${my})`)}.`],
+    },
+    errors: [
+      { e: `${k}xy/(x-${my})`, tag: 'kuerzen', msg: `${M('xy')} steht oben UND unten – das kürzt sich auch weg!` },
+    ],
+  };
+});
+
+tpl(3, 'l3-quad', () => {
+  const a = ri(1, 4), a2 = a * a, H = `x(x-${a})(x+${a})`, Z = `x^2-${cf(a, `(x-${a})`)}`;
+  return {
+    level: 3, kind: 'add', name: 'Endgegner · quadratischer Zähler', skill: 'Hauptnenner, Minus mal Minus, Kürzen prüfen',
+    prompt: `x/(x^2-${a2})-${a}/(x^2+${cf(a, 'x')})`,
+    factored: `x/((x-${a})(x+${a}))-${a}/(x(x+${a}))`,
+    hn: H,
+    combined: `(${Z})/(${H})`,
+    final: `(x^2-${cf(a, 'x')}+${a2})/(${H})`,
+    hints: {
+      factor: [`Beide Nenner lassen sich zerlegen: einmal binomische Formel, einmal ausklammern.`,
+               `${Meq(`x^2-${a2}`, `(x-${a})(x+${a})`)} und ${Meq(`x^2+${cf(a, 'x')}`, `x(x+${a})`)}`],
+      hn: [`Sammle die Faktoren: ${M(`(x-${a})`)}, ${M(`(x+${a})`)}, ${M('x')}. Welcher kommt doppelt vor?`, `${M(`(x+${a})`)} nur einmal: ${M(H)}`],
+      combine: [`Dem ersten Bruch fehlt ${M('x')}, dem zweiten ${M(`(x-${a})`)}.`, M(`(${Z})/(${H})`)],
+      final: [`Klammer auflösen (Minus!). Prüfe dann: Enthält der Zähler ${M(`(x-${a})`)}, ${M(`(x+${a})`)} oder x? (Einsetzen: Wird er 0?)`,
+              `Zähler: ${M(`x^2-${cf(a, 'x')}+${a2}`)} – der lässt sich nicht weiter kürzen. Fertig!`],
+    },
+    errors: [
+      { e: `(x^2-${cf(a, 'x')}-${a2})/(${H})`, tag: 'minus-klammer', msg: `Minus-Falle: ${Meq(`-${cf(a, `(x-${a})`)}`, `-${cf(a, 'x')}+${a2}`)}. Minus mal Minus ergibt Plus!` },
+    ],
+  };
+});
+
+/* ---------- Level 4: Trick-Erkennung ---------- */
+tpl(4, 'l4-cancel', () => {
+  const a = ri(1, 6), b = ri(1, 6);
+  return {
+    level: 4, kind: 'add', variant: 'trick', name: 'Trick · erst kürzen, dann addieren', skill: 'Jeden Bruch vorab kürzen – kein Hauptnenner nötig',
+    prompt: `(x^2-${a * a})/(x-${a})+(x^2+${cf(b, 'x')})/x`,
+    reduced: `(x+${a})+(x+${b})`,
+    final: `2x+${a + b}`,
+    hints: {
+      reduce: [`Bevor du einen Hauptnenner suchst: Lässt sich jeder Bruch für sich allein kürzen?`,
+               `${Meq(`x^2-${a * a}`, `(x-${a})(x+${a})`)} – kürzt sich mit dem Nenner. Und ${Meq(`x^2+${cf(b, 'x')}`, `x(x+${b})`)}.`],
+      final: [`Jetzt nur noch zusammenfassen – ganz ohne Bruch!`, `${M(`(x+${a})+(x+${b})`)} = ?`],
+    },
+    errors: [
+      { e: `(x+${a})(x+${b})`, tag: 'operation', msg: `Das ist eine Plus-Aufgabe – die beiden gekürzten Terme werden addiert, nicht multipliziert.` },
+      { e: `x+${a}+x^2+${b}`, tag: 'summanden', msg: `Beim Kürzen durch x muss JEDER Summand geteilt werden: ${Meq(`(x^2+${cf(b, 'x')})/x`, `x+${b}`)}. Sicherer: erst x ausklammern, dann kürzen.` },
+      { e: `x+${a}+x+${cf(b, 'x')}`, tag: 'summanden', msg: `In ${M(`(x^2+${cf(b, 'x')})/x`)} hast du nur einen Summanden gekürzt. Erst ausklammern: ${M(`x(x+${b})/x`)} – dann kürzen.` },
+    ],
+  };
+});
+
+tpl(4, 'l4-sign', () => {
+  const a = ri(1, 7), p = ri(1, 9); let q = ri(1, 9); while (q === p) q = ri(1, 9);
+  return {
+    level: 4, kind: 'add', variant: 'sameDen', name: 'Trick · verdrehter Nenner', skill: 'a − x = −(x − a) statt Riesen-Hauptnenner',
+    prompt: `${p}/(x-${a})+${q}/(${a}-x)`,
+    reduced: `${p}/(x-${a})-${q}/(x-${a})`,
+    final: `${p - q}/(x-${a})`,
+    hints: {
+      reduce: [`Schau genau auf die Nenner: ${M(`x-${a}`)} und ${M(`${a}-x`)}. Was ist der Unterschied?`,
+               `${Meq(`${a}-x`, `-(x-${a})`)}, also ${Meq(`${q}/(${a}-x)`, `-${q}/(x-${a})`)}.`],
+      final: [`Jetzt haben beide Brüche den gleichen Nenner – verrechne nur noch die Zähler.`, `${p} − ${q} = ${p - q}`],
+    },
+    errors: [
+      { e: `${p + q}/(x-${a})`, tag: 'vorzeichen', msg: `${M(`${a}-x`)} ist NICHT dasselbe wie ${M(`x-${a}`)}, sondern ${M(`-(x-${a})`)}. Dadurch wird aus dem Plus ein Minus.` },
+    ],
+  };
+});
+
+tpl(4, 'l4-split', () => {
+  const k = ri(2, 6), m = ri(2, 9), b = ri(1, 5); let n = ri(2, 7); while (n === m) n = ri(2, 7);
+  return {
+    level: 4, kind: 'add', variant: 'trick', name: 'Trick · Bruch aufteilen', skill: '(a + b)/c = a/c + b/c, Ausklammern',
+    prompt: `(${k}x^2+${m}x)/x-(${n}x+${n * b})/(x+${b})`,
+    reduced: `${k}x+${m}-${n}`,
+    final: `${k}x${pm(m - n)}`,
+    hints: {
+      reduce: [`Zwei Brüche, zwei Abkürzungen: Den ersten kannst du aufteilen – ${Meq('(a+b)/c', 'a/c+b/c')} – oder x ausklammern. Beim zweiten: ${n} ausklammern!`,
+               `${Meq(`(${k}x^2+${m}x)/x`, `${k}x+${m}`)} und ${Meq(`(${n}x+${n * b})/(x+${b})`, `${n}(x+${b})/(x+${b})`, `${n}`)}`],
+      final: [`Fasse die Zahlen zusammen.`, `${m} − ${n} = ${m - n}`],
+    },
+    errors: [
+      { e: `${k}x+${m}x-${n}`, tag: 'summanden', msg: `Beim Aufteilen wird JEDER Summand durch x geteilt: ${Meq(`${m}x/x`, `${m}`)}, nicht ${M(`${m}x`)}.` },
+      { e: `${k}x+${m}+${n}`, tag: 'minus-klammer', msg: `Das Minus vor dem zweiten Bruch bleibt stehen: Der Bruch ergibt ${n}, also „− ${n}“.` },
+    ],
+  };
+});
+
+tpl(4, 'l4-binom', () => {
+  const a = ri(1, 6); let b = ri(1, 6); while (b === a) b = ri(1, 6);
+  return {
+    level: 4, kind: 'add', variant: 'trick', name: 'Trick · Binome kürzen sich weg', skill: 'Binomische Formeln erkennen, bevor man rechnet',
+    prompt: `(x^2+${2 * a}x+${a * a})/(x+${a})-(x^2-${b * b})/(x-${b})`,
+    reduced: `(x+${a})-(x+${b})`,
+    final: `${a - b}`,
+    hints: {
+      reduce: [`Bevor du einen Hauptnenner suchst: Erkennst du in den Zählern binomische Formeln?`,
+               `${Meq(`x^2+${2 * a}x+${a * a}`, `(x+${a})^2`)} und ${Meq(`x^2-${b * b}`, `(x-${b})(x+${b})`)}. Jetzt kürzt sich jeweils der Nenner weg.`],
+      final: [`Minus vor der Klammer: Jedes Vorzeichen in der Klammer dreht sich um.`, `${Meq(`(x+${a})-(x+${b})`, `x+${a}-x-${b}`)}`],
+    },
+    errors: [
+      { e: `${a + b}`, tag: 'minus-klammer', msg: `Minus-Falle: ${Meq(`-(x+${b})`, `-x-${b}`)}. Das Minus gilt für die ganze Klammer!` },
+      { e: `2x+${a + b}`, tag: 'vorzeichen', msg: `Zwischen den Brüchen steht ein <b>Minus</b> – du hast addiert.` },
+    ],
+  };
+});
+
+tpl(4, 'l4-factor', () => {
+  const a = ri(1, 6), k = ri(2, 7), m = ri(1, 7);
+  return {
+    level: 4, kind: 'add', variant: 'trick', name: 'Trick · versteckter gemeinsamer Nenner', skill: 'Erst kürzen – dann sind die Nenner gleich',
+    prompt: `(${k}x+${k * a})/(x^2-${a * a})+${m}/(x-${a})`,
+    reduced: `${k}/(x-${a})+${m}/(x-${a})`,
+    final: `${k + m}/(x-${a})`,
+    hints: {
+      reduce: [`Schau dir den ersten Bruch allein an: Im Zähler kannst du etwas ausklammern – und der Nenner ist eine binomische Formel. Kürzt sich da was?`,
+               `${Meq(`(${k}x+${k * a})/(x^2-${a * a})`, `${k}(x+${a})/((x-${a})(x+${a}))`, `${k}/(x-${a})`)}`],
+      final: [`Gleicher Nenner – Zähler addieren, fertig.`, M(`${k + m}/(x-${a})`)],
+    },
+    errors: [
+      { e: `${k + m}/(x^2-${a * a})`, tag: 'erweitern', msg: `Bringst du ${M(`${m}/(x-${a})`)} auf den Nenner ${M(`x^2-${a * a}`)}, musst du auch den Zähler mit ${M(`(x+${a})`)} erweitern. Noch einfacher: Kürze zuerst den ersten Bruch!` },
+    ],
+  };
+});
+
+tpl(4, 'l4-signbinom', () => {
+  const a = ri(1, 7); let b = ri(1, 9); while (b === a) b = ri(1, 9);
+  return {
+    level: 4, kind: 'add', variant: 'trick', name: 'Trick · Vorzeichen & Binom', skill: 'a − x = −(x − a) kombiniert mit 3. binomischer Formel',
+    prompt: `(x^2-${a * a})/(${a}-x)+x+${b}`,
+    reduced: `-(x+${a})+x+${b}`,
+    final: `${b - a}`,
+    hints: {
+      reduce: [`Der Nenner ${M(`${a}-x`)} ist „verdreht“. Schreib ihn als ${M(`-(x-${a})`)} – und schau dir den Zähler an.`,
+               `${Meq(`(x^2-${a * a})/(${a}-x)`, `(x-${a})(x+${a})/(-(x-${a}))`, `-(x+${a})`)}`],
+      final: [`Klammer mit Minus davor auflösen und zusammenfassen.`, `${Meq(`-(x+${a})+x+${b}`, `-x-${a}+x+${b}`)}`],
+    },
+    errors: [
+      { e: `2x+${a + b}`, tag: 'vorzeichen', msg: `Du hast ${M(`${a}-x`)} wie ${M(`x-${a}`)} behandelt. Aber ${Meq(`${a}-x`, `-(x-${a})`)} – deshalb wird der Bruch zu ${M(`-(x+${a})`)}.` },
+      { e: `${a + b}`, tag: 'minus-klammer', msg: `${Meq(`-(x+${a})`, `-x-${a}`)} – das Minus gilt auch für die ${a}.` },
+    ],
+  };
+});
+
+/* =====================================================================
+   7. Strategie-Fragen (Schritt 0: Aufgabentyp erkennen)
+   ===================================================================== */
+const STRAT = {
+  mul: {
+    q: 'Hier werden Bruchterme <b>multipliziert</b>. Wie gehst du am geschicktesten vor?',
+    hint: 'Frag dich: Brauche ich bei Mal-Aufgaben überhaupt einen gemeinsamen Nenner? Was passiert mit Zählern und Nennern beim Multiplizieren?',
+    opts: [
+      { l: 'Zähler und Nenner faktorisieren, dann über Kreuz kürzen – ohne Hauptnenner', ok: true },
+      { l: 'Zuerst einen Hauptnenner bilden', tag: 'hn-bei-mal', msg: 'Das ist <b>der</b> Klassiker unter den Denkfehlern! Einen Hauptnenner brauchst du NUR bei Plus und Minus. Bei Mal gilt einfach: Zähler · Zähler und Nenner · Nenner – und vorher schön kürzen.' },
+      { l: 'Alles ausmultiplizieren und dann zusammenfassen', tag: 'ausmultipliziert', msg: 'Ausmultiplizieren ist hier eine Sackgasse: Danach siehst du nicht mehr, welche Faktoren sich kürzen. Du brauchst das Gegenteil – <b>Faktorisieren</b>!' },
+      { l: 'Gleiche Summanden oben und unten wegstreichen', tag: 'summanden', msg: `Vorsicht: Kürzen darfst du nur <b>Faktoren</b>, niemals einzelne Summanden. ${M('(x+2)/(x+5)')} ist nicht ${M('2/5')}! Erst faktorisieren, dann kürzen.` },
+    ],
+  },
+  div: {
+    q: 'Hier wird durch einen Bruchterm <b>geteilt</b>. Was ist der erste Schritt?',
+    hint: 'Wie teilt man durch einen Bruch? Denk an ganz normale Zahlenbrüche: 1/2 : 3/4 = …',
+    opts: [
+      { l: 'Mit dem Kehrwert des zweiten Bruchs multiplizieren', ok: true },
+      { l: 'Einen Hauptnenner bilden', tag: 'hn-bei-mal', msg: 'Ein Hauptnenner hilft nur bei Plus und Minus. Bei der Division verwandelst du einfach in eine Multiplikation: <b>mal Kehrwert</b>!' },
+      { l: 'Den ersten Bruch umdrehen', tag: 'kehrwert', msg: 'Fast – umgedreht wird aber der Bruch, <b>durch den</b> geteilt wird, also der zweite (der hinter dem „:“).' },
+      { l: 'Sofort über Kreuz kürzen', tag: 'kehrwert', msg: 'Über Kreuz kürzen geht erst, wenn aus der Division eine Multiplikation geworden ist. Sonst kürzt du Dinge, die gar nicht zusammengehören.' },
+    ],
+  },
+  add: {
+    q: 'Hier wird <b>addiert bzw. subtrahiert</b>. Wie gehst du vor?',
+    hint: 'Brüche kann man nur dann einfach zusammenzählen, wenn … ?',
+    opts: [
+      { l: 'Nenner faktorisieren, kleinsten Hauptnenner bilden, Brüche erweitern', ok: true },
+      { l: 'Zähler + Zähler und Nenner + Nenner', tag: 'zaehler-nenner', msg: `Achtung, Klassiker! ${M('1/2+1/3')} ist nicht ${M('2/5')}. Brüche addiert man nur mit <b>gleichem Nenner</b> – also brauchst du einen Hauptnenner.` },
+      { l: 'Über Kreuz kürzen wie bei der Multiplikation', tag: 'kreuz', msg: 'Über Kreuz kürzen geht nur bei <b>Mal</b>! Bei Plus/Minus hängen die Brüche nicht multiplikativ zusammen – erst Hauptnenner, dann zusammenfassen.' },
+      { l: 'Einfach alle Nenner miteinander multiplizieren', tag: 'kgv', msg: 'Das funktioniert zwar immer, erzeugt aber riesige Terme, die du am Ende mühsam kürzen musst. Faktorisiere erst die Nenner – dann siehst du die gemeinsamen Faktoren und der Hauptnenner bleibt klein.' },
+    ],
+  },
+  trick: {
+    q: 'Plus/Minus-Aufgabe – aber <b>schau genau hin</b>! Was machst du zuerst?',
+    hint: 'Sieh dir jeden Bruch einzeln an, bevor du an einen Hauptnenner denkst. Kann man da schon etwas kürzen, aufteilen oder umdrehen?',
+    opts: [
+      { l: 'Erst jeden Bruch für sich vereinfachen (kürzen, aufteilen, Vorzeichen drehen)', ok: true },
+      { l: 'Sofort den Hauptnenner bilden', tag: 'hn-statt-trick', msg: 'Würde funktionieren – ist aber ein riesiger Umweg! Bei solchen Aufgaben lohnt sich ein zweiter Blick: Oft lässt sich jeder Bruch vorab kürzen und der Hauptnenner wird winzig oder überflüssig.' },
+      { l: 'Zähler + Zähler und Nenner + Nenner', tag: 'zaehler-nenner', msg: 'Brüche addiert man nie, indem man Zähler und Nenner einzeln addiert. Aber hier gibt es ohnehin einen eleganteren Weg – schau dir jeden Bruch einzeln an!' },
+      { l: 'Alles ausmultiplizieren', tag: 'ausmultipliziert', msg: 'Ausmultiplizieren macht die Terme nur länger. Hier steckt ein Trick drin – such nach Faktoren, die sich kürzen lassen!' },
+    ],
+  },
+};
+
+/* =====================================================================
+   8. Aufgabe aufbauen
+   ===================================================================== */
+const DEF_HINTS = {
+  kehrwert: ['Geteilt durch einen Bruch = mal seinen Kehrwert. Nur der zweite Bruch wird umgedreht.'],
+  factor: ['Checkliste: 1. Gemeinsamen Faktor ausklammern. 2. Binomische Formel? 3. Vier Summanden → gruppieren.'],
+  combine: ['Bei der Multiplikation gilt: Zähler mal Zähler, Nenner mal Nenner. Schreib alles auf EINEN Bruchstrich – und lass die Klammern stehen, nichts ausmultiplizieren!',
+            'Tipp zur Eingabe: Setz den ganzen Zähler und den ganzen Nenner in Klammern, z. B. (…)(…)/((…)(…)). In der Vorschau siehst du, ob es passt.'],
+  hn: ['Schreib jeden Nenner in Faktoren zerlegt hin und sammle jeden Faktor in seiner höchsten Potenz.'],
+  final: ['Suche Faktoren, die im Zähler UND im Nenner stehen, und kürze sie.'],
+  reduce: ['Schau dir jeden Bruch einzeln an: Lässt er sich kürzen oder aufteilen?'],
+};
+
+function autoErrors(t) {
+  const out = [], pa = t.promptAst;
+  try {
+    if (t.kind === 'mul') {
+      const ps = fracParts(pa);
+      if (ps.length === 2) {
+        const v = ps.map(x => x.d ? RF.div(toRF(x.n), toRF(x.d)) : toRF(x.n));
+        out.push({ rf: RF.add(v[0], v[1]), tag: 'operation', msg: 'Hoppla – du hast die Brüche <b>addiert</b> statt multipliziert. Bei „·“ gilt: Zähler · Zähler und Nenner · Nenner.' });
+      }
+    }
+    if (t.kind === 'div' && pa.t === 'div' && pa.colon) {
+      const A = toRF(pa.a), B = toRF(pa.b);
+      out.push({ rf: RF.mul(A, B), tag: 'kehrwert', msg: 'Du hast mit dem Bruch <b>multipliziert statt mit seinem Kehrwert</b>. Bei der Division wird der zweite Bruch umgedreht!' });
+      out.push({ rf: RF.mul(RF.inv(A), B), tag: 'kehrwert', msg: 'Du hast den <b>falschen Bruch</b> umgedreht – nur der Bruch hinter dem „:“ wird zum Kehrwert.' });
+    }
+    if (t.kind === 'add') {
+      const ts = signedTerms(pa).map(({ s, node }) => {
+        const x = stripNeg(node);
+        const n = (x.t === 'div' && !x.colon) ? toRF(x.a) : toRF(x), d = (x.t === 'div' && !x.colon) ? toRF(x.b) : ONE();
+        return { n: s < 0 ? RF.neg(n) : n, d, ds: s < 0 ? RF.neg(d) : d };
+      });
+      if (ts.length >= 2) {
+        const sumN = ts.map(x => x.n).reduce(RF.add), sumD = ts.map(x => x.d).reduce(RF.add), sumDs = ts.map(x => x.ds).reduce(RF.add);
+        const zz = 'Achtung, Klassiker! Brüche addiert man <b>nicht</b>, indem man Zähler + Zähler und Nenner + Nenner rechnet. Du brauchst einen gemeinsamen Nenner.';
+        for (const D of [sumD, sumDs]) if (!P.isZero(D.n)) out.push({ rf: RF.div(sumN, D), tag: 'zaehler-nenner', msg: zz });
+        if (t.hnPoly) out.push({ rf: RF.div(sumN, { n: t.hnPoly, d: P.c(1) }), tag: 'erweitern', msg: 'Der Hauptnenner stimmt, aber die <b>Zähler wurden nicht mit erweitert</b>. Was du unten dranmultiplizierst, muss auch oben dran!' });
+        const prod = ts.map(x => RF.div(x.n, x.d)).reduce(RF.mul);
+        out.push({ rf: prod, tag: 'operation', msg: 'Das ist das Ergebnis einer <b>Mal</b>-Aufgabe. Hier wird aber addiert/subtrahiert – dafür brauchst du einen Hauptnenner.' });
+      }
+    }
+  } catch (e) { /* Automatische Fehlerkandidaten sind optional */ }
+  return out;
+}
+
+function buildTask(spec, mode) {
+  const t = { ...spec, variant: spec.variant || 'std', mode };
+  t.promptAst = parse(spec.prompt);
+  t.value = toRF(t.promptAst);
+  t.finalAst = parse(spec.final);
+  t.finalDeg = RF.deg(toRF(t.finalAst));
+  if (spec.hn) {
+    t.hnPoly = toRF(parse(spec.hn)).n; t.hnRoots = intRoots(t.hnPoly);
+    t.prodPoly = signedTerms(t.promptAst).map(({ node }) => { const x = stripNeg(node); return (x.t === 'div' && !x.colon) ? toRF(x.b).n : P.c(1); }).reduce(P.mul, P.c(1));
+    if (P.ratio(t.prodPoly, t.hnPoly)) t.prodPoly = null;
+  }
+  t.known = [];
+  for (const s of [spec.kehrwert, spec.factored, spec.combined, spec.final, spec.hn, spec.reduced]) {
+    if (!s) continue;
+    for (const f of sumFactors(parse(s))) {
+      const r = toRF(f.node);
+      if (P.isConst(r.d) && P.deg(r.n) >= 1) { const pr = P.primitive(r.n); if (!t.known.some(k => P.eq(k, pr))) t.known.push(pr); }
+    }
+  }
+  t.errs = [...(spec.errors || []).map(er => ({ ...er, rf: toRF(parse(er.e)) })), ...autoErrors(t)]
+    .filter(er => { try { return !P.isZero(er.rf.d) && !RF.eq(er.rf, t.value); } catch (e) { return false; } });
+
+  const H = spec.hints || {};
+  const hints = (id, fb) => (H[id] && H[id].length ? H[id] : DEF_HINTS[fb || id]);
+  const steps = [];
+  const expr = (o) => { o.type = 'expr'; if (o.ref) o.refAst = parse(o.ref); o.expAst = parse(o.expected); if (o.check === 'reduceEach' || o.check === 'sameDen') o.cx = complexity(o.expAst); steps.push(o); };
+  if (mode === 'steps') {
+    const sk = t.variant !== 'std' ? 'trick' : t.kind, S0 = STRAT[sk];
+    steps.push({ id: 'strategy', type: 'choice', title: 'Strategie', q: S0.q, opts: shuffle(S0.opts), hints: [S0.hint] });
+    if (t.kind === 'mul' || t.kind === 'div') {
+      if (t.kind === 'div') expr({ id: 'kehrwert', check: 'kehrwert', title: 'Kehrwert', instr: 'Schreibe die Division als <b>Multiplikation mit dem Kehrwert</b> des zweiten Bruchs.', expected: spec.kehrwert, ref: spec.prompt, hints: hints('kehrwert') });
+      expr({ id: 'factor', check: 'factorAll', title: 'Faktorisieren', instr: 'Zerlege <b>jeden Zähler und jeden Nenner</b> in Faktoren (ausklammern, binomische Formeln, gruppieren). Noch nicht kürzen, nichts ausmultiplizieren.', expected: spec.factored, ref: spec.kehrwert || spec.prompt, hints: hints('factor') });
+      expr({ id: 'combine', check: 'combineMul', title: 'Ein Bruchstrich', instr: 'Schreibe alles auf <b>einen Bruchstrich</b>: Zähler · Zähler durch Nenner · Nenner. Lass die Faktoren stehen!', expected: spec.combined, hints: hints('combine') });
+      expr({ id: 'final', check: 'final', title: 'Kürzen', instr: 'Kürze alle gemeinsamen Faktoren und gib das <b>Endergebnis</b> an.', expected: spec.final, hints: hints('final') });
+    } else if (t.variant === 'std') {
+      if (!spec.skipFactor) expr({ id: 'factor', check: 'factorDen', title: 'Nenner zerlegen', instr: 'Zerlege <b>alle Nenner</b> in Faktoren. Die Zähler darfst du so lassen.', expected: spec.factored, ref: spec.prompt, hints: hints('factor') });
+      expr({ id: 'hn', check: 'hn', title: 'Hauptnenner', instr: 'Gib den <b>Hauptnenner</b> an – das kleinste gemeinsame Vielfache aller Nenner. (Nur den Nenner eingeben, faktorisiert oder ausmultipliziert.)', expected: spec.hn, hints: hints('hn') });
+      expr({ id: 'combine', check: 'combineAdd', title: 'Erweitern', instr: 'Erweitere alle Brüche auf den Hauptnenner und schreibe alles auf <b>einen Bruchstrich</b>. Klammern um die Zähler!', expected: spec.combined, hints: hints('combine', 'hn') });
+      expr({ id: 'final', check: 'final', title: 'Zusammenfassen', instr: 'Löse die Klammern im Zähler auf, fasse zusammen und kürze, falls möglich. Gib das <b>Endergebnis</b> an.', expected: spec.final, hints: hints('final') });
+    } else {
+      expr({ id: 'reduce', check: t.variant === 'sameDen' ? 'sameDen' : 'reduceEach', title: 'Vorab vereinfachen', instr: t.variant === 'sameDen' ? 'Bring beide Brüche auf <b>denselben Nenner</b> – ohne ihn größer zu machen.' : 'Vereinfache zuerst <b>jeden Bruch einzeln</b> (kürzen, aufteilen) – bevor du an einen Hauptnenner denkst.', expected: spec.reduced, ref: spec.prompt, hints: hints('reduce') });
+      expr({ id: 'final', check: 'final', title: 'Ergebnis', instr: 'Fasse zusammen und gib das <b>Endergebnis</b> an.', expected: spec.final, hints: hints('final') });
+    }
+  } else {
+    const sk = t.variant !== 'std' ? 'trick' : t.kind;
+    const dh = [STRAT[sk].hint];
+    for (const id of ['kehrwert', 'factor', 'reduce', 'hn', 'combine', 'final']) if (H[id] && H[id][0]) dh.push(H[id][0]);
+    expr({ id: 'final', check: 'final', title: 'Ergebnis', instr: 'Vereinfache so weit wie möglich und gib nur das <b>Endergebnis</b> ein.', expected: spec.final, hints: dh });
+  }
+  t.steps = steps;
+  return t;
+}
+
+/* =====================================================================
+   9. Prüfen & Fehler-Diagnose
+   ===================================================================== */
+function finalCheck(t, ast, rf) {
+  const terms = termsOf(ast);
+  const fracTerms = terms.filter(x => !P.isConst(toRF(x).d)).length;
+  if (fracTerms > 1 || (fracTerms === 1 && terms.length > 1 && termsOf(t.finalAst).length === 1))
+    return { status: 'almost', msg: 'Der Wert stimmt schon – aber fasse noch alles auf <b>einen Bruchstrich</b> zusammen.' };
+  const top = stripNeg(ast);
+  const numNode = (top.t === 'div' && !top.colon) ? top.a : top;
+  const nts = termsLit(numNode);
+  if (nts.length > 1 && (nts.some(hasSumInside) || nts.length > toRF(numNode).n.size))
+    return { status: 'almost', msg: `Der Wert stimmt – aber ${top === numNode ? 'der Term' : 'der Zähler'} ist noch nicht <b>zusammengefasst</b>. Klammern auflösen und gleiche Glieder zusammenrechnen.` };
+  if (RF.deg(rf) > t.finalDeg)
+    return { status: 'almost', tag: 'nicht-gekuerzt', msg: `Richtig umgeformt – aber noch <b>nicht fertig gekürzt</b>.${commonFactorHint(rf) || ' Faktorisiere Zähler und Nenner und suche gemeinsame Faktoren.'}` };
+  const g = bgcd(P.content(rf.n), P.content(rf.d));
+  if (g > 1n && !P.isZero(rf.n))
+    return { status: 'almost', tag: 'nicht-gekuerzt', msg: `Fast perfekt! Die Zahlen oben und unten sind beide durch <b>${g}</b> teilbar – kürze noch.` };
+  return { status: 'ok' };
+}
+
+function checkHN(t, ast, rf) {
+  if (!P.isConst(rf.d)) return { status: 'error', msg: 'Der Hauptnenner ist nur ein <b>Nenner</b> – ein Produkt von Faktoren ohne Bruchstrich, z. B. (x − 1)(x + 1).' };
+  const U = rf, L = { n: t.hnPoly, d: P.c(1) };
+  const r = RF.ratio(U, L);
+  if (r) {
+    const [n, d] = r;
+    if (d === 1n && babs(n) === 1n) return { status: 'ok' };
+    if (d === 1n && n !== 0n) return { status: 'almost', tag: 'kgv', msg: `Das ist ein gemeinsamer Nenner, aber nicht der <b>kleinste</b>: Der Zahlenfaktor ist ${babs(n)}-mal zu groß. Nimm bei Zahlen das kgV, nicht das Produkt.` };
+    return { status: 'error', msg: 'Da fehlt ein Zahlenfaktor – jeder Nenner muss vollständig im Hauptnenner stecken.' };
+  }
+  if (t.prodPoly && RF.ratio(U, { n: t.prodPoly, d: P.c(1) }))
+    return { status: 'almost', tag: 'kgv', msg: 'Du hast einfach alle Nenner multipliziert. Das ist ein gemeinsamer Nenner, aber nicht der kleinste – gemeinsame Faktoren kommen nur <b>einmal</b> hinein. Zerlege die Nenner und vergleiche!' };
+  const vs = P.vars(U.n);
+  if (vs.every(v => v === 'x')) {
+    for (const root of t.hnRoots) if (P.evalAt(U.n, { x: BigInt(root) }) !== 0n)
+      return { status: 'error', msg: `Im Hauptnenner fehlt noch ${linLabel('x', root)}. Jeder Nenner muss komplett darin enthalten sein.` };
+  }
+  if (P.deg(U.n) > P.deg(t.hnPoly)) return { status: 'almost', tag: 'kgv', msg: 'Dein Nenner ist zu groß – ein Faktor steckt doppelt drin. Jeder Faktor nur so oft, wie er in einem einzelnen Nenner höchstens vorkommt.' };
+  if (P.deg(U.n) < P.deg(t.hnPoly)) return { status: 'error', msg: 'Da fehlt noch etwas. Achte auch auf Potenzen: Steht irgendwo z. B. (x + 1)², muss der Faktor zweimal hinein.' };
+  return { status: 'error', msg: 'Das passt noch nicht. Schreib alle Nenner in Faktoren zerlegt untereinander und sammle jeden Faktor in seiner höchsten Potenz.' };
+}
+
+const GENERIC = {
+  kehrwert: 'Das hat nicht mehr denselben Wert wie die Aufgabe. Denk dran: Nur der zweite Bruch wird umgedreht, aus „:“ wird „·“.',
+  factorAll: 'Dein Term hat nicht mehr denselben Wert wie vorher. Multipliziere deine Faktoren zur Kontrolle im Kopf wieder aus.',
+  factorDen: 'Dein Term hat nicht mehr denselben Wert wie vorher. Multipliziere deine Faktoren zur Kontrolle im Kopf wieder aus.',
+  combineMul: 'Beim Zusammenziehen hat sich der Wert geändert. Zähler · Zähler und Nenner · Nenner – nichts weglassen, nichts dazuerfinden.',
+  combineAdd: 'Der Wert stimmt nicht mehr. Prüfe beim Erweitern: Wurde jeder Zähler mit genau dem Faktor multipliziert, der seinem Nenner zum Hauptnenner fehlt?',
+  reduceEach: 'Der Wert hat sich verändert. Kürzen darfst du nur gemeinsame Faktoren von Zähler und Nenner.',
+  sameDen: 'Der Wert hat sich verändert. Wenn du einen Nenner umdrehst, bekommt der Bruch ein Minus.',
+  final: 'Das stimmt leider noch nicht. Rechne Schritt für Schritt nach – oder hol dir einen Hinweis.',
+};
+
+function diagnose(t, step, ast, rf) {
+  for (const er of t.errs) { try { if (RF.eq(rf, er.rf)) return { status: 'error', tag: er.tag, msg: er.msg }; } catch (e) { } }
+  try {
+    if (step.check === 'factorAll' || step.check === 'factorDen') { const pm_ = partMismatch(step.refAst, ast); if (pm_) return pm_; }
+    if (step.check === 'reduceEach' || step.check === 'sameDen') { const tm = termValueMismatch(step.refAst, ast); if (tm) return tm; }
+  } catch (e) { }
+  const r = RF.ratio(rf, t.value);
+  if (r) {
+    const [n, d] = r;
+    if (n === -1n && d === 1n) return { status: 'error', tag: 'vorzeichen', msg: `Fast! Dein Term ist genau das <b>Negative</b> vom richtigen. Irgendwo ist ein Vorzeichen gekippt – prüfe Minus-Klammern und Terme wie ${Meq('a-x', '-(x-a)')}.` };
+    if (n !== 0n) return { status: 'error', tag: 'zahlen', msg: `Die Variablen stimmen – nur ein <b>Zahlenfaktor</b> passt nicht (dein Term ist das ${d === 1n ? n : `${n}/${d}`}-fache vom richtigen). Prüfe das Kürzen der Zahlen.` };
+  }
+  if (!P.isZero(rf.n)) { try { if (RF.eq(RF.inv(rf), t.value)) return { status: 'error', tag: 'kehrwert', msg: 'Zähler und Nenner sind <b>vertauscht</b> – dein Term ist genau der Kehrwert des richtigen.' }; } catch (e) { } }
+  return { status: 'error', msg: GENERIC[step.check] || GENERIC.final };
+}
+
+function evaluate(t, step, input) {
+  let ast, rf;
+  try { ast = parse(input); rf = toRF(ast); } catch (e) { return { status: 'syntax', msg: e.message }; }
+  if (P.isZero(rf.d)) return { status: 'syntax', msg: 'Division durch 0.' };
+  if (step.check === 'hn') return checkHN(t, ast, rf);
+  if (!RF.eq(rf, t.value)) return diagnose(t, step, ast, rf);
+
+  const fin = finalCheck(t, ast, rf);
+  if (step.check === 'final') return fin;
+  const jump = fin.status === 'ok' ? { status: 'ok', jump: true } : null;
+
+  switch (step.check) {
+    case 'kehrwert':
+      if (jump) return jump;
+      if (hasColon(ast) || hasDivByFraction(ast)) return { status: 'almost', msg: 'Der Wert stimmt, aber du teilst noch <b>durch einen Bruch</b>. Dreh den zweiten Bruch um und mach aus „:“ ein „·“.' };
+      return { status: 'ok' };
+    case 'factorAll': case 'factorDen': {
+      if (jump) return jump;
+      const na = findNonAtomic(ast, step.check === 'factorDen' ? 'den' : 'all', t.known);
+      if (na) return { status: 'almost', tag: 'nicht-faktorisiert', msg: 'Richtig umgeformt, aber noch nicht fertig zerlegt. ' + nonAtomicMsg(na) };
+      if (hasColon(ast)) return { status: 'almost', msg: 'Zerlegt – aber da steht noch ein „:“. Erst den Kehrwert nehmen!' };
+      return { status: 'ok' };
+    }
+    case 'combineMul': {
+      if (jump) return jump;
+      if (!isSingleFraction(ast)) return { status: 'almost', msg: 'Der Wert stimmt – schreib aber alles auf <b>einen Bruchstrich</b>: (Zähler · Zähler)/(Nenner · Nenner).' };
+      const na = findNonAtomic(ast, 'all', t.known);
+      if (na) return { status: 'error', tag: 'ausmultipliziert', msg: `Stopp – nicht ausmultiplizieren! Bei ${Mnode(na.node, true)} sieht man die Faktoren nicht mehr. Lass alles als <b>Produkt von Faktoren</b> stehen – nur so siehst du, was sich kürzen lässt.` };
+      return { status: 'ok' };
+    }
+    case 'combineAdd': {
+      if (jump) return jump;
+      if (!isSingleFraction(ast)) return { status: 'almost', msg: 'Der Wert stimmt – schreib aber alles auf <b>einen Bruchstrich</b> über dem Hauptnenner.' };
+      const den = denPoly(ast);
+      if (den && !P.ratio(den, t.hnPoly)) {
+        if (P.deg(den) > P.deg(t.hnPoly)) return { status: 'almost', tag: 'kgv', msg: 'Der Wert stimmt, aber dein Nenner ist größer als der Hauptnenner. Nimm den Hauptnenner aus dem letzten Schritt – sonst musst du am Ende viel kürzen.' };
+        return { status: 'almost', msg: 'Der Wert stimmt – nutze als Nenner aber den <b>Hauptnenner</b> aus dem letzten Schritt.' };
+      }
+      return { status: 'ok' };
+    }
+    case 'reduceEach': {
+      if (jump) return jump;
+      if (complexity(ast) > step.cx) {
+        if (termsOf(ast).length === 1 && termsOf(t.promptAst).length > 1)
+          return { status: 'error', tag: 'hn-statt-trick', msg: 'Du hast direkt alles auf einen Hauptnenner gebracht. Mathematisch okay – aber ein <b>riesiger Umweg</b>! Schau dir jeden Bruch einzeln an: Lässt er sich vorher kürzen oder aufteilen?' };
+        return { status: 'almost', msg: 'Richtig umgeformt, aber mindestens ein Bruch lässt sich noch weiter vereinfachen. Faktorisiere Zähler und Nenner jedes Bruchs einzeln.' };
+      }
+      return { status: 'ok' };
+    }
+    case 'sameDen': {
+      if (jump) return jump;
+      const dens = termsOf(ast).map(x => toRF(x).d).filter(d => !P.isConst(d));
+      if (!dens.every(d => P.eq(d, dens[0]))) return { status: 'almost', msg: `Der Wert stimmt, aber die Nenner sind noch verschieden. Tipp: ${Meq('a-x', '-(x-a)')}.` };
+      if (complexity(ast) > step.cx) return { status: 'error', tag: 'hn-statt-trick', msg: `Du hast (x − a)(a − x) als Hauptnenner genommen. Geht – ist aber unnötig groß! Die beiden Nenner unterscheiden sich nur im Vorzeichen: ${Meq('a-x', '-(x-a)')}.` };
+      return { status: 'ok' };
+    }
+  }
+  return { status: 'ok' };
+}
+
+/* =====================================================================
+   10. Zustand & Speicherung
+   ===================================================================== */
+const STORE = 'bruchterm-trainer-v1';
+const LEVELS = {
+  1: { name: 'Mal & Geteilt', short: 'Faktorisieren & kürzen', icon: '✖️' },
+  2: { name: 'Plus & Minus', short: 'Hauptnenner', icon: '➕' },
+  3: { name: 'Endgegner', short: 'Höhere Potenzen', icon: '🐉' },
+  4: { name: 'Trick-Erkennung', short: 'Erst schauen!', icon: '🕵️' },
+  0: { name: 'Mix', short: 'Alles gemischt', icon: '🎲' },
+};
+const GOAL = 5;
+function defaultStats() { return { points: 0, streak: 0, best: 0, solved: 0, perfect: 0, lvl: { 1: 0, 2: 0, 3: 0, 4: 0 }, mist: {}, level: 1, mode: 'steps', keypad: null }; }
+function loadStats() {
+  const d = defaultStats();
+  try { const s = JSON.parse(localStorage.getItem(STORE)); if (s) return { ...d, ...s, lvl: { ...d.lvl, ...(s.lvl || {}) }, mist: { ...(s.mist || {}) } }; } catch (e) { }
+  return d;
+}
+let stats = loadStats();
+function saveStats() { try { localStorage.setItem(STORE, JSON.stringify(stats)); } catch (e) { } }
+
+let S = null;           // aktuelle Sitzung
+let lastTpl = null;
+
+/* =====================================================================
+   11. Oberfläche
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const PRAISE = ['Sauber! ✨', 'Stark gerechnet! 💪', 'Genau so! 🎯', 'Glasklar! 💎', 'Läuft bei dir! 🚀', 'Mathe-Maschine! 🤖', 'Präzise wie ein Uhrwerk ⏱️'];
+const STEP_PRAISE = { strategy: 'Richtige Strategie! 🧭', kehrwert: 'Kehrwert sitzt! 🔄', factor: 'Sauber zerlegt! 🧩', combine: 'Alles auf einem Bruchstrich ✓', hn: 'Kleinster Hauptnenner – perfekt! 🎯', reduce: 'Guter Blick! 🕵️', final: 'Endergebnis richtig! 🎉' };
+const isTouch = () => window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+const keypadOn = () => stats.keypad === null ? isTouch() : stats.keypad;
+
+function updateHeader() {
+  $('#st-points').textContent = stats.points;
+  $('#st-streak').textContent = stats.streak;
+  $('#st-solved').textContent = stats.solved;
+}
+function renderLevels() {
+  const order = [1, 2, 3, 4, 0];
+  $('#levels').innerHTML = order.map(l => {
+    const L = LEVELS[l], active = stats.level === l;
+    const n = l ? stats.lvl[l] : Object.values(stats.lvl).reduce((a, b) => a + b, 0);
+    const pct = l ? Math.min(100, n / GOAL * 100) : 100;
+    const star = l && n >= GOAL ? '⭐' : '';
+    return `<button data-level="${l}" class="lvl-btn shrink-0 w-[10.5rem] sm:w-auto snap-start text-left rounded-2xl border p-3 transition ${active ? 'border-indigo-400/70 bg-indigo-500/15 shadow-lg shadow-indigo-900/30' : 'border-slate-800 bg-slate-900/60 hover:bg-slate-800/70'}">
+      <div class="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wider ${active ? 'text-indigo-300' : 'text-slate-500'}"><span>${l ? 'Level ' + l : 'Mix'}</span><span>${star}${L.icon}</span></div>
+      <div class="mt-0.5 font-bold text-slate-100 leading-tight">${L.name}</div>
+      <div class="hidden sm:block text-[11px] text-slate-400 leading-tight">${L.short}</div>
+      ${l ? `<div class="mt-2 h-1.5 rounded-full bg-slate-800 overflow-hidden"><div class="h-full rounded-full bg-gradient-to-r from-indigo-400 to-emerald-400" style="width:${pct}%"></div></div>
+      <div class="mt-1 text-[10px] text-slate-500 tabular-nums">${Math.min(n, 999)} / ${GOAL} gelöst</div>` : `<div class="mt-2 text-[10px] text-slate-500 tabular-nums">${n} insgesamt gelöst</div>`}
+    </button>`;
+  }).join('');
+  document.querySelectorAll('.lvl-btn').forEach(b => b.onclick = () => { stats.level = +b.dataset.level; saveStats(); renderLevels(); newTask(); });
+  const act = document.querySelector(`.lvl-btn[data-level="${stats.level}"]`), box = $('#levels');
+  if (act && box.scrollWidth > box.clientWidth) box.scrollLeft = act.offsetLeft - 16;
+}
+function renderModes() {
+  document.querySelectorAll('.mode-btn').forEach(b => {
+    const on = b.dataset.mode === stats.mode;
+    b.className = `mode-btn px-3 py-1.5 rounded-lg font-medium transition ${on ? 'bg-indigo-500 text-white shadow' : 'text-slate-400 hover:text-slate-200'}`;
+    b.onclick = () => { if (stats.mode === b.dataset.mode) return; stats.mode = b.dataset.mode; saveStats(); renderModes(); if (S && !S.done) startTask(S.spec); };
+  });
+}
+
+function newTask() {
+  const lvl = stats.level || pick([1, 2, 3, 4]);
+  let pool = T.filter(x => x.level === lvl);
+  if (pool.length > 1) pool = pool.filter(x => x.id !== lastTpl);
+  const tp = pick(pool); lastTpl = tp.id;
+  startTask(tp.gen());
+}
+function startTask(spec) {
+  const t = buildTask(spec, stats.mode);
+  S = { spec, task: t, idx: 0, log: [], errors: 0, hints: 0, stepHints: 0, revealed: false, stepRevealed: false, pts: 0, done: false, lastExpr: ser(t.promptAst) };
+  renderTask();
+}
+
+function renderTask() {
+  const t = S.task, L = LEVELS[t.level];
+  $('#task').innerHTML = `
+  <div class="rounded-3xl border border-slate-800 bg-slate-900/70 shadow-2xl shadow-black/40 p-4 sm:p-6 fade-in">
+    <div class="flex flex-wrap items-center gap-2 text-xs">
+      <span class="px-2.5 py-1 rounded-full bg-indigo-500/15 text-indigo-300 font-semibold">${L.icon} Level ${t.level} · ${L.name}</span>
+      <span class="text-slate-400">${t.name}</span>
+    </div>
+    <div class="mt-3 text-[11px] uppercase tracking-widest text-slate-500">Vereinfache</div>
+    <div class="scroll-x py-4 sm:py-5"><div class="center-max math text-[1.55rem] sm:text-[2rem] text-white px-2">${R(t.promptAst)}</div></div>
+    <div id="stepper" class="scroll-x"></div>
+    <div id="path" class="mt-3 space-y-1.5"></div>
+    <div id="stepArea" class="mt-4"></div>
+  </div>`;
+  renderStepper(); renderPath(); renderStep();
+}
+function renderStepper() {
+  const st = S.task.steps;
+  if (st.length <= 1) { $('#stepper').innerHTML = ''; return; }
+  $('#stepper').innerHTML = `<div class="flex items-center gap-1 min-w-max pb-1">${st.map((s, i) => {
+    const done = i < S.idx || S.done, cur = i === S.idx && !S.done;
+    const dot = done ? 'bg-emerald-500 text-slate-950' : cur ? 'bg-indigo-500 text-white ring-4 ring-indigo-500/25' : 'bg-slate-800 text-slate-500';
+    return `${i ? `<div class="w-4 sm:w-6 h-px ${done ? 'bg-emerald-500/60' : 'bg-slate-700'}"></div>` : ''}
+      <div class="flex items-center gap-1.5"><span class="w-6 h-6 rounded-full grid place-items-center text-[11px] font-bold ${dot}">${done ? '✓' : i + 1}</span><span class="text-xs ${cur ? 'text-slate-100 font-semibold' : 'text-slate-500'}">${s.title}</span></div>`;
+  }).join('')}</div>`;
+}
+function renderPath() {
+  if (!S.log.length) { $('#path').innerHTML = ''; return; }
+  $('#path').innerHTML = `<div class="rounded-2xl bg-slate-950/50 border border-slate-800 p-3 space-y-2">
+    <div class="text-[10px] uppercase tracking-widest text-slate-500">Dein Lösungsweg</div>
+    ${S.log.map(e => `<div class="flex items-center gap-3 text-sm fade-in">
+      <span class="shrink-0 ${e.revealed ? 'text-amber-400' : 'text-emerald-400'}">${e.revealed ? '👀' : '✓'}</span>
+      <span class="shrink-0 w-24 sm:w-32 text-slate-400 text-xs">${e.title}</span>
+      <div class="scroll-x min-w-0 flex-1">${e.html}</div></div>`).join('')}
+  </div>`;
+}
+
+function renderStep() {
+  const area = $('#stepArea');
+  if (S.done) return renderDone();
+  const st = S.task.steps[S.idx], n = S.task.steps.length;
+  S.stepHints = 0; S.stepRevealed = false;
+  const head = `<div class="flex items-center justify-between gap-2">
+      <div class="text-sm font-semibold text-indigo-300">${n > 1 ? `Schritt ${S.idx + 1} von ${n} · ` : ''}${st.title}</div>
+      ${st.type === 'expr' ? '<button id="btnHelp" class="shrink-0 whitespace-nowrap text-xs text-slate-400 hover:text-slate-200 underline decoration-dotted underline-offset-4">Eingabe-Hilfe</button>' : ''}
+    </div>`;
+  const hintBtn = `<button id="btnHint" class="px-4 py-3 rounded-xl bg-amber-400/10 text-amber-200 border border-amber-400/30 hover:bg-amber-400/20 font-semibold whitespace-nowrap">💡 Hinweis</button>`;
+  if (st.type === 'choice') {
+    area.innerHTML = `${head}
+      <p class="mt-2 text-slate-200 leading-relaxed">${st.q}</p>
+      <div class="mt-3 grid gap-2">${st.opts.map((o, i) => `<button data-opt="${i}" class="opt text-left px-4 py-3 rounded-xl border border-slate-700 bg-slate-800/60 hover:bg-slate-800 hover:border-slate-500 transition text-slate-200">${o.l}</button>`).join('')}</div>
+      <div class="mt-3 flex justify-end">${hintBtn}</div>
+      <div id="hintList" class="mt-3 space-y-2"></div>
+      <div id="feedback" class="mt-3"></div>`;
+    area.querySelectorAll('.opt').forEach(b => b.onclick = () => onChoice(b, st.opts[+b.dataset.opt]));
+    $('#btnHint').onclick = onHint;
+    return;
+  }
+  const prefill = st.check === 'hn' ? '' : (S.task.mode === 'direct' ? '' : S.lastExpr);
+  area.innerHTML = `${head}
+    <p class="mt-1.5 text-slate-300 leading-relaxed">${st.instr}</p>
+    <div id="helpBox" class="hidden mt-3 rounded-xl bg-slate-950/60 border border-slate-800 p-3 text-sm text-slate-300 space-y-1">
+      <div><code class="text-indigo-300">x^2</code> oder <code class="text-indigo-300">x²</code> für Potenzen</div>
+      <div><code class="text-indigo-300">/</code> für den Bruchstrich: <code class="text-indigo-300">(x+1)/(x-1)</code> → ${M('(x+1)/(x-1)')}</div>
+      <div>Mehrgliedrige Zähler/Nenner <b>immer in Klammern</b> setzen.</div>
+      <div><code class="text-indigo-300">·</code> oder <code class="text-indigo-300">*</code> für mal – darf man weglassen: <code class="text-indigo-300">3x(x+1)</code></div>
+      <div><code class="text-indigo-300">:</code> für geteilt · <code class="text-indigo-300">-(x-2)</code> für ein Minus vor der Klammer</div>
+      <div class="text-slate-400">Die Vorschau zeigt dir, wie die App deine Eingabe versteht.</div>
+    </div>
+    <div class="mt-3 relative">
+      <input id="inp" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" ${keypadOn() ? 'inputmode="none"' : ''}
+        class="w-full rounded-xl bg-slate-950/70 border border-slate-700 px-4 py-3 font-mono text-[17px] text-slate-100 placeholder-slate-600 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/30 outline-none transition"
+        placeholder="${st.check === 'hn' ? 'z. B. (x-2)(x+2)' : 'Term eingeben …'}" value="${esc(prefill)}">
+    </div>
+    <div id="preview" class="mt-2 min-h-[3.25rem] rounded-xl bg-slate-900 border border-dashed border-slate-700 px-3 py-2 flex items-center gap-3">
+      <span class="shrink-0 text-[10px] uppercase tracking-widest text-slate-500">Vorschau</span>
+      <div id="previewMath" class="scroll-x min-w-0 flex-1 text-lg text-slate-100"></div>
+    </div>
+    <div id="keypad" class="${keypadOn() ? '' : 'hidden'} mt-3"></div>
+    <div class="mt-3 flex gap-2">
+      <button id="btnCheck" class="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 hover:from-indigo-400 hover:to-violet-400 text-white font-bold shadow-lg shadow-indigo-900/40 transition">Prüfen ↵</button>
+      ${hintBtn}
+    </div>
+    <div class="mt-2 flex items-center justify-between text-xs">
+      <button id="btnKeys" class="text-slate-400 hover:text-slate-200">${keypadOn() ? '⌨️ System-Tastatur' : '🧮 Mathe-Tasten'}</button>
+      <button id="btnSkip" class="text-slate-500 hover:text-slate-300">Aufgabe überspringen ›</button>
+    </div>
+    <div id="hintList" class="mt-3 space-y-2"></div>
+    <div id="feedback" class="mt-3"></div>`;
+  renderKeypad();
+  const inp = $('#inp');
+  inp.addEventListener('input', updatePreview);
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); onCheck(); } });
+  $('#btnCheck').onclick = onCheck;
+  $('#btnHint').onclick = onHint;
+  $('#btnHelp').onclick = () => $('#helpBox').classList.toggle('hidden');
+  $('#btnKeys').onclick = () => { stats.keypad = !keypadOn(); saveStats(); const v = inp.value; renderStep(); $('#inp').value = v; updatePreview(); };
+  $('#btnSkip').onclick = () => { if (stats.streak) toast('Serie zurückgesetzt – beim nächsten Mal! 💪'); stats.streak = 0; saveStats(); updateHeader(); newTask(); };
+  updatePreview();
+  if (!isTouch() || keypadOn()) { inp.focus({ preventScroll: true }); const L = inp.value.length; inp.setSelectionRange(L, L); }
+}
+
+function updatePreview() {
+  const v = $('#inp').value, box = $('#previewMath');
+  if (!v.trim()) { box.innerHTML = '<span class="text-sm text-slate-600">…</span>'; return; }
+  try { const a = parse(v); toRF(a); box.innerHTML = `<span class="math">${R(a)}</span>`; }
+  catch (e) { box.innerHTML = `<span class="text-sm text-slate-500">${esc(e.message)}</span>`; }
+}
+
+const KEYS = [
+  ['7', '8', '9', '(', ')', '⌫'],
+  ['4', '5', '6', 'x', 'y', '^'],
+  ['1', '2', '3', 'a', 'b', '²'],
+  ['0', '+', '−', '·', '/', ':'],
+  ['▢/▢', '(▢)²', '←', '→', 'C', '↵'],
+];
+function renderKeypad() {
+  const kp = $('#keypad'); if (!kp) return;
+  kp.innerHTML = `<div class="grid grid-cols-6 gap-1.5">${KEYS.flat().map(k => {
+    let cls = 'bg-slate-800 text-slate-100 border-slate-700';
+    if (/^[xyab]$/.test(k)) cls = 'bg-indigo-500/15 text-indigo-200 border-indigo-400/30 italic font-serif';
+    else if ('+−·/:^²()'.includes(k) || k === '▢/▢' || k === '(▢)²') cls = 'bg-slate-700/70 text-slate-100 border-slate-600';
+    else if (k === '⌫' || k === 'C' || k === '←' || k === '→') cls = 'bg-slate-900 text-slate-300 border-slate-700';
+    else if (k === '↵') cls = 'bg-emerald-500 text-slate-950 border-emerald-400 font-bold';
+    return `<button type="button" data-k="${esc(k)}" class="key h-11 rounded-xl border text-lg ${cls}">${k}</button>`;
+  }).join('')}</div>`;
+  kp.querySelectorAll('.key').forEach(b => {
+    b.addEventListener('pointerdown', e => e.preventDefault());
+    b.addEventListener('click', () => onKey(b.dataset.k));
+  });
+}
+function onKey(k) {
+  const el = $('#inp'); if (!el) return;
+  const s = el.selectionStart ?? el.value.length, e = el.selectionEnd ?? el.value.length;
+  const put = (txt, caret) => { el.value = el.value.slice(0, s) + txt + el.value.slice(e); const p = s + (caret ?? txt.length); el.setSelectionRange(p, p); };
+  switch (k) {
+    case '⌫': if (s !== e) put(''); else if (s > 0) { el.value = el.value.slice(0, s - 1) + el.value.slice(e); el.setSelectionRange(s - 1, s - 1); } break;
+    case 'C': el.value = ''; break;
+    case '←': el.setSelectionRange(Math.max(0, s - 1), Math.max(0, s - 1)); break;
+    case '→': el.setSelectionRange(Math.min(el.value.length, e + 1), Math.min(el.value.length, e + 1)); break;
+    case '↵': onCheck(); return;
+    case '▢/▢': put('()/()', 1); break;
+    case '(▢)²': put('()^2', 1); break;
+    case '²': put('^2'); break;
+    case '−': put('-'); break;
+    default: put(k);
+  }
+  el.focus({ preventScroll: true }); updatePreview();
+}
+
+function feedback(res) {
+  const fb = $('#feedback'); if (!fb) return;
+  const tag = res.tag && TAGS[res.tag];
+  const styles = {
+    ok: 'border-emerald-400/40 bg-emerald-500/10 text-emerald-100',
+    almost: 'border-amber-400/40 bg-amber-500/10 text-amber-50',
+    error: 'border-rose-400/40 bg-rose-500/10 text-rose-50',
+    syntax: 'border-slate-600 bg-slate-800/60 text-slate-200',
+  };
+  const icon = { ok: '✅', almost: '🟡', error: '🧠', syntax: '⌨️' }[res.status];
+  const title = { ok: res.title || 'Richtig!', almost: 'Fast!', error: tag ? 'Denkfehler erkannt' : 'Noch nicht ganz', syntax: 'Eingabe nicht lesbar' }[res.status];
+  fb.innerHTML = `<div class="rounded-2xl border p-3.5 ${styles[res.status]} ${res.status === 'ok' ? 'pop-in' : 'fade-in'}">
+    <div class="flex items-center gap-2 flex-wrap"><span>${icon}</span><span class="font-bold">${title}</span>
+      ${tag ? `<span class="chip-tag text-[11px] px-2 py-0.5 rounded-full bg-rose-400/15 border border-rose-300/30 text-rose-200 font-semibold">${tag.label}</span>` : ''}</div>
+    ${res.msg ? `<div class="fb-text mt-1.5 leading-relaxed">${res.msg}</div>` : ''}
+    ${res.status === 'error' || res.status === 'almost' ? `<div class="mt-2 text-xs opacity-70">${pick(['Kein Problem – genau dafür ist Training da.', 'Guter Versuch! Mit dem Tipp klappt\'s.', 'Fehler erkannt = Fehler gebannt. 💪', 'Weiter so – du bist nah dran!'])}</div>` : ''}
+  </div>`;
+}
+
+function onCheck() {
+  if (!S || S.done) return;
+  const st = S.task.steps[S.idx]; if (st.type !== 'expr') return;
+  const inp = $('#inp'), v = inp.value;
+  if (!v.trim()) { feedback({ status: 'syntax', msg: 'Gib zuerst einen Term ein.' }); return; }
+  const res = evaluate(S.task, st, v);
+  if (res.status === 'ok') {
+    const html = (() => { try { return `<span class="math">${R(parse(v))}</span>`; } catch (e) { return esc(v); } })();
+    stepSuccess(st, html, v, res.jump);
+    return;
+  }
+  if (res.status === 'error') {
+    S.errors++;
+    if (res.tag) { stats.mist[res.tag] = (stats.mist[res.tag] || 0) + 1; saveStats(); }
+    inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake');
+  }
+  if (res.status === 'almost' && res.tag === 'kgv') { stats.mist.kgv = (stats.mist.kgv || 0) + 1; saveStats(); }
+  feedback(res);
+}
+
+function onChoice(btn, opt) {
+  if (opt.ok) {
+    btn.classList.add('border-emerald-400', 'bg-emerald-500/15', 'glow');
+    stepSuccess(S.task.steps[S.idx], `<span class="text-slate-200">${opt.l}</span>`, null);
+    return;
+  }
+  S.errors++;
+  if (opt.tag) { stats.mist[opt.tag] = (stats.mist[opt.tag] || 0) + 1; saveStats(); }
+  btn.disabled = true;
+  btn.classList.add('opacity-50', 'line-through', 'border-rose-400/50', 'shake');
+  feedback({ status: 'error', tag: opt.tag, msg: opt.msg });
+}
+
+function stepSuccess(st, html, input, jump) {
+  const gain = S.stepRevealed ? 0 : Math.max(3, 10 - 3 * S.stepHints);
+  S.pts += gain;
+  S.log.push({ title: st.title, html, revealed: S.stepRevealed });
+  if (input !== null && st.check !== 'hn') S.lastExpr = input;
+  const anchor = $('#btnCheck') || document.querySelector('.opt.glow') || $('#stepArea');
+  if (gain) floatPoints(anchor, `+${gain}`);
+  feedback({ status: 'ok', title: jump ? 'Wow – du bist schon am Ziel! 🚀' : (STEP_PRAISE[st.id] || pick(PRAISE)), msg: jump ? 'Du hast gleich mehrere Schritte auf einmal erledigt.' : '' });
+  document.querySelectorAll('#stepArea button, #stepArea input').forEach(b => b.disabled = true);
+  const next = () => {
+    if (jump || S.idx >= S.task.steps.length - 1) return completeTask();
+    S.idx++; renderStepper(); renderPath(); renderStep();
+  };
+  setTimeout(next, jump ? 1100 : 750);
+}
+
+function onHint() {
+  const st = S.task.steps[S.idx], list = $('#hintList');
+  if (S.stepHints < st.hints.length) {
+    const h = st.hints[S.stepHints];
+    S.stepHints++; S.hints++;
+    list.insertAdjacentHTML('beforeend', `<div class="hint-text rounded-2xl border border-amber-400/30 bg-amber-400/5 p-3 text-amber-50/90 leading-relaxed fade-in"><span class="font-bold text-amber-300">💡 Hinweis ${S.stepHints}:</span> ${h}</div>`);
+    if (S.stepHints >= st.hints.length) $('#btnHint').innerHTML = st.type === 'choice' ? '👀 Auflösen' : (st.id === 'final' ? '👀 Lösung zeigen' : '👀 Zwischenschritt');
+    return;
+  }
+  reveal(st);
+}
+function reveal(st) {
+  S.stepRevealed = true; S.revealed = true;
+  if (st.type === 'choice') {
+    const o = st.opts.find(x => x.ok);
+    const btn = [...document.querySelectorAll('.opt')].find(b => st.opts[+b.dataset.opt].ok);
+    $('#feedback').innerHTML = `<div class="rounded-2xl border border-sky-400/40 bg-sky-500/10 p-3.5 fade-in"><div class="font-bold text-sky-200">👀 Richtige Strategie</div><div class="mt-1 text-sky-50">${o.l}</div>
+      <button id="btnTake" class="mt-3 px-4 py-2 rounded-xl bg-sky-500 text-slate-950 font-bold">Verstanden – weiter</button></div>`;
+    $('#btnTake').onclick = () => { if (btn) btn.classList.add('border-sky-400'); stepSuccess(st, `<span class="text-slate-200">${o.l}</span>`, null); };
+    return;
+  }
+  const txt = ser(st.expAst);
+  $('#feedback').innerHTML = `<div class="rounded-2xl border border-sky-400/40 bg-sky-500/10 p-3.5 fade-in">
+    <div class="font-bold text-sky-200">👀 So sieht dieser Schritt aus</div>
+    <div class="scroll-x mt-2 py-1"><span class="math text-xl text-white">${R(st.expAst)}</span></div>
+    <div class="mt-1 text-xs text-sky-200/70">Schau ihn dir in Ruhe an – beim nächsten Mal schaffst du es allein.</div>
+    <button id="btnTake" class="mt-3 px-4 py-2 rounded-xl bg-sky-500 text-slate-950 font-bold">Übernehmen & weiter</button></div>`;
+  $('#inp').value = txt; updatePreview();
+  $('#btnTake').onclick = () => stepSuccess(st, `<span class="math">${R(st.expAst)}</span>`, txt);
+}
+
+function completeTask() {
+  S.done = true;
+  const t = S.task, perfect = !S.errors && !S.hints && !S.revealed;
+  let bonus = 0;
+  if (!S.revealed) { stats.streak++; bonus += Math.min(stats.streak, 10); } else stats.streak = 0;
+  if (perfect) { bonus += 5; stats.perfect++; }
+  S.pts += bonus; S.bonus = bonus;
+  stats.points += S.pts; stats.solved++;
+  stats.lvl[t.level] = (stats.lvl[t.level] || 0) + 1;
+  stats.best = Math.max(stats.best, stats.streak);
+  saveStats(); updateHeader(); renderLevels(); renderStepper(); renderPath();
+  renderDone();
+  if (!S.revealed) confetti(perfect ? 180 : 90);
+  if (stats.lvl[t.level] === GOAL) setTimeout(() => toast(`⭐ Level ${t.level} gemeistert! Weiter so!`), 700);
+  else if ([3, 5, 10, 15, 20, 30, 50].includes(stats.streak)) setTimeout(() => toast({ 3: '🔥 3er-Serie – du bist im Flow!', 5: '⚡ 5 in Folge – stark!', 10: '🏆 10er-Serie! Bruch-Legende!' }[stats.streak] || `🔥 ${stats.streak}er-Serie!`), 700);
+}
+function renderDone() {
+  const t = S.task, perfect = !S.errors && !S.hints && !S.revealed;
+  const emoji = S.revealed ? '💪' : perfect ? '🌟' : '🎉';
+  const title = S.revealed ? 'Geschafft – mit etwas Hilfe' : perfect ? 'Perfekt gelöst!' : pick(['Aufgabe gelöst!', 'Stark gemacht!', 'Sauber durchgezogen!']);
+  const sub = S.revealed ? 'Schau dir den Lösungsweg oben nochmal an – die nächste packst du allein.' : perfect ? 'Keine Fehler, keine Hinweise. So sieht Können aus.' : 'Fehler gehören dazu – wichtig ist, dass du sie jetzt erkennst.';
+  $('#stepArea').innerHTML = `<div class="text-center py-3 pop-in">
+    <div class="text-5xl">${emoji}</div>
+    <h3 class="mt-2 text-2xl font-extrabold bg-gradient-to-r from-emerald-300 via-cyan-300 to-indigo-300 bg-clip-text text-transparent">${title}</h3>
+    <p class="mt-1 text-slate-400 text-sm">${sub}</p>
+    <div class="mt-4 flex flex-wrap justify-center gap-2 text-sm">
+      <span class="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-200 border border-emerald-400/30 font-semibold">+${S.pts} Punkte${S.bonus ? ` (inkl. ${S.bonus} Bonus)` : ''}</span>
+      <span class="px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Fehler: ${S.errors}</span>
+      <span class="px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Hinweise: ${S.hints}</span>
+      <span class="px-3 py-1 rounded-full bg-orange-500/15 text-orange-200 border border-orange-400/30">🔥 Serie: ${stats.streak}</span>
+    </div>
+    <div class="mt-4 rounded-2xl bg-slate-950/60 border border-slate-800 p-3">
+      <div class="text-[10px] uppercase tracking-widest text-slate-500">Ergebnis</div>
+      <div class="scroll-x mt-1"><div class="center-max math text-2xl text-white">${R(t.finalAst)}</div></div>
+    </div>
+    <div class="mt-2 text-xs text-slate-500">Trainiert: ${t.skill}</div>
+    <div class="mt-5 flex flex-wrap gap-2 justify-center">
+      <button id="btnNext" class="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 text-slate-950 font-extrabold shadow-lg shadow-emerald-900/30 hover:brightness-110">Nächste Aufgabe →</button>
+      <button id="btnSame" class="px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-slate-200 hover:bg-slate-700">Gleicher Typ nochmal</button>
+    </div>
+  </div>`;
+  $('#btnNext').onclick = newTask;
+  $('#btnSame').onclick = () => { const tp = T.find(x => x.id === lastTpl); startTask(tp.gen()); };
+  $('#btnNext').focus({ preventScroll: true });
+}
+
+/* ---------- Erfolgsmomente ---------- */
+function floatPoints(anchor, text) {
+  if (!anchor) return;
+  const r = anchor.getBoundingClientRect(), el = document.createElement('div');
+  el.className = 'float-pts'; el.textContent = text;
+  el.style.left = (r.left + r.width / 2) + 'px'; el.style.top = (r.top - 6) + 'px';
+  document.body.appendChild(el); setTimeout(() => el.remove(), 1200);
+}
+let toastTimer = null;
+function toast(msg) {
+  const el = $('#toast');
+  el.innerHTML = `<div class="toast px-4 py-2.5 rounded-2xl bg-slate-800/95 border border-slate-600 shadow-2xl text-sm font-semibold text-slate-100 whitespace-nowrap">${msg}</div>`;
+  el.classList.remove('hidden'); el.style.transform = 'translateX(-50%)';
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.add('hidden'), 2600);
+}
+function confetti(n) {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c = $('#confetti'), ctx = c.getContext('2d'), dpr = window.devicePixelRatio || 1;
+  c.width = innerWidth * dpr; c.height = innerHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const cols = ['#818cf8', '#34d399', '#22d3ee', '#fbbf24', '#f472b6', '#a78bfa'];
+  const ps = Array.from({ length: n }, () => ({
+    x: innerWidth / 2 + (Math.random() - .5) * 120, y: innerHeight * .38,
+    vx: (Math.random() - .5) * 13, vy: -Math.random() * 13 - 4, g: .32 + Math.random() * .12,
+    s: 4 + Math.random() * 6, r: Math.random() * 6, vr: (Math.random() - .5) * .35, c: pick(cols), shape: Math.random() < .5,
+  }));
+  const t0 = performance.now();
+  (function frame(t) {
+    const el = t - t0; ctx.clearRect(0, 0, innerWidth, innerHeight);
+    for (const p of ps) {
+      p.vy += p.g; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.globalAlpha = Math.max(0, 1 - el / 1900); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c;
+      if (p.shape) ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); else { ctx.beginPath(); ctx.arc(0, 0, p.s / 2.4, 0, 7); ctx.fill(); }
+      ctx.restore();
+    }
+    if (el < 1900) requestAnimationFrame(frame); else ctx.clearRect(0, 0, innerWidth, innerHeight);
+  })(t0);
+}
+
+/* ---------- Modals ---------- */
+function openModal(title, html) {
+  $('#modalTitle').innerHTML = title; $('#modalBody').innerHTML = html;
+  $('#modal').classList.remove('hidden'); document.body.style.overflow = 'hidden';
+}
+function closeModal() { $('#modal').classList.add('hidden'); document.body.style.overflow = ''; }
+
+function cheatSheet() {
+  const C = {
+    indigo: ['border-indigo-400/25 bg-indigo-500/5', 'text-indigo-200'],
+    amber: ['border-amber-400/25 bg-amber-500/5', 'text-amber-200'],
+    emerald: ['border-emerald-400/25 bg-emerald-500/5', 'text-emerald-200'],
+    violet: ['border-violet-400/25 bg-violet-500/5', 'text-violet-200'],
+    cyan: ['border-cyan-400/25 bg-cyan-500/5', 'text-cyan-200'],
+    rose: ['border-rose-400/25 bg-rose-500/5', 'text-rose-200'],
+    slate: ['border-slate-400/25 bg-slate-500/5', 'text-slate-200'],
+  };
+  const box = (title, body, color = 'indigo') => `<div class="rounded-2xl border ${C[color][0]} p-4"><div class="font-bold ${C[color][1]} mb-2">${title}</div><div class="text-slate-300 space-y-2 leading-relaxed">${body}</div></div>`;
+  openModal('📘 Spickzettel', `<div class="grid gap-3">
+    ${box('🥇 Die goldene Regel', `<b>„Aus Summen kürzen nur die Dummen.“</b> Kürzen darfst du nur <b>Faktoren</b>. Also: erst faktorisieren, dann kürzen.<div class="scroll-x">${M('(x+2)/(x+5)')} &nbsp;≠&nbsp; ${M('2/5')} &nbsp;&nbsp;aber&nbsp;&nbsp; ${Meq('(x+2)(x-1)/(x+2)', 'x-1')}</div>`, 'amber')}
+    ${box('✖️ Mal & ➗ Geteilt – KEIN Hauptnenner', `<div class="scroll-x">${Meq('a/b·c/d', '(a·c)/(b·d)')}</div><div>Vorher über Kreuz kürzen, was geht.</div><div class="scroll-x">${Meq('a/b:c/d', 'a/b·d/c')} &nbsp;(nur den <b>zweiten</b> Bruch umdrehen)</div>`)}
+    ${box('➕ Plus & Minus – Hauptnenner', `<ol class="list-decimal list-inside space-y-1"><li>Nenner faktorisieren</li><li>Hauptnenner = jeder Faktor in seiner höchsten Potenz (kgV)</li><li>Jeden Bruch erweitern – <b>Zähler mitnehmen!</b></li><li>Zähler zusammenfassen – Minus-Klammern beachten</li><li>Am Ende nochmal kürzen</li></ol>`, 'emerald')}
+    ${box('🧩 Binomische Formeln', `<div class="scroll-x">${Meq('(a+b)^2', 'a^2+2ab+b^2')}</div><div class="scroll-x">${Meq('(a-b)^2', 'a^2-2ab+b^2')}</div><div class="scroll-x">${Meq('(a+b)(a-b)', 'a^2-b^2')} &nbsp;← kein Mittelglied!</div>`, 'violet')}
+    ${box('🔧 Faktorisier-Checkliste', `<div>1. <b>Ausklammern</b>: ${Meq('3x+6', '3(x+2)')}, &nbsp;${Meq('x^2+5x', 'x(x+5)')}</div><div>2. <b>Binomische Formel</b> erkennen (Quadratzahlen!)</div><div class="scroll-x">3. <b>Gruppieren</b> bei 4 Summanden: ${Meq('x^3+2x^2-x-2', 'x^2(x+2)-(x+2)', '(x+2)(x^2-1)')}</div><div>4. Nochmal prüfen: Lässt sich ein Faktor weiter zerlegen? (${M('x^4-1')} geht zweimal!)</div>`, 'cyan')}
+    ${box('🕵️ Tricks', `<div><b>Vorzeichen drehen:</b> ${Meq('a-x', '-(x-a)')}, z. B. ${Meq('3-x', '-(x-3)')}</div><div class="scroll-x"><b>Bruch aufteilen:</b> ${Meq('(a+b)/c', 'a/c+b/c')} &nbsp;(aber ${M('c/(a+b)')} ≠ ${M('c/a+c/b')}!)</div><div><b>Erst kürzen, dann Hauptnenner:</b> Oft verschwindet der Bruch ganz.</div><div><b>Minus vor dem Bruch:</b> gilt für den ganzen Zähler – Klammer setzen!</div>`, 'rose')}
+    ${box('⌨️ Eingabe', `<div><code>x^2</code> Potenz · <code>/</code> Bruch · <code>·</code> oder <code>*</code> mal (darf fehlen) · <code>:</code> geteilt</div><div>Mehrgliedrige Zähler/Nenner in Klammern: <code>(x+1)/(x-1)</code></div>`, 'slate')}
+  </div>`);
+}
+function statsView() {
+  const total = Object.values(stats.lvl).reduce((a, b) => a + b, 0);
+  const mist = Object.entries(stats.mist).filter(([k, v]) => v > 0 && TAGS[k]).sort((a, b) => b[1] - a[1]);
+  const max = mist.length ? mist[0][1] : 1;
+  const tile = (v, l) => `<div class="rounded-2xl bg-slate-800/60 border border-slate-700 p-3 text-center"><div class="text-2xl font-extrabold text-slate-100 tabular-nums">${v}</div><div class="text-[11px] text-slate-400">${l}</div></div>`;
+  openModal('📊 Statistik & Fehler-Analyse', `
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">${tile(total, 'gelöst')}${tile(stats.points, 'Punkte')}${tile(stats.best, 'beste Serie')}${tile(stats.perfect, 'perfekt gelöst')}</div>
+    <h3 class="mt-5 mb-2 font-bold text-slate-200">Fortschritt pro Level</h3>
+    <div class="space-y-2">${[1, 2, 3, 4].map(l => `<div class="flex items-center gap-3 text-sm"><span class="w-36 shrink-0 text-slate-300">${LEVELS[l].icon} ${LEVELS[l].name}</span>
+      <div class="flex-1 h-2 rounded-full bg-slate-800 overflow-hidden"><div class="h-full rounded-full bg-gradient-to-r from-indigo-400 to-emerald-400" style="width:${Math.min(100, stats.lvl[l] / GOAL * 100)}%"></div></div>
+      <span class="w-14 text-right tabular-nums text-slate-400">${stats.lvl[l]}${stats.lvl[l] >= GOAL ? ' ⭐' : ''}</span></div>`).join('')}</div>
+    <h3 class="mt-5 mb-1 font-bold text-slate-200">Deine typischen Denkfehler</h3>
+    <p class="text-xs text-slate-500 mb-3">Die App merkt sich, welche Fehler du machst – und wo du gezielt üben solltest.</p>
+    ${mist.length ? `<div class="space-y-2">${mist.map(([k, v]) => `<div class="rounded-2xl border border-slate-700 bg-slate-800/40 p-3">
+        <div class="flex items-center gap-2"><span class="font-semibold text-slate-100">${TAGS[k].label}</span><span class="ml-auto text-xs tabular-nums text-rose-300 font-bold">${v}×</span>
+        <button data-go="${TAGS[k].lvl}" class="go-lvl text-xs px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-200 border border-indigo-400/30 hover:bg-indigo-500/30">Üben →</button></div>
+        <div class="mt-1.5 h-1.5 rounded-full bg-slate-900 overflow-hidden"><div class="h-full bg-rose-400/70" style="width:${v / max * 100}%"></div></div>
+        <div class="mt-1.5 text-sm text-slate-400">${TAGS[k].tip}</div></div>`).join('')}</div>`
+      : `<div class="rounded-2xl border border-dashed border-slate-700 p-4 text-sm text-slate-400 text-center">Noch keine Fehler erfasst. Leg los – und trau dich, Fehler zu machen! 🙂</div>`}
+    <div class="mt-6 text-right"><button id="btnReset" class="text-xs text-slate-500 hover:text-rose-300">Statistik zurücksetzen</button></div>`);
+  document.querySelectorAll('.go-lvl').forEach(b => b.onclick = () => { stats.level = +b.dataset.go; saveStats(); closeModal(); renderLevels(); newTask(); });
+  $('#btnReset').onclick = () => { if (confirm('Wirklich alle Punkte, Serien und Fehler-Statistiken löschen?')) { const keep = { level: stats.level, mode: stats.mode, keypad: stats.keypad }; stats = { ...defaultStats(), ...keep }; saveStats(); updateHeader(); renderLevels(); statsView(); } };
+}
+
+function init() {
+  updateHeader(); renderLevels(); renderModes();
+  $('#btnNew').onclick = newTask;
+  $('#btnCheat').onclick = cheatSheet;
+  $('#btnStats').onclick = statsView;
+  $('#modalClose').onclick = closeModal;
+  $('#modalBg').onclick = closeModal;
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Enter' && S && S.done && $('#modal').classList.contains('hidden') && !(document.activeElement && document.activeElement.tagName === 'BUTTON')) { e.preventDefault(); newTask(); }
+  });
+  newTask();
+}
+if (typeof window !== 'undefined' && typeof document !== 'undefined' && document.getElementById('app')) init();
+</script>
+</body>
+</html>
