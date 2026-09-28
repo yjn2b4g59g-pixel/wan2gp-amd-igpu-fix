@@ -1,0 +1,968 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Winkelwerk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,500;1,400;1,500&display=swap">
+<style>
+:root{
+  --bg:#EDF0F4; --surface:#FFFFFF; --surface-2:#F4F6F9; --ink:#172030; --muted:#5A6577; --faint:#8C96A6;
+  --line:#D5DBE4; --grid:#E8ECF1; --axis:#7F899A;
+  --sin:#C33149; --cos:#2360CC; --tan:#A86A00; --ok:#1C7A4B; --warn:#A5520B;
+  --f-math:"STIX Two Text","Cambria Math","Times New Roman",serif;
+  --f-ui:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0F131A; --surface:#171C25; --surface-2:#1E2430; --ink:#E6EAF1; --muted:#9BA5B6; --faint:#6E7889;
+    --line:#2B3342; --grid:#212835; --axis:#6A7485;
+    --sin:#F06C7E; --cos:#6FA0F7; --tan:#E9B03F; --ok:#4CC38A; --warn:#F0A64A;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0F131A; --surface:#171C25; --surface-2:#1E2430; --ink:#E6EAF1; --muted:#9BA5B6; --faint:#6E7889;
+  --line:#2B3342; --grid:#212835; --axis:#6A7485;
+  --sin:#F06C7E; --cos:#6FA0F7; --tan:#E9B03F; --ok:#4CC38A; --warn:#F0A64A;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-ui);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:clamp(16px,3vw,32px);padding-block:22px 48px}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--cos);outline-offset:2px}
+
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 24px;margin-bottom:18px}
+.brand h1{font:italic 500 clamp(30px,4vw,40px)/1 var(--f-math);margin:0;letter-spacing:-.01em;text-wrap:balance}
+.brand p{margin:8px 0 0;color:var(--muted);max-width:58ch}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:3px;gap:2px}
+.seg button{appearance:none;border:0;background:transparent;color:var(--muted);font:500 14px/1 var(--f-ui);padding:8px 12px;border-radius:6px;cursor:pointer}
+.seg button:hover{color:var(--ink);background:var(--surface-2)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.seg.m button{font:500 16px/1 var(--f-math)}
+.check{display:inline-flex;align-items:center;gap:7px;font-size:14px;color:var(--muted);cursor:pointer;user-select:none}
+.check input{accent-color:var(--ink);width:16px;height:16px;margin:0}
+
+.cols{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;align-items:start}
+.col{display:grid;gap:16px;min-width:0}
+@media (max-width:920px){.cols{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.panel-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-bottom:10px}
+.eyebrow{font:600 11.5px/1.2 var(--f-ui);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0}
+.eyebrow .nt{text-transform:none;letter-spacing:0;font:italic 500 14px/1 var(--f-math)}
+@media (max-width:520px){.vals tbody th small{display:none}}
+
+svg.plot{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none}
+#circle{touch-action:none;cursor:grab;max-width:470px;margin:0 auto}
+#circle:active{cursor:grabbing}
+#graph{touch-action:pan-y;cursor:ew-resize}
+
+/* SVG */
+.axis{stroke:var(--axis);stroke-width:1}
+.gridl{stroke:var(--grid);stroke-width:1}
+.unit{fill:none;stroke:var(--ink);stroke-width:1.5}
+.tick{stroke:var(--axis);stroke-width:1}
+.guide{fill:none;stroke:var(--faint);stroke-width:1.25;stroke-dasharray:5 4}
+.faintline{stroke-opacity:.55}
+.s-sin{stroke:var(--sin)} .s-cos{stroke:var(--cos)} .s-tan{stroke:var(--tan)} .s-ink{stroke:var(--ink)}
+.f-sin{fill:var(--sin)} .f-cos{fill:var(--cos)} .f-tan{fill:var(--tan)}
+.thick{stroke-width:4.5;stroke-linecap:round}
+.radius{stroke:var(--ink);stroke-width:2}
+.radius.ghost{stroke:var(--faint);stroke-width:1.5;stroke-dasharray:3 3}
+.curve{fill:none;stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round}
+.curve.inv{stroke-width:3.6}
+.curve.restr{stroke-width:2;stroke-opacity:.6}
+.curve.full{stroke-width:1.5;stroke-opacity:.35;stroke-dasharray:2 4}
+.diag{stroke:var(--faint);stroke-width:1.25;stroke-dasharray:8 5}
+.dot{stroke:var(--surface);stroke-width:2}
+.dot-ink{fill:var(--ink);stroke:var(--surface);stroke-width:2}
+.hollow{fill:var(--surface);stroke-width:2.25}
+.arcpath{fill:none;stroke:var(--ink);stroke-width:1.5}
+.range{fill:none;stroke-width:10;stroke-opacity:.2;stroke-linecap:round}
+.marker-fill{fill:var(--ink)}
+.hit{fill:transparent}
+.lbl{font:12px var(--f-ui);fill:var(--muted);paint-order:stroke;stroke:var(--surface);stroke-width:3.5px;stroke-linejoin:round}
+.lbl.ink{fill:var(--ink)}
+.mlab{font:italic 15px var(--f-math);fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round}
+.mlab .up{font-style:normal}
+.mlab.c-sin{fill:var(--sin)} .mlab.c-cos{fill:var(--cos)} .mlab.c-tan{fill:var(--tan)}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{appearance:none;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:5px 11px;font:500 13px/1.2 var(--f-ui);cursor:pointer;font-variant-numeric:tabular-nums}
+.chip:hover{border-color:var(--faint)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.chip.mt{font:500 14.5px/1.2 var(--f-math)}
+.chip.fn{--c:var(--ink);font:14.5px/1.2 var(--f-math)}
+.chip.fn.sin{--c:var(--sin)} .chip.fn.cos{--c:var(--cos)} .chip.fn.tan{--c:var(--tan)}
+.chip.fn .dot{width:9px;height:9px;border-radius:50%;background:var(--c);flex:none}
+.chip.fn .v{font:500 12.5px var(--f-num)}
+.chip.fn[aria-pressed="true"]{background:color-mix(in srgb,var(--c) 12%,var(--surface));color:var(--ink);border-color:var(--c)}
+.chip.fn[aria-pressed="false"]{color:var(--muted)}
+.chip.fn[aria-pressed="false"] .dot{background:transparent;box-shadow:inset 0 0 0 1.5px var(--c)}
+
+/* inputs */
+.ctl{display:grid;gap:12px}
+.field{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.field label{font-weight:600}
+.inp{font:500 18px/1 var(--f-num);padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);color:var(--ink);width:11ch;min-width:0}
+.inp.invalid{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 8%,var(--surface))}
+.unitlbl{color:var(--muted);font:14px var(--f-num)}
+input[type=range]{width:100%;accent-color:var(--ink);margin:0}
+.hint{color:var(--muted);font-size:13px;margin:0}
+.hint.warn{color:var(--warn)}
+.sub{font:600 11.5px/1.2 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:4px 0 0}
+
+/* legends */
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:13px;color:var(--muted)}
+.legend .k{display:inline-flex;align-items:center;gap:7px}
+.legend svg{width:24px;height:12px;flex:none;overflow:visible}
+.legend .coord{font-family:var(--f-num);color:var(--ink)}
+.note{font-size:13px;color:var(--muted);margin:8px 0 0}
+
+/* readout */
+.m{font-family:var(--f-math)}
+.m i,.mi{font-style:italic}
+.headline{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.headline .m{font-size:clamp(26px,3.4vw,34px);line-height:1.15}
+.headline .alt{font:15px var(--f-num);color:var(--muted)}
+.tag{display:inline-block;font:600 11px/1 var(--f-ui);letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:999px;background:var(--surface-2);color:var(--muted);align-self:center}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0 4px;padding:0}
+.fact{background:var(--surface-2);border-radius:8px;padding:9px 11px;margin:0}
+.fact dt{font-size:12px;color:var(--muted)}
+.fact dd{margin:2px 0 0;font:500 15px/1.35 var(--f-num)}
+.fact dd .m{font-size:17px}
+.fact small{display:block;font:12.5px var(--f-ui);color:var(--muted)}
+.table-wrap{overflow-x:auto;margin-top:12px}
+table.vals{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.vals th,.vals td{padding:9px 8px;border-top:1px solid var(--line);text-align:left;vertical-align:middle;white-space:nowrap}
+.vals thead th{border-top:0;font:600 11.5px var(--f-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:0}
+.vals tbody th{font:400 17px var(--f-math)}
+.vals tbody th small{font:13px var(--f-math);color:var(--muted)}
+.vals td.ex{font:17px var(--f-math)}
+.vals td.num{font:15px var(--f-num)}
+.vals td.undef{font:13px var(--f-ui);color:var(--muted)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px;vertical-align:1px}
+.sw.sin{background:var(--sin)} .sw.cos{background:var(--cos)} .sw.tan{background:var(--tan)} .sw.cot{background:transparent;box-shadow:inset 0 0 0 2px var(--tan)}
+.sign{display:inline-grid;place-items:center;min-width:26px;height:24px;border-radius:6px;font:600 14px var(--f-num)}
+.sign.pos{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.sign.neg{background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)}
+.sign.zero{background:var(--surface-2);color:var(--muted)}
+.identity{margin:12px 0 0;font:16px var(--f-math);color:var(--ink)}
+.identity .num{font:14px var(--f-num)}
+h3{font:600 14.5px/1.3 var(--f-ui);margin:20px 0 8px}
+.rows{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.rows li{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:9px 11px;border:1px solid var(--line);border-radius:8px}
+.rows .m{font-size:16.5px}
+.rows .expl{flex-basis:100%;font-size:13px;color:var(--muted)}
+.badge{font:600 12px/1 var(--f-ui);padding:4px 7px;border-radius:5px}
+.badge.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.badge.warn{background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)}
+.linkbtn{appearance:none;border:0;background:none;padding:2px 0;color:var(--cos);font:500 13px var(--f-ui);cursor:pointer;margin-left:auto;text-decoration:underline;text-underline-offset:3px}
+.prose{max-width:66ch;margin:0;color:var(--ink)}
+.formula{font:17px/1.6 var(--f-math);margin:6px 0 0}
+.formula .or{font:13px var(--f-ui);color:var(--muted);margin:0 6px}
+@media (prefers-reduced-motion: no-preference){.chip,.seg button{transition:background-color .12s,border-color .12s,color .12s}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>Winkelwerk</h1>
+      <p>Sinus, Kosinus, Tangens und ihre Umkehrfunktionen am Einheitskreis. Punkt ziehen, Regler schieben oder Werte eintippen.</p>
+    </div>
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="Modus">
+        <button type="button" id="modeAngle" data-mode="winkel">Winkel → Wert</button>
+        <button type="button" id="modeInv" data-mode="umkehr">Wert → Winkel</button>
+      </div>
+      <div class="seg" role="group" aria-label="Winkeleinheit">
+        <button type="button" id="unitDeg" data-unit="deg">Grad</button>
+        <button type="button" id="unitRad" data-unit="rad">Bogenmaß</button>
+      </div>
+      <label class="check" for="snap" title="Winkel rasten in 15°-Schritten ein, Werte auf besonderen Werten wie √2/2"><input type="checkbox" id="snap"> Einrasten</label>
+    </div>
+  </header>
+
+  <div class="cols">
+    <div class="col">
+      <section class="panel" aria-labelledby="hCircle">
+        <div class="panel-head"><h2 class="eyebrow" id="hCircle">Einheitskreis · <span class="nt">r</span> = 1</h2></div>
+        <svg id="circle" class="plot" viewBox="0 0 400 400" role="img" aria-label="Einheitskreis mit Winkel α und den Strecken für Sinus, Kosinus und Tangens"></svg>
+        <div class="legend" id="circleLegend"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="hInput">
+        <div class="panel-head"><h2 class="eyebrow" id="hInput">Eingabe</h2></div>
+
+        <div class="ctl" id="ctlAngle">
+          <div class="field">
+            <label for="angleText">Winkel <span class="m mi">α</span></label>
+            <input class="inp" id="angleText" type="text" inputmode="text" autocomplete="off" spellcheck="false">
+            <span class="unitlbl" id="angleUnit">°</span>
+          </div>
+          <input id="angleRange" type="range" min="-360" max="360" step="1" aria-label="Winkel α">
+          <p class="sub">Besondere Winkel</p>
+          <div class="chips" id="anglePresets"></div>
+          <p class="hint" id="angleHint"></p>
+        </div>
+
+        <div class="ctl" id="ctlInv" hidden>
+          <div class="seg m" role="group" aria-label="Umkehrfunktion" id="invSeg">
+            <button type="button" data-inv="arcsin">arcsin</button>
+            <button type="button" data-inv="arccos">arccos</button>
+            <button type="button" data-inv="arctan">arctan</button>
+          </div>
+          <div class="field">
+            <label for="valText">Wert <span class="m mi">x</span></label>
+            <input class="inp" id="valText" type="text" inputmode="text" autocomplete="off" spellcheck="false">
+          </div>
+          <input id="valRange" type="range" min="-1" max="1" step="0.005" aria-label="Wert x">
+          <p class="sub">Besondere Werte</p>
+          <div class="chips" id="valPresets"></div>
+          <p class="hint" id="valHint"></p>
+        </div>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="panel" aria-labelledby="hGraph">
+        <div class="panel-head">
+          <h2 class="eyebrow" id="hGraph">Graphen über <span class="nt">α</span></h2>
+          <div class="chips" id="fnChips">
+            <button type="button" class="chip fn sin" data-fn="sin" aria-pressed="true"><span class="dot"></span><span>sin <i>α</i></span><span class="v" data-v="sin"></span></button>
+            <button type="button" class="chip fn cos" data-fn="cos" aria-pressed="true"><span class="dot"></span><span>cos <i>α</i></span><span class="v" data-v="cos"></span></button>
+            <button type="button" class="chip fn tan" data-fn="tan" aria-pressed="true"><span class="dot"></span><span>tan <i>α</i></span><span class="v" data-v="tan"></span></button>
+          </div>
+        </div>
+        <svg id="graph" class="plot" viewBox="0 0 640 340" role="img" aria-label="Funktionsgraphen"></svg>
+        <div class="legend" id="graphLegend"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="hRead">
+        <div class="panel-head"><h2 class="eyebrow" id="hRead">Werte bei <span class="nt">α</span></h2></div>
+        <div id="readout" aria-live="polite"></div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const D2R = Math.PI / 180;
+  const R2 = Math.SQRT2 / 2, R3 = Math.sqrt(3);
+
+  const state = {
+    mode: 'winkel', unit: 'deg', snap: true,
+    theta: 150,
+    inv: 'arcsin', v: 0.5,
+    show: { sin: true, cos: true, tan: true }
+  };
+  try {
+    const s = JSON.parse(localStorage.getItem('winkelwerk') || '{}');
+    if (s.unit === 'deg' || s.unit === 'rad') state.unit = s.unit;
+    if (typeof s.snap === 'boolean') state.snap = s.snap;
+  } catch (e) {}
+  if (location.hash === '#umkehr') state.mode = 'umkehr';
+  function save() { try { localStorage.setItem('winkelwerk', JSON.stringify({ unit: state.unit, snap: state.snap })); } catch (e) {} }
+
+  /* ---------- Zahlen & Formatierung ---------- */
+  const nf4 = new Intl.NumberFormat('de-DE', { maximumFractionDigits: 4 });
+  const nf2 = new Intl.NumberFormat('de-DE', { maximumFractionDigits: 2 });
+  function num(x, f = nf4) {
+    if (!isFinite(x)) return '–';
+    if (Math.abs(x) < 5e-11) x = 0;
+    let s = f.format(x);
+    if (s === '-0') s = '0';
+    return s.replace('-', '−');
+  }
+  const mod = (a, m) => ((a % m) + m) % m;
+  const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+  function cleanDeg(x) { const r = Math.round(x); return Math.abs(x - r) < 1e-7 ? r + 0 : x; }
+  function intDeg(d) { const r = Math.round(d); return Math.abs(d - r) < 1e-9 ? r : null; }
+  const f2 = n => Math.round(n * 100) / 100;
+
+  function piFrac(deg) {
+    const r = deg / 180;
+    for (const q of [1, 2, 3, 4, 6, 12]) {
+      const p = r * q, pr = Math.round(p);
+      if (Math.abs(p - pr) < 1e-9) {
+        if (pr === 0) return '0';
+        const a = Math.abs(pr), n = (a === 1 ? '' : a) + 'π';
+        return (pr < 0 ? '−' : '') + (q === 1 ? n : n + '/' + q);
+      }
+    }
+    return null;
+  }
+  const degStr = d => num(d, nf2) + '°';
+  const radStr = d => piFrac(d) ?? num(d * D2R);
+  const angStr = d => state.unit === 'deg' ? degStr(d) : radStr(d);
+  function altStr(d) {
+    if (state.unit === 'rad') return (piFrac(d) ? '= ' : 'rad = ') + degStr(d);
+    const p = piFrac(d);
+    return p && p !== '0' ? `= ${p} ≈ ${num(d * D2R)} rad` : `= ${num(d * D2R)} rad`;
+  }
+
+  /* ---------- Trigonometrie ---------- */
+  function trig(fn, deg) {
+    const d = intDeg(deg);
+    let s, c;
+    if (d !== null && mod(d, 90) === 0) { const k = mod(d / 90, 4); s = [0, 1, 0, -1][k]; c = [1, 0, -1, 0][k]; }
+    else { s = Math.sin(deg * D2R); c = Math.cos(deg * D2R); }
+    if (fn === 'sin') return s;
+    if (fn === 'cos') return c;
+    if (fn === 'tan') return c === 0 ? NaN : s / c;
+    if (fn === 'cot') return s === 0 ? NaN : c / s;
+  }
+  const SIN_EX = { 0: '0', 30: '1/2', 45: '√2/2', 60: '√3/2', 90: '1', 120: '√3/2', 135: '√2/2', 150: '1/2', 180: '0', 210: '−1/2', 225: '−√2/2', 240: '−√3/2', 270: '−1', 300: '−√3/2', 315: '−√2/2', 330: '−1/2' };
+  const TAN_EX = { 0: '0', 30: '√3/3', 45: '1', 60: '√3', 90: null, 120: '−√3', 135: '−1', 150: '−√3/3' };
+  const COT_EX = { 0: null, 30: '√3', 45: '1', 60: '√3/3', 90: '0', 120: '−√3/3', 135: '−1', 150: '−√3' };
+  function exact(fn, deg) {
+    const d = intDeg(deg);
+    if (d === null) return undefined;
+    if (fn === 'sin') return SIN_EX[mod(d, 360)];
+    if (fn === 'cos') return SIN_EX[mod(d + 90, 360)];
+    const k = mod(d, 180);
+    if (fn === 'tan') return k in TAN_EX ? TAN_EX[k] : undefined;
+    if (fn === 'cot') return k in COT_EX ? COT_EX[k] : undefined;
+  }
+
+  const SPEC_SC = [[-1, '−1'], [-R3 / 2, '−√3/2'], [-R2, '−√2/2'], [-0.5, '−1/2'], [0, '0'], [0.5, '1/2'], [R2, '√2/2'], [R3 / 2, '√3/2'], [1, '1']];
+  const SPEC_T = [[-R3, '−√3'], [-1, '−1'], [-R3 / 3, '−√3/3'], [0, '0'], [R3 / 3, '√3/3'], [1, '1'], [R3, '√3']];
+  const specFor = inv => inv === 'arctan' ? SPEC_T : SPEC_SC;
+  function exactV(v, inv = state.inv) { const h = specFor(inv).find(([x]) => Math.abs(x - v) < 1e-9); return h ? h[1] : null; }
+  const vStr = (v, inv = state.inv) => exactV(v, inv) ?? num(v);
+  function snapExact(v, inv = state.inv, tol = 1e-9) {
+    let best = null, bd = tol;
+    for (const [x] of specFor(inv)) { const d = Math.abs(x - v); if (d <= bd) { bd = d; best = x; } }
+    return best ?? v;
+  }
+
+  const INV = {
+    arcsin: { base: 'sin', f: Math.asin, ran: [-90, 90], open: false, dom: [-1, 1], slider: [-1, 1, 0.005], tol: 0.02,
+      restr: [-Math.PI / 2, Math.PI / 2], restrTxt: '[−π/2; π/2]',
+      why: 'Der Sinus nimmt jeden Wert zwischen −1 und 1 unendlich oft an. Auf ganz ℝ lässt er sich deshalb nicht umkehren. Auf [−π/2; π/2] steigt er streng monoton von −1 bis 1 und trifft jeden Wert genau einmal. Genau dieses Stück kehrt arcsin um.' },
+    arccos: { base: 'cos', f: Math.acos, ran: [0, 180], open: false, dom: [-1, 1], slider: [-1, 1, 0.005], tol: 0.02,
+      restr: [0, Math.PI], restrTxt: '[0; π]',
+      why: 'Der Kosinus fällt auf [0; π] streng monoton von 1 auf −1 und erreicht dort jeden Wert genau einmal. Deshalb liegt arccos x immer zwischen 0 und π, also zwischen 0° und 180°.' },
+    arctan: { base: 'tan', f: Math.atan, ran: [-90, 90], open: true, dom: [-Infinity, Infinity], slider: [-5, 5, 0.01], tol: 0.05,
+      restr: [-Math.PI / 2 + 1e-3, Math.PI / 2 - 1e-3], restrTxt: '(−π/2; π/2)',
+      why: 'Der Tangens wiederholt sich alle π und hat Polstellen bei ±π/2. Auf (−π/2; π/2) steigt er streng monoton und nimmt dabei jede reelle Zahl genau einmal an. Deshalb ist arctan für alle x definiert, erreicht ±π/2 aber nie.' }
+  };
+  const rangeStr = inv => { const m = INV[inv]; const [o, c] = m.open ? ['(', ')'] : ['[', ']']; return `${o}${angStr(m.ran[0])}; ${angStr(m.ran[1])}${c}`; };
+
+  function solve() {
+    const inv = state.inv, v = state.v, p = cleanDeg(INV[inv].f(v) / D2R);
+    const raw = inv === 'arcsin' ? [p, cleanDeg(180 - p)] : inv === 'arccos' ? [p, cleanDeg(-p)] : [p];
+    const period = inv === 'arctan' ? 180 : 360;
+    const fam = [];
+    for (const a of raw) if (!fam.some(b => Math.abs(mod(a - b + 180, 360) - 180) < 1e-7)) fam.push(a);
+    const list = [];
+    for (const a of fam) for (let k = -3; k <= 3; k++) {
+      const x = cleanDeg(a + k * period);
+      if (x > -1e-9 && x < 360 - 1e-7 && !list.some(y => Math.abs(y - x) < 1e-7)) list.push(Math.max(0, x));
+    }
+    list.sort((a, b) => a - b);
+    const sec = fam.length > 1 ? fam[1] : (inv === 'arctan' ? cleanDeg(p + 180) : null);
+    return { p, fam, period, list, sec };
+  }
+
+  /* ---------- Eingaben parsen ---------- */
+  const norm = s => s.trim().replace(/\s+/g, '').replace(/,/g, '.').replace(/[−–]/g, '-').toLowerCase();
+  function parseAngle(str) {
+    const s = norm(str).replace(/°/g, '').replace(/pi/g, 'π');
+    if (s === '') return null;
+    const m = s.match(/^([+-]?)(\d*\.?\d*)(π?)(?:\/(\d*\.?\d+))?$/);
+    if (!m) return null;
+    const [, sg, n, pi, den] = m;
+    if ((n === '' || n === '.') && !pi) return null;
+    let val = n === '' ? 1 : Number(n);
+    if (!isFinite(val)) return null;
+    if (pi) val *= Math.PI;
+    if (den) val /= Number(den);
+    if (sg === '-') val = -val;
+    const deg = (pi || state.unit === 'rad') ? val / D2R : val;
+    return isFinite(deg) ? cleanDeg(deg) : null;
+  }
+  function parseValue(str) {
+    const s = norm(str).replace(/sqrt\(?(\d*\.?\d+)\)?/g, '√$1').replace(/wurzel\(?(\d*\.?\d+)\)?/g, '√$1');
+    if (s === '') return null;
+    const m = s.match(/^([+-]?)(\d*\.?\d*)(?:√(\d*\.?\d+))?(?:\/(\d*\.?\d+))?$/);
+    if (!m) return null;
+    const [, sg, n, rt, den] = m;
+    if ((n === '' || n === '.') && !rt) return null;
+    let val = n === '' ? 1 : Number(n);
+    if (rt) val *= Math.sqrt(Number(rt));
+    if (den) val /= Number(den);
+    if (sg === '-') val = -val;
+    return isFinite(val) ? val : null;
+  }
+
+  /* ---------- Einheitskreis ---------- */
+  const C = 200, R = 130;
+  const pt = (x, y) => [f2(C + R * x), f2(C - R * y)];
+  const polar = (r, deg) => [f2(C + r * Math.cos(deg * D2R)), f2(C - r * Math.sin(deg * D2R))];
+  function arcPts(r, a0, a1, grow = 0) {
+    const n = Math.max(6, Math.ceil(Math.abs(a1 - a0) / 3));
+    let d = '';
+    for (let i = 0; i <= n; i++) {
+      const a = a0 + (a1 - a0) * i / n;
+      const rr = r + Math.abs(a - a0) / 360 * grow;
+      const [x, y] = polar(rr, a);
+      d += (i ? 'L' : 'M') + x + ' ' + y;
+    }
+    return d;
+  }
+  const mlab = (x, y, html, anchor = 'middle', cls = '') =>
+    `<text class="mlab ${cls}" x="${f2(x)}" y="${f2(y)}" text-anchor="${anchor}" dominant-baseline="middle">${html}</text>`;
+  const fnTxt = (fn, arg = '<tspan>α</tspan>') => `<tspan class="up">${fn}</tspan> ${arg}`;
+
+  function circleBase() {
+    let s = `<defs>
+      <marker id="arrowC" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1 L9 5 L0 9 z" class="marker-fill"/></marker>
+      <clipPath id="clipC"><rect x="0" y="0" width="400" height="400"/></clipPath></defs>`;
+    s += `<line class="axis" x1="14" y1="${C}" x2="386" y2="${C}"/><line class="axis" x1="${C}" y1="14" x2="${C}" y2="386"/>`;
+    s += `<text class="lbl" x="384" y="${C - 8}" text-anchor="end">x</text><text class="lbl" x="${C + 8}" y="22">y</text>`;
+    s += `<circle class="unit" cx="${C}" cy="${C}" r="${R}"/>`;
+    for (let d = 0; d < 360; d += 15) {
+      const major = d % 30 === 0 || d % 45 === 0;
+      const [x1, y1] = polar(R - (major ? 6 : 3), d), [x2, y2] = polar(R + (major ? 6 : 3), d);
+      s += `<line class="tick" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
+      if (major) {
+        const [lx, ly] = polar(R + 21, d);
+        s += `<text class="lbl" x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle">${state.unit === 'deg' ? d + '°' : piFrac(d)}</text>`;
+      }
+    }
+    s += `<text class="lbl" x="${C - 8}" y="${C + 14}" text-anchor="end">0</text>`;
+    return s;
+  }
+
+  function angleArc(deg, labelHtml) {
+    let s = '';
+    if (Math.abs(deg) >= 0.5) s += `<path class="arcpath" d="${arcPts(28, 0, deg, 10)}" marker-end="url(#arrowC)"/>`;
+    const la = Math.abs(deg) <= 360 ? deg / 2 : mod(deg, 360) / 2;
+    const [x, y] = polar(Math.abs(deg) < 20 ? 62 : 50, Math.abs(deg) < 20 ? deg + (deg < 0 ? -12 : 12) : la);
+    s += mlab(x, y, labelHtml);
+    return s;
+  }
+
+  function circleAngle() {
+    const th = state.theta, sn = trig('sin', th), cs = trig('cos', th), tn = trig('tan', th);
+    const [px, py] = pt(cs, sn), [fx] = pt(cs, 0);
+    let s = `<line class="guide" x1="${C + R}" y1="0" x2="${C + R}" y2="400"/>`;
+    if (isFinite(tn)) {
+      const [tx, ty] = pt(1, tn);
+      s += `<line class="guide s-tan faintline" x1="${C}" y1="${C}" x2="${tx}" y2="${ty}"/>`;
+      s += `<line class="s-tan thick" x1="${C + R}" y1="${C}" x2="${tx}" y2="${ty}"/>`;
+      s += `<circle class="dot f-tan" cx="${tx}" cy="${ty}" r="4.5"/>`;
+      if (Math.abs(tn) * R > 20) s += mlab(C + R + 8, clamp((C + ty) / 2, 16, 384), fnTxt('tan'), 'start', 'c-tan');
+    }
+    s += `<line class="s-cos thick" x1="${C}" y1="${C}" x2="${fx}" y2="${C}"/>`;
+    s += `<line class="s-sin thick" x1="${fx}" y1="${C}" x2="${px}" y2="${py}"/>`;
+    s += `<line class="radius" x1="${C}" y1="${C}" x2="${px}" y2="${py}"/>`;
+    if (Math.abs(cs) * R > 26) s += mlab((C + fx) / 2, sn >= 0 ? C + 17 : C - 14, fnTxt('cos'), 'middle', 'c-cos');
+    if (Math.abs(sn) * R > 22) s += mlab(fx + (cs >= 0 ? 9 : -9), (C + py) / 2, fnTxt('sin'), cs >= 0 ? 'start' : 'end', 'c-sin');
+    s += angleArc(th, '<tspan>α</tspan>');
+    s += `<circle class="hit" cx="${px}" cy="${py}" r="22"/><circle class="dot-ink" cx="${px}" cy="${py}" r="7"/>`;
+    return s;
+  }
+
+  function circleInverse() {
+    const m = INV[state.inv], v = state.v, S = solve(), p = S.p, base = m.base;
+    let s = `<path class="range s-${base}" d="${arcPts(R, m.ran[0], m.ran[1])}"/>`;
+    if (m.open) for (const a of m.ran) { const [x, y] = polar(R, a); s += `<circle class="hollow s-${base}" cx="${x}" cy="${y}" r="4"/>`; }
+    const [px, py] = pt(Math.cos(p * D2R), Math.sin(p * D2R));
+    if (state.inv === 'arcsin') {
+      const [, y] = pt(0, v);
+      s += `<line class="guide s-sin" x1="12" y1="${y}" x2="388" y2="${y}"/>`;
+      s += mlab(14, 22, `${fnTxt('sin')} = ${vStr(v)}`, 'start', 'c-sin');
+      s += `<line class="s-sin thick" x1="${px}" y1="${C}" x2="${px}" y2="${py}"/>`;
+    } else if (state.inv === 'arccos') {
+      const [x] = pt(v, 0);
+      s += `<line class="guide s-cos" x1="${x}" y1="12" x2="${x}" y2="388"/>`;
+      s += mlab(x + (v > 0.4 ? -8 : 8), 30, `${fnTxt('cos')} = ${vStr(v)}`, v > 0.4 ? 'end' : 'start', 'c-cos');
+      s += `<line class="s-cos thick" x1="${C}" y1="${C}" x2="${x}" y2="${C}"/>`;
+    } else {
+      const [tx, ty] = pt(1, v);
+      const [ax, ay] = polar(R * 1.6, p), [bx, by] = polar(R * 1.6, p + 180);
+      s += `<line class="guide" x1="${C + R}" y1="0" x2="${C + R}" y2="400"/>`;
+      s += `<line class="guide s-tan" x1="${bx}" y1="${by}" x2="${ax}" y2="${ay}"/>`;
+      s += `<line class="s-tan thick" x1="${C + R}" y1="${C}" x2="${tx}" y2="${ty}"/>`;
+      s += `<circle class="dot f-tan" cx="${tx}" cy="${ty}" r="5"/>`;
+      s += mlab(C + R - 8, clamp(ty + (v >= 0 ? -14 : 16), 16, 384), `${fnTxt('tan')} = ${vStr(v)}`, 'end', 'c-tan');
+    }
+    if (S.sec !== null) {
+      const [qx, qy] = pt(Math.cos(S.sec * D2R), Math.sin(S.sec * D2R));
+      s += `<line class="radius ghost" x1="${C}" y1="${C}" x2="${qx}" y2="${qy}"/>`;
+      s += `<circle class="hollow s-ink" cx="${qx}" cy="${qy}" r="6"/>`;
+      const [lx, ly] = polar(R * 0.7, S.sec + (Math.abs(mod(S.sec, 180) - 90) < 20 ? 14 : 0));
+      s += `<text class="lbl ink" x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle">${angStr(S.sec)}</text>`;
+    }
+    s += `<line class="radius" x1="${C}" y1="${C}" x2="${px}" y2="${py}"/>`;
+    s += angleArc(p, `<tspan class="up">${angStr(p)}</tspan>`);
+    s += `<circle class="dot-ink" cx="${px}" cy="${py}" r="7"/>`;
+    return s;
+  }
+
+  function drawCircle() {
+    $('#circle').innerHTML = circleBase() + `<g clip-path="url(#clipC)">${state.mode === 'winkel' ? circleAngle() : circleInverse()}</g>`;
+  }
+
+  /* ---------- Graphen ---------- */
+  let geom = null;
+  function isNarrow() { const w = $('#graph').getBoundingClientRect().width; return w > 0 && w < 560; }
+
+  function samplePath(f, x0, x1, n, X, Y, lim) {
+    let d = '', pen = false, prev = null;
+    for (let i = 0; i <= n; i++) {
+      const x = x0 + (x1 - x0) * i / n, y = f(x);
+      if (!isFinite(y) || Math.abs(y) > lim) { pen = false; prev = null; continue; }
+      if (prev !== null && Math.abs(y - prev) > lim) pen = false;
+      d += (pen ? 'L' : 'M') + f2(X(x)) + ' ' + f2(Y(y));
+      pen = true; prev = y;
+    }
+    return d;
+  }
+
+  function drawGraphAngle() {
+    const nw = isNarrow(), W = nw ? 440 : 640, H = 340;
+    const g = { W, H, l: 40, r: W - 12, t: 14, b: 304, ymax: 2.4 };
+    geom = g;
+    const X = d => g.l + (d + 360) / 720 * (g.r - g.l);
+    const Y = y => (g.t + g.b) / 2 - y * (g.b - g.t) / 2 / g.ymax;
+    let s = `<defs><clipPath id="clipG"><rect x="${g.l}" y="${g.t}" width="${g.r - g.l}" height="${g.b - g.t}"/></clipPath></defs>`;
+    for (let d = -360; d <= 360; d += 90) {
+      s += `<line class="gridl" x1="${f2(X(d))}" y1="${g.t}" x2="${f2(X(d))}" y2="${g.b}"/>`;
+      if (!nw || d % 180 === 0) s += `<text class="lbl" x="${f2(X(d))}" y="${g.b + 20}" text-anchor="middle">${state.unit === 'deg' ? d + '°' : piFrac(d)}</text>`;
+    }
+    for (const y of [-2, -1, 1, 2]) {
+      s += `<line class="gridl" x1="${g.l}" y1="${f2(Y(y))}" x2="${g.r}" y2="${f2(Y(y))}"/>`;
+      s += `<text class="lbl" x="${g.l - 8}" y="${f2(Y(y))}" text-anchor="end" dominant-baseline="middle">${num(y)}</text>`;
+    }
+    s += `<line class="axis" x1="${g.l}" y1="${f2(Y(0))}" x2="${g.r}" y2="${f2(Y(0))}"/>`;
+    s += `<line class="axis" x1="${f2(X(0))}" y1="${g.t}" x2="${f2(X(0))}" y2="${g.b}"/>`;
+    s += `<g clip-path="url(#clipG)">`;
+    if (state.show.tan) for (const d of [-270, -90, 90, 270]) s += `<line class="guide s-tan faintline" x1="${f2(X(d))}" y1="${g.t}" x2="${f2(X(d))}" y2="${g.b}"/>`;
+    for (const fn of ['cos', 'sin', 'tan']) {
+      if (!state.show[fn]) continue;
+      s += `<path class="curve s-${fn}" d="${samplePath(d => trig(fn, d), -360, 360, 1440, X, Y, 12)}"/>`;
+    }
+    const th = clamp(state.theta, -360, 360), mx = f2(X(th));
+    s += `<line class="guide s-ink" x1="${mx}" y1="${g.t}" x2="${mx}" y2="${g.b}"/>`;
+    for (const fn of ['cos', 'sin', 'tan']) {
+      const y = trig(fn, th);
+      if (!state.show[fn] || !isFinite(y) || Math.abs(y) > g.ymax) continue;
+      s += `<circle class="dot f-${fn}" cx="${mx}" cy="${f2(Y(y))}" r="5.5"/>`;
+    }
+    s += `</g>`;
+    s += `<text class="lbl ink" x="${f2(clamp(X(th), g.l + 24, g.r - 24))}" y="${g.t + 4}" text-anchor="middle" dominant-baseline="hanging">α = ${angStr(state.theta)}</text>`;
+    const svg = $('#graph');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.innerHTML = s;
+  }
+
+  function drawGraphInv() {
+    const nw = isNarrow(), W = nw ? 440 : 640, u = nw ? 52 : 62;
+    const t = 14, y0 = t + 3.75 * u, b = y0 + 2.05 * u, H = Math.round(b + 16);
+    const g = { W, H, u, x0: W / 2, y0, l: 10, r: W - 10, t, b };
+    geom = g;
+    const X = x => g.x0 + x * u, Y = y => g.y0 - y * u;
+    const xmin = (g.l - g.x0) / u, xmax = (g.r - g.x0) / u, ymax = (g.y0 - g.t) / u, ymin = (g.y0 - g.b) / u;
+    const m = INV[state.inv], base = m.base, v = state.v;
+    const S = solve(), pr = S.p * D2R;
+    const baseF = x => trig(base, x / D2R);
+    const invF = x => m.f(x);
+    const specials = [[Math.PI / 2, 90], [Math.PI, 180], [-Math.PI / 2, -90]];
+    const near = k => specials.some(([r]) => Math.abs(r - k) < 0.3);
+
+    let s = `<defs><clipPath id="clipG"><rect x="${g.l}" y="${g.t}" width="${g.r - g.l}" height="${g.b - g.t}"/></clipPath></defs>`;
+    for (let k = Math.ceil(xmin); k <= Math.floor(xmax); k++) {
+      if (k) s += `<line class="gridl" x1="${f2(X(k))}" y1="${g.t}" x2="${f2(X(k))}" y2="${g.b}"/>`;
+      if (k && !near(k) && Math.abs(k) <= 4) s += `<text class="lbl" x="${f2(X(k))}" y="${f2(g.y0 + 16)}" text-anchor="middle">${num(k)}</text>`;
+    }
+    for (let k = Math.ceil(ymin); k <= Math.floor(ymax); k++) {
+      if (k) s += `<line class="gridl" x1="${g.l}" y1="${f2(Y(k))}" x2="${g.r}" y2="${f2(Y(k))}"/>`;
+      if (k && !near(k)) s += `<text class="lbl" x="${f2(g.x0 - 7)}" y="${f2(Y(k))}" text-anchor="end" dominant-baseline="middle">${num(k)}</text>`;
+    }
+    s += `<line class="axis" x1="${g.l}" y1="${f2(g.y0)}" x2="${g.r}" y2="${f2(g.y0)}"/>`;
+    s += `<line class="axis" x1="${f2(g.x0)}" y1="${g.t}" x2="${f2(g.x0)}" y2="${g.b}"/>`;
+    for (const [r, d] of specials) {
+      const lab = state.unit === 'deg' ? d + '°' : piFrac(d);
+      if (r <= ymax && r >= ymin) {
+        s += `<line class="tick" x1="${f2(g.x0 - 4)}" y1="${f2(Y(r))}" x2="${f2(g.x0 + 4)}" y2="${f2(Y(r))}"/>`;
+        s += `<text class="lbl ink" x="${f2(g.x0 - 8)}" y="${f2(Y(r))}" text-anchor="end" dominant-baseline="middle">${lab}</text>`;
+      }
+      if (r <= xmax && r >= xmin) {
+        s += `<line class="tick" x1="${f2(X(r))}" y1="${f2(g.y0 - 4)}" x2="${f2(X(r))}" y2="${f2(g.y0 + 4)}"/>`;
+        s += `<text class="lbl ink" x="${f2(X(r))}" y="${f2(g.y0 + 16)}" text-anchor="middle">${lab}</text>`;
+      }
+    }
+    s += `<g clip-path="url(#clipG)">`;
+    const L = Math.max(xmax, ymax) + 1;
+    s += `<line class="diag" x1="${f2(X(-L))}" y1="${f2(Y(-L))}" x2="${f2(X(L))}" y2="${f2(Y(L))}"/>`;
+    if (state.inv === 'arctan') {
+      for (const r of [Math.PI / 2, -Math.PI / 2]) {
+        s += `<line class="guide s-tan faintline" x1="${g.l}" y1="${f2(Y(r))}" x2="${g.r}" y2="${f2(Y(r))}"/>`;
+        s += `<line class="guide s-tan faintline" x1="${f2(X(r))}" y1="${g.t}" x2="${f2(X(r))}" y2="${g.b}"/>`;
+      }
+    }
+    s += `<path class="curve full s-${base}" d="${samplePath(baseF, xmin, xmax, 1200, X, Y, 12)}"/>`;
+    s += `<path class="curve restr s-${base}" d="${samplePath(baseF, m.restr[0], m.restr[1], 600, X, Y, 12)}"/>`;
+    const [i0, i1] = state.inv === 'arctan' ? [xmin, xmax] : [-1, 1];
+    s += `<path class="curve inv s-${base}" d="${samplePath(invF, i0, i1, 600, X, Y, 12)}"/>`;
+    if (state.inv !== 'arctan') for (const e of [-1, 1]) s += `<circle class="dot f-${base}" cx="${f2(X(e))}" cy="${f2(Y(m.f(e)))}" r="4"/>`;
+
+    const qx = X(v), qy = Y(pr), rx = X(pr), ry = Y(v);
+    s += `<line class="guide" x1="${f2(qx)}" y1="${f2(g.y0)}" x2="${f2(qx)}" y2="${f2(qy)}"/>`;
+    s += `<line class="guide" x1="${f2(g.x0)}" y1="${f2(qy)}" x2="${f2(qx)}" y2="${f2(qy)}"/>`;
+    s += `<line class="guide s-ink" style="stroke-dasharray:1.5 4;stroke-linecap:round;stroke-width:2" x1="${f2(qx)}" y1="${f2(qy)}" x2="${f2(rx)}" y2="${f2(ry)}"/>`;
+    s += `<circle class="hollow s-${base}" cx="${f2(rx)}" cy="${f2(ry)}" r="5.5"/>`;
+    s += `<circle class="dot-ink" cx="${f2(qx)}" cy="${f2(qy)}" r="7"/>`;
+    s += `</g>`;
+    const above = pr >= v;
+    const qlab = `(${vStr(v)} | ${angStr(S.p)})`;
+    const qlx = clamp(qx + (above ? -12 : 12), g.l + 4, g.r - 4), qly = clamp(qy + (above ? -14 : 20), g.t + 10, g.b - 6);
+    s += `<text class="lbl ink" style="font-size:13px" x="${f2(qlx)}" y="${f2(qly)}" text-anchor="${above ? 'end' : 'start'}">${qlab}</text>`;
+    s += `<text class="lbl" x="${f2(X(Math.min(xmax, ymax) - 0.35))}" y="${f2(Y(Math.min(xmax, ymax) - 0.35) - 10)}" text-anchor="end">y = x</text>`;
+    const svg = $('#graph');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.innerHTML = s;
+  }
+
+  const drawGraph = () => state.mode === 'winkel' ? drawGraphAngle() : drawGraphInv();
+
+  /* ---------- Legenden ---------- */
+  const swLine = (cls, extra = '') => `<svg viewBox="0 0 24 12" aria-hidden="true"><line x1="2" y1="6" x2="22" y2="6" class="${cls}" ${extra}/></svg>`;
+  const swDot = cls => `<svg viewBox="0 0 24 12" aria-hidden="true"><circle cx="12" cy="6" r="5" class="${cls}"/></svg>`;
+
+  function drawLegends() {
+    const cl = $('#circleLegend'), gl = $('#graphLegend');
+    if (state.mode === 'winkel') {
+      const th = state.theta;
+      cl.innerHTML =
+        `<span class="k">${swLine('s-sin thick')}<span><span class="m">sin <i>α</i></span>: senkrechte Strecke (Gegenkathete)</span></span>` +
+        `<span class="k">${swLine('s-cos thick')}<span><span class="m">cos <i>α</i></span>: waagerechte Strecke (Ankathete)</span></span>` +
+        `<span class="k">${swLine('s-tan thick')}<span><span class="m">tan <i>α</i></span>: Abschnitt auf der Tangente <span class="m"><i>x</i> = 1</span></span></span>` +
+        `<span class="k coord">P(cos α | sin α) = P(${num(trig('cos', th))} | ${num(trig('sin', th))})</span>`;
+      gl.innerHTML = `<span>Im Graphen waagerecht ziehen, um <span class="m"><i>α</i></span> zu verschieben. Gestrichelte Senkrechte bei ±90° und ±270°: Polstellen des Tangens.</span>`;
+    } else {
+      const m = INV[state.inv], S = solve();
+      cl.innerHTML =
+        `<span class="k">${swLine(`range s-${m.base}`, 'style="stroke-width:8"')}<span>Wertebereich von <span class="m">${state.inv}</span>: ${rangeStr(state.inv)}</span></span>` +
+        `<span class="k">${swDot('dot-ink')}<span>Hauptwert ${angStr(S.p)}</span></span>` +
+        (S.sec !== null ? `<span class="k">${swDot('hollow s-ink')}<span>weitere Lösung ${angStr(S.sec)}</span></span>` : '');
+      gl.innerHTML =
+        `<span class="k">${swLine(`curve inv s-${m.base}`)}<span class="m"><i>y</i> = ${state.inv} <i>x</i></span></span>` +
+        `<span class="k">${swLine(`curve restr s-${m.base}`)}<span><span class="m"><i>y</i> = ${m.base} <i>x</i></span> auf ${m.restrTxt}</span></span>` +
+        `<span class="k">${swLine(`curve full s-${m.base}`)}<span><span class="m">${m.base} <i>x</i></span> auf ganz ℝ</span></span>` +
+        `<span class="k">${swLine('diag')}<span>Spiegelachse <span class="m"><i>y</i> = <i>x</i></span></span></span>` +
+        `<p class="note" style="flex-basis:100%">Beide Achsen sind im Bogenmaß und gleich skaliert. Nur so erscheint der Graph der Umkehrfunktion als Spiegelbild an der Geraden <span class="m"><i>y</i> = <i>x</i></span>. Waagerecht ziehen verschiebt <span class="m"><i>x</i></span>.</p>`;
+    }
+  }
+
+  /* ---------- Auswertung ---------- */
+  function quadrant(n) {
+    const Q = [['I', 0, 90], ['II', 90, 180], ['III', 180, 270], ['IV', 270, 360]];
+    const d = intDeg(n);
+    if (d !== null && d % 90 === 0) return { name: 'auf einer Achse', range: '' };
+    const q = Q.find(([, a, b]) => n > a && n < b);
+    return { name: q[0], range: `${angStr(q[1])} < α < ${angStr(q[2])}` };
+  }
+  function refAngle(n) { return n <= 90 ? n : n <= 180 ? 180 - n : n <= 270 ? n - 180 : 360 - n; }
+  function signBadge(v) {
+    if (!isFinite(v)) return '<span class="sign zero">–</span>';
+    if (Math.abs(v) < 1e-12) return '<span class="sign zero">0</span>';
+    return v > 0 ? '<span class="sign pos">+</span>' : '<span class="sign neg">−</span>';
+  }
+
+  function readoutAngle() {
+    const th = state.theta, n = cleanDeg(mod(th, 360));
+    const s = trig('sin', th), c = trig('cos', th);
+    const q = quadrant(n);
+    let h = `<div class="headline"><span class="m"><i>α</i> = ${angStr(th)}</span><span class="alt">${altStr(th)}</span></div>`;
+    h += `<dl class="facts">`;
+    h += `<div class="fact"><dt>Quadrant</dt><dd>${q.name}${q.range ? `<small>${q.range}</small>` : ''}</dd></div>`;
+    h += `<div class="fact"><dt>Bezugswinkel</dt><dd>${angStr(refAngle(n))}<small>Winkel zur x‑Achse</small></dd></div>`;
+    if (Math.abs(n - th) > 1e-9) h += `<div class="fact"><dt>Gleichwertig in [${angStr(0)}; ${angStr(360)})</dt><dd>${angStr(n)}<small>Periode ${angStr(360)}</small></dd></div>`;
+    h += `</dl>`;
+    const rows = [
+      ['sin', 'sin', ''], ['cos', 'cos', ''],
+      ['tan', 'tan', '= sin α / cos α'], ['cot', 'cot', '= cos α / sin α']
+    ];
+    h += `<div class="table-wrap"><table class="vals"><thead><tr><th>Funktion</th><th>exakt</th><th>Dezimal</th><th>Vorzeichen</th></tr></thead><tbody>`;
+    for (const [fn, sw, sub] of rows) {
+      const val = trig(fn, th), ex = exact(fn, th);
+      const defined = isFinite(val);
+      h += `<tr><th><span class="sw ${sw}"></span>${fn} <i>α</i>${sub ? ` <small>${sub}</small>` : ''}</th>`;
+      h += `<td class="ex">${ex === undefined ? '–' : ex === null ? '–' : ex}</td>`;
+      h += defined ? `<td class="num">${num(val)}</td>` : `<td class="undef">nicht definiert</td>`;
+      h += `<td>${signBadge(val)}</td></tr>`;
+    }
+    h += `</tbody></table></div>`;
+    h += `<p class="identity">sin²<i>α</i> + cos²<i>α</i> = <span class="num">${num(s * s)} + ${num(c * c)} = ${num(s * s + c * c)}</span></p>`;
+
+    h += `<h3>Rückweg über die Umkehrfunktion</h3><ul class="rows">`;
+    for (const inv of ['arcsin', 'arccos', 'arctan']) {
+      const m = INV[inv], val = trig(m.base, th);
+      if (!isFinite(val)) {
+        h += `<li><span class="m">tan <i>α</i></span> ist bei ${angStr(th)} nicht definiert, arctan entfällt.</li>`;
+        continue;
+      }
+      const res = cleanDeg(m.f(val) / D2R), same = Math.abs(res - th) < 1e-6;
+      h += `<li><span class="m">${inv}(${m.base} <i>α</i>) = ${inv}(${vStr(val, inv)}) = ${angStr(res)}</span>`;
+      h += same ? `<span class="badge ok">= α</span>` : `<span class="badge warn">≠ α</span>`;
+      h += `<button type="button" class="linkbtn" data-go-inv="${inv}" data-val="${val}">im Umkehrmodus öffnen</button>`;
+      if (!same) h += `<span class="expl">${angStr(th)} liegt nicht in ${rangeStr(inv)}. ${inv} liefert deshalb den Winkel mit demselben ${m.base === 'sin' ? 'Sinus' : m.base === 'cos' ? 'Kosinus' : 'Tangens'} aus diesem Bereich.</span>`;
+      h += `</li>`;
+    }
+    h += `</ul>`;
+    return h;
+  }
+
+  function readoutInv() {
+    const inv = state.inv, m = INV[inv], v = state.v, S = solve(), p = S.p;
+    const baseName = m.base === 'sin' ? 'Sinus' : m.base === 'cos' ? 'Kosinus' : 'Tangens';
+    let h = `<div class="headline"><span class="m">${inv}(${vStr(v)}) = ${angStr(p)}</span><span class="alt">${altStr(p)}</span><span class="tag">Hauptwert</span></div>`;
+    const check = trig(m.base, p);
+    h += `<dl class="facts">`;
+    h += `<div class="fact"><dt>Definitionsbereich</dt><dd><span class="m">${inv === 'arctan' ? 'ℝ' : '[−1; 1]'}</span><small>erlaubte Werte für x</small></dd></div>`;
+    h += `<div class="fact"><dt>Wertebereich</dt><dd><span class="m">${rangeStr(inv)}</span><small>mögliche Hauptwerte</small></dd></div>`;
+    h += `<div class="fact"><dt>Probe</dt><dd><span class="m">${m.base}(${angStr(p)})</span> = ${num(check)}<small>${Math.abs(check - v) < 1e-9 ? 'stimmt mit x überein ✓' : 'Abweichung durch Rundung'}</small></dd></div>`;
+    h += `</dl>`;
+
+    h += `<h3>Alle Winkel mit <span class="m">${m.base} <i>α</i> = ${vStr(v)}</span></h3>`;
+    h += `<p class="prose" style="margin-bottom:8px">Im Intervall [${angStr(0)}; ${angStr(360)}):</p><div class="chips">`;
+    for (const a of S.list) h += `<button type="button" class="chip mt" data-theta="${a}" title="Diesen Winkel am Kreis ansehen">${angStr(a)}</button>`;
+    h += `</div>`;
+    const per = angStr(S.period);
+    h += `<p class="formula">` + S.fam.map(a => `<i>α</i> = ${angStr(a)} + <i>k</i> · ${per}`).join('<span class="or">oder</span>') + `<span class="or">mit</span><i>k</i> ∈ ℤ</p>`;
+
+    h += `<h3>Warum nur dieser Bereich?</h3><p class="prose">${m.why}</p>`;
+
+    h += `<h3>Zusammenhänge</h3><ul class="rows">`;
+    if (inv !== 'arctan') {
+      const as = cleanDeg(Math.asin(v) / D2R), ac = cleanDeg(Math.acos(v) / D2R);
+      h += `<li><span class="m">arcsin <i>x</i> + arccos <i>x</i> = ${angStr(90)}</span><span class="expl">Hier: ${angStr(as)} + ${angStr(ac)} = ${angStr(cleanDeg(as + ac))}</span></li>`;
+    } else if (Math.abs(v) > 1e-12) {
+      const a1 = cleanDeg(Math.atan(v) / D2R), a2 = cleanDeg(Math.atan(1 / v) / D2R);
+      h += `<li><span class="m">arctan <i>x</i> + arctan(1/<i>x</i>) = ${angStr(v > 0 ? 90 : -90)}</span><span class="expl">für ${v > 0 ? 'x > 0' : 'x < 0'}. Hier: ${angStr(a1)} + ${angStr(a2)} = ${angStr(cleanDeg(a1 + a2))}</span></li>`;
+    } else {
+      h += `<li><span class="m">arctan <i>x</i> + arctan(1/<i>x</i>) = ±${angStr(90)}</span><span class="expl">Für x = 0 ist 1/x nicht definiert.</span></li>`;
+    }
+    const sym = inv === 'arccos' ? `arccos(−<i>x</i>) = ${angStr(180)} − arccos <i>x</i>` : `${inv}(−<i>x</i>) = −${inv} <i>x</i>`;
+    h += `<li><span class="m">${sym}</span><span class="expl">${inv === 'arccos' ? 'Der Graph ist punktsymmetrisch zum Punkt (0 | π/2).' : `${inv} ist eine ungerade Funktion, der Graph ist punktsymmetrisch zum Ursprung.`}</span></li>`;
+    h += `<li><span class="m">${m.base}(${inv} <i>x</i>) = <i>x</i></span><span class="expl">gilt für jedes erlaubte x. Umgekehrt gilt ${inv}(${m.base} α) = α nur, wenn α in ${rangeStr(inv)} liegt. Der ${baseName} vergisst, aus welcher Periode der Winkel kam.</span></li>`;
+    h += `</ul>`;
+    return h;
+  }
+
+  /* ---------- Steuerelemente ---------- */
+  const ANGLE_PRESETS = [-45, 0, 30, 45, 60, 90, 120, 135, 150, 180, 225, 270, 330];
+  let presetUnit = null, presetInv = null;
+
+  function updateAngleControls(force) {
+    const r = $('#angleRange');
+    r.step = state.snap ? 15 : 1;
+    r.value = clamp(state.theta, -360, 360);
+    $('#angleUnit').textContent = state.unit === 'deg' ? '°' : 'rad';
+    const t = $('#angleText');
+    if (force || document.activeElement !== t) {
+      t.value = state.unit === 'deg' ? num(state.theta, nf2) : radStr(state.theta);
+      t.classList.remove('invalid');
+      setHint('angle');
+    }
+    if (presetUnit !== state.unit) {
+      presetUnit = state.unit;
+      $('#anglePresets').innerHTML = ANGLE_PRESETS.map(d => `<button type="button" class="chip mt" data-deg="${d}">${angStr(d)}</button>`).join('');
+    }
+    for (const b of $('#anglePresets').children) b.setAttribute('aria-pressed', Math.abs(+b.dataset.deg - state.theta) < 1e-9);
+  }
+
+  function updateInvControls(force) {
+    for (const b of $('#invSeg').children) b.setAttribute('aria-pressed', b.dataset.inv === state.inv);
+    const m = INV[state.inv], r = $('#valRange');
+    r.min = m.slider[0]; r.max = m.slider[1]; r.step = m.slider[2];
+    r.value = clamp(state.v, m.slider[0], m.slider[1]);
+    const t = $('#valText');
+    if (force || document.activeElement !== t) { t.value = vStr(state.v); t.classList.remove('invalid'); setHint('val'); }
+    if (presetInv !== state.inv) {
+      presetInv = state.inv;
+      $('#valPresets').innerHTML = specFor(state.inv).map(([x, l]) => `<button type="button" class="chip mt" data-v="${x}">${l}</button>`).join('');
+    }
+    for (const b of $('#valPresets').children) b.setAttribute('aria-pressed', Math.abs(+b.dataset.v - state.v) < 1e-9);
+  }
+
+  function setHint(which, warn) {
+    if (which === 'angle') {
+      const el = $('#angleHint');
+      el.classList.toggle('warn', !!warn);
+      el.textContent = warn || (state.unit === 'deg'
+        ? 'Punkt am Kreis ziehen, Regler schieben oder eintippen, z. B. 135, −45 oder 22,5. Mit „π“ oder „pi“ wird Bogenmaß gelesen.'
+        : 'Punkt am Kreis ziehen, Regler schieben oder eintippen, z. B. 2π/3, −pi/4 oder 0,75.');
+    } else {
+      const el = $('#valHint');
+      el.classList.toggle('warn', !!warn);
+      el.textContent = warn || (state.inv === 'arctan'
+        ? 'Erlaubt ist jede reelle Zahl, der Regler reicht von −5 bis 5. Wurzeln gehen auch, z. B. √3 oder sqrt3/3.'
+        : 'Erlaubt ist −1 ≤ x ≤ 1. Wurzeln gehen auch, z. B. √3/2 oder sqrt2/2.');
+    }
+  }
+
+  function render(force) {
+    const angle = state.mode === 'winkel';
+    $('#modeAngle').setAttribute('aria-pressed', angle);
+    $('#modeInv').setAttribute('aria-pressed', !angle);
+    $('#unitDeg').setAttribute('aria-pressed', state.unit === 'deg');
+    $('#unitRad').setAttribute('aria-pressed', state.unit === 'rad');
+    $('#snap').checked = state.snap;
+    $('#ctlAngle').hidden = !angle;
+    $('#ctlInv').hidden = angle;
+    $('#fnChips').hidden = !angle;
+    $('#hGraph').innerHTML = angle ? 'Graphen über <span class="nt">α</span>' : 'Umkehrfunktion als Spiegelbild';
+    $('#hRead').innerHTML = angle ? 'Werte bei <span class="nt">α</span>' : 'Ergebnis';
+    if (angle) {
+      updateAngleControls(force);
+      for (const b of $('#fnChips').children) {
+        const fn = b.dataset.fn, val = trig(fn, state.theta);
+        b.setAttribute('aria-pressed', state.show[fn]);
+        b.querySelector('.v').textContent = isFinite(val) ? '= ' + num(val, nf2) : 'n. def.';
+      }
+    } else updateInvControls(force);
+    drawCircle();
+    drawGraph();
+    drawLegends();
+    $('#readout').innerHTML = angle ? readoutAngle() : readoutInv();
+  }
+
+  function setMode(mode) {
+    state.mode = mode;
+    try { history.replaceState(null, '', '#' + mode); } catch (e) {}
+    render(true);
+  }
+  function setInv(inv, v) {
+    state.inv = inv;
+    const m = INV[inv];
+    state.v = snapExact(v !== undefined ? v : clamp(state.v, m.dom[0], m.dom[1]), inv, 1e-7);
+    if (inv !== 'arctan') state.v = clamp(state.v, -1, 1);
+  }
+
+  /* Header */
+  $('#modeAngle').addEventListener('click', () => setMode('winkel'));
+  $('#modeInv').addEventListener('click', () => setMode('umkehr'));
+  $('#unitDeg').addEventListener('click', () => { state.unit = 'deg'; save(); render(true); });
+  $('#unitRad').addEventListener('click', () => { state.unit = 'rad'; save(); render(true); });
+  $('#snap').addEventListener('change', e => { state.snap = e.target.checked; save(); render(); });
+
+  /* Winkel */
+  $('#angleRange').addEventListener('input', e => {
+    let d = +e.target.value;
+    if (state.snap) d = Math.round(d / 15) * 15;
+    state.theta = d; render(true);
+  });
+  function applyAngleText() {
+    const t = $('#angleText'), d = parseAngle(t.value);
+    if (d === null) { t.classList.add('invalid'); setHint('angle', 'Diese Eingabe lässt sich nicht lesen. Beispiele: 135, −45, 22,5, 2π/3, pi/6.'); return; }
+    const c = clamp(d, -360, 360);
+    state.theta = c;
+    render(true);
+    if (c !== d) setHint('angle', `Der Bereich reicht von ${angStr(-360)} bis ${angStr(360)}. Eingestellt: ${angStr(c)}.`);
+  }
+  $('#angleText').addEventListener('change', applyAngleText);
+  $('#angleText').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); applyAngleText(); } });
+  $('#anglePresets').addEventListener('click', e => { const b = e.target.closest('[data-deg]'); if (b) { state.theta = +b.dataset.deg; render(true); } });
+  $('#fnChips').addEventListener('click', e => { const b = e.target.closest('[data-fn]'); if (b) { state.show[b.dataset.fn] = !state.show[b.dataset.fn]; render(); } });
+
+  /* Umkehr */
+  $('#invSeg').addEventListener('click', e => { const b = e.target.closest('[data-inv]'); if (b) { setInv(b.dataset.inv); render(true); } });
+  $('#valRange').addEventListener('input', e => {
+    let v = +e.target.value;
+    if (state.snap) v = snapExact(v, state.inv, INV[state.inv].tol);
+    state.v = v; render(true);
+  });
+  function applyValText() {
+    const t = $('#valText'), v = parseValue(t.value);
+    if (v === null) { t.classList.add('invalid'); setHint('val', 'Diese Eingabe lässt sich nicht lesen. Beispiele: 0,5, −√3/2, sqrt2/2, 1,2.'); return; }
+    if (state.inv !== 'arctan' && Math.abs(v) > 1) { t.classList.add('invalid'); setHint('val', `${state.inv} ist nur für −1 ≤ x ≤ 1 definiert, denn ${INV[state.inv].base === 'sin' ? 'der Sinus' : 'der Kosinus'} nimmt keine Werte außerhalb dieses Bereichs an.`); return; }
+    state.v = snapExact(v, state.inv, 1e-7);
+    render(true);
+  }
+  $('#valText').addEventListener('change', applyValText);
+  $('#valText').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); applyValText(); } });
+  $('#valPresets').addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (b) { state.v = +b.dataset.v; render(true); } });
+
+  /* Auswertung: Sprünge zwischen den Modi */
+  $('#readout').addEventListener('click', e => {
+    const go = e.target.closest('[data-go-inv]');
+    if (go) { setInv(go.dataset.goInv, +go.dataset.val); setMode('umkehr'); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    const th = e.target.closest('[data-theta]');
+    if (th) { state.theta = +th.dataset.theta; setMode('winkel'); }
+  });
+
+  /* Ziehen */
+  function svgPoint(svg, e) {
+    const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY;
+    const m = svg.getScreenCTM();
+    return m ? p.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+  function bindDrag(svg, handler) {
+    let active = false;
+    svg.addEventListener('pointerdown', e => {
+      active = true;
+      try { svg.setPointerCapture(e.pointerId); } catch (err) {}
+      handler(svgPoint(svg, e));
+    });
+    svg.addEventListener('pointermove', e => { if (active) handler(svgPoint(svg, e)); });
+    const end = () => { active = false; };
+    svg.addEventListener('pointerup', end);
+    svg.addEventListener('pointercancel', end);
+  }
+  bindDrag($('#circle'), q => {
+    const x = (q.x - C) / R, y = (C - q.y) / R;
+    if (Math.hypot(x, y) < 0.06) return;
+    let a = Math.atan2(y, x) / D2R;
+    if (a < 0) a += 360;
+    a = state.snap ? mod(Math.round(a / 15) * 15, 360) : mod(Math.round(a), 360);
+    if (state.mode === 'winkel') state.theta = a;
+    else {
+      let v = trig(INV[state.inv].base, a);
+      if (!isFinite(v)) return;
+      if (state.inv === 'arctan') v = clamp(v, -5, 5);
+      state.v = snapExact(v, state.inv, 1e-7);
+    }
+    render(true);
+  });
+  bindDrag($('#graph'), q => {
+    const g = geom;
+    if (!g) return;
+    if (state.mode === 'winkel') {
+      let d = (q.x - g.l) / (g.r - g.l) * 720 - 360;
+      d = clamp(d, -360, 360);
+      state.theta = state.snap ? Math.round(d / 15) * 15 : Math.round(d);
+    } else {
+      const lim = state.inv === 'arctan' ? Math.min(5, (g.r - g.x0) / g.u) : 1;
+      let v = clamp((q.x - g.x0) / g.u, -lim, lim);
+      v = state.snap ? snapExact(v, state.inv, INV[state.inv].tol * 2) : Math.round(v * 100) / 100;
+      state.v = v;
+    }
+    render(true);
+  });
+
+  let lastNarrow = null;
+  window.addEventListener('resize', () => { const n = isNarrow(); if (n !== lastNarrow) { lastNarrow = n; drawGraph(); } });
+
+  render(true);
+  lastNarrow = isNarrow();
+  if (lastNarrow) drawGraph();
+})();
+</script>
+</body>
+</html>
