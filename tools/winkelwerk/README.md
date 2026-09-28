@@ -1,6 +1,6 @@
 # Winkelwerk
 
-Interaktives Werkzeug für die trigonometrischen Funktionen und ihre Umkehrfunktionen. Es besteht aus einer einzigen Datei (`index.html`) ohne Abhängigkeiten. Zum Starten die Datei im Browser öffnen.
+Interaktives Werkzeug für die trigonometrischen Funktionen, ihre Umkehrfunktionen und die wichtigsten Sätze. Es besteht aus einer einzigen Datei (`index.html`) ohne Abhängigkeiten. Zum Starten die Datei im Browser öffnen.
 
 ## Modus „Winkel → Wert“
 
@@ -16,6 +16,15 @@ Interaktives Werkzeug für die trigonometrischen Funktionen und ihre Umkehrfunkt
 - Graph der Umkehrfunktion als Spiegelbild der eingeschränkten Ausgangsfunktion an y = x, beide Achsen gleich skaliert.
 - Alle Lösungen in [0°; 360°) und die allgemeine Lösung (z. B. α = 30° + k · 360° oder α = 150° + k · 360°).
 - Definitions- und Wertebereich, Probe und Zusammenhänge wie arcsin x + arccos x = 90°.
+
+## Modus „Sätze“
+
+Jeder Satz wird in einer Figur gezeigt und mit den eingestellten Werten live nachgerechnet. Dazu gibt es jeweils einen Hinweis, wofür man ihn braucht.
+
+- **Grundbeziehungen:** trigonometrischer Pythagoras, tan α = sin α / cos α, 1 + tan²α = 1/cos²α, negativer Winkel, Supplement- und Komplementwinkel, Periodizität, Drehung um 90°.
+- **Additionstheoreme:** sin(α ± β), cos(α ± β), tan(α + β) und die Summenformeln sin α + sin β und cos α + cos β. α und β lassen sich am Kreis ziehen.
+- **Doppel- und Halbwinkel:** sin 2α, cos 2α (alle drei Formen), tan 2α, Potenzreduktion für sin² und cos², halber Winkel mit Vorzeichen nach Quadrant, tan(α/2) über den Umfangswinkelsatz.
+- **Sinus- und Kosinussatz:** Dreieck mit ziehbaren Ecken und Vorlagen. Enthält Winkelsumme, Sinussatz mit Umkreis, Kosinussatz (mit Pythagoras als Sonderfall), Flächenformel, Projektionssatz und die Definitionen im rechtwinkligen Dreieck.
 
 ## Eingabe
 

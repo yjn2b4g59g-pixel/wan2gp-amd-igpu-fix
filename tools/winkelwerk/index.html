@@ -12,6 +12,7 @@
   --bg:#EDF0F4; --surface:#FFFFFF; --surface-2:#F4F6F9; --ink:#172030; --muted:#5A6577; --faint:#8C96A6;
   --line:#D5DBE4; --grid:#E8ECF1; --axis:#7F899A;
   --sin:#C33149; --cos:#2360CC; --tan:#A86A00; --ok:#1C7A4B; --warn:#A5520B;
+  --beta:#7A4CC2; --res:#0E8577;
   --f-math:"STIX Two Text","Cambria Math","Times New Roman",serif;
   --f-ui:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --f-num:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
@@ -22,6 +23,7 @@
     --bg:#0F131A; --surface:#171C25; --surface-2:#1E2430; --ink:#E6EAF1; --muted:#9BA5B6; --faint:#6E7889;
     --line:#2B3342; --grid:#212835; --axis:#6A7485;
     --sin:#F06C7E; --cos:#6FA0F7; --tan:#E9B03F; --ok:#4CC38A; --warn:#F0A64A;
+    --beta:#B592F0; --res:#3CC7B6;
   }
 }
 :root[data-theme="dark"]{
@@ -29,6 +31,7 @@
   --bg:#0F131A; --surface:#171C25; --surface-2:#1E2430; --ink:#E6EAF1; --muted:#9BA5B6; --faint:#6E7889;
   --line:#2B3342; --grid:#212835; --axis:#6A7485;
   --sin:#F06C7E; --cos:#6FA0F7; --tan:#E9B03F; --ok:#4CC38A; --warn:#F0A64A;
+    --beta:#B592F0; --res:#3CC7B6;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -55,7 +58,7 @@ button{font:inherit;color:inherit}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
 .panel-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-bottom:10px}
 .eyebrow{font:600 11.5px/1.2 var(--f-ui);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0}
-.eyebrow .nt{text-transform:none;letter-spacing:0;font:italic 500 14px/1 var(--f-math)}
+.eyebrow .nt,.sub .nt{text-transform:none;letter-spacing:0;font:italic 500 14px/1 var(--f-math)}
 @media (max-width:520px){.vals tbody th small{display:none}}
 
 svg.plot{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none}
@@ -92,6 +95,33 @@ svg.plot{display:block;width:100%;height:auto;user-select:none;-webkit-user-sele
 .mlab{font:italic 15px var(--f-math);fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round}
 .mlab .up{font-style:normal}
 .mlab.c-sin{fill:var(--sin)} .mlab.c-cos{fill:var(--cos)} .mlab.c-tan{fill:var(--tan)}
+
+.f-ink{fill:var(--ink)} .s-ink{stroke:var(--ink)}
+.s-beta{stroke:var(--beta)} .f-beta{fill:var(--beta)} .s-res{stroke:var(--res)} .f-res{fill:var(--res)}
+.mlab.c-beta{fill:var(--beta)} .mlab.c-res{fill:var(--res)}
+.fillres{fill:var(--res);fill-opacity:.13;stroke:none}
+.fillink{fill:var(--ink);fill-opacity:.06;stroke:none}
+.mirror{fill:none;stroke:var(--res);stroke-width:2;stroke-dasharray:7 5}
+.tri{fill:var(--ink);fill-opacity:.05;stroke:var(--ink);stroke-width:2;stroke-linejoin:round}
+.tri-hl{stroke:var(--res);stroke-width:4.5;stroke-linecap:round}
+.gdot{fill:var(--axis);fill-opacity:.35}
+
+/* Sätze */
+.seg.tabs{display:flex;flex-wrap:wrap;width:fit-content;max-width:100%;margin-bottom:16px}
+#thmFig{touch-action:none;cursor:grab;max-width:470px;margin:0 auto}
+.thms{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.thm{min-width:0;border:1px solid var(--line);border-radius:10px;padding:11px 14px;cursor:pointer;background:var(--surface)}
+.thm:hover{border-color:var(--faint)}
+.thm[aria-pressed="true"]{border-color:var(--res);background:color-mix(in srgb,var(--res) 6%,var(--surface));cursor:default}
+.th-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.thm h4{margin:0;font:600 14.5px/1.3 var(--f-ui)}
+.thm .formula{font:18px/1.55 var(--f-math);margin:4px 0 0}
+.thm .calc{font:13.5px/1.75 var(--f-num);margin:8px 0 0;overflow-x:auto;padding:8px 10px;background:var(--surface-2);border-radius:7px}
+.thm .calc div{white-space:nowrap}
+.thm .calc i{font-family:var(--f-math);font-size:15px}
+.thm .use{font-size:13.5px;color:var(--muted);margin:8px 0 0;max-width:68ch}
+.thm:not([aria-pressed="true"]) .calc,.thm:not([aria-pressed="true"]) .use{display:none}
+#triFacts{grid-template-columns:repeat(auto-fit,minmax(104px,1fr));margin:0}
 
 /* chips */
 .chips{display:flex;flex-wrap:wrap;gap:6px}
@@ -177,12 +207,13 @@ h3{font:600 14.5px/1.3 var(--f-ui);margin:20px 0 8px}
   <header class="top">
     <div class="brand">
       <h1>Winkelwerk</h1>
-      <p>Sinus, Kosinus, Tangens und ihre Umkehrfunktionen am Einheitskreis. Punkt ziehen, Regler schieben oder Werte eintippen.</p>
+      <p>Sinus, Kosinus, Tangens, ihre Umkehrfunktionen und die wichtigsten Sätze, am Einheitskreis und im Dreieck. Punkte ziehen, Regler schieben oder Werte eintippen.</p>
     </div>
     <div class="toolbar">
       <div class="seg" role="group" aria-label="Modus">
         <button type="button" id="modeAngle" data-mode="winkel">Winkel → Wert</button>
         <button type="button" id="modeInv" data-mode="umkehr">Wert → Winkel</button>
+        <button type="button" id="modeThm" data-mode="saetze">Sätze</button>
       </div>
       <div class="seg" role="group" aria-label="Winkeleinheit">
         <button type="button" id="unitDeg" data-unit="deg">Grad</button>
@@ -192,7 +223,7 @@ h3{font:600 14.5px/1.3 var(--f-ui);margin:20px 0 8px}
     </div>
   </header>
 
-  <div class="cols">
+  <div class="cols" id="mainView">
     <div class="col">
       <section class="panel" aria-labelledby="hCircle">
         <div class="panel-head"><h2 class="eyebrow" id="hCircle">Einheitskreis · <span class="nt">r</span> = 1</h2></div>
@@ -253,6 +284,35 @@ h3{font:600 14.5px/1.3 var(--f-ui);margin:20px 0 8px}
       </section>
     </div>
   </div>
+
+  <div id="thmView" hidden>
+    <div class="seg tabs" role="group" aria-label="Themen" id="thmTabs">
+      <button type="button" data-tg="grund">Grundbeziehungen</button>
+      <button type="button" data-tg="add">Additionstheoreme</button>
+      <button type="button" data-tg="dbl">Doppel- und Halbwinkel</button>
+      <button type="button" data-tg="tri">Sinus- und Kosinussatz</button>
+    </div>
+    <div class="cols">
+      <div class="col">
+        <section class="panel" aria-labelledby="hThmFig">
+          <div class="panel-head"><h2 class="eyebrow" id="hThmFig">Figur</h2></div>
+          <svg id="thmFig" class="plot" viewBox="0 0 400 400" role="img" aria-label="Figur zum gewählten Satz"></svg>
+          <div class="legend" id="thmLegend"></div>
+        </section>
+        <section class="panel" aria-labelledby="hThmCtl">
+          <div class="panel-head"><h2 class="eyebrow" id="hThmCtl">Eingabe</h2></div>
+          <div class="ctl" id="thmCtl"></div>
+        </section>
+      </div>
+      <div class="col">
+        <section class="panel" aria-labelledby="hThmList">
+          <div class="panel-head"><h2 class="eyebrow" id="hThmList">Sätze</h2></div>
+          <p class="prose" id="thmIntro" style="margin-bottom:12px"></p>
+          <div class="thms" id="thmList"></div>
+        </section>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -273,6 +333,7 @@ h3{font:600 14.5px/1.3 var(--f-ui);margin:20px 0 8px}
     if (typeof s.snap === 'boolean') state.snap = s.snap;
   } catch (e) {}
   if (location.hash === '#umkehr') state.mode = 'umkehr';
+  else if (location.hash === '#saetze') state.mode = 'saetze';
   function save() { try { localStorage.setItem('winkelwerk', JSON.stringify({ unit: state.unit, snap: state.snap })); } catch (e) {} }
 
   /* ---------- Zahlen & Formatierung ---------- */
@@ -426,10 +487,11 @@ h3{font:600 14.5px/1.3 var(--f-ui);margin:20px 0 8px}
     `<text class="mlab ${cls}" x="${f2(x)}" y="${f2(y)}" text-anchor="${anchor}" dominant-baseline="middle">${html}</text>`;
   const fnTxt = (fn, arg = '<tspan>α</tspan>') => `<tspan class="up">${fn}</tspan> ${arg}`;
 
-  function circleBase() {
+  function circleBase(pfx = 'C', labels = true) {
     let s = `<defs>
-      <marker id="arrowC" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1 L9 5 L0 9 z" class="marker-fill"/></marker>
-      <clipPath id="clipC"><rect x="0" y="0" width="400" height="400"/></clipPath></defs>`;
+      <marker id="arrow${pfx}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1 L9 5 L0 9 z" class="marker-fill"/></marker>
+      ${['ink', 'beta', 'res'].map(c => `<marker id="arrow${pfx}-${c}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1 L9 5 L0 9 z" style="fill:var(--${c})"/></marker>`).join('')}
+      <clipPath id="clip${pfx}"><rect x="0" y="0" width="400" height="400"/></clipPath></defs>`;
     s += `<line class="axis" x1="14" y1="${C}" x2="386" y2="${C}"/><line class="axis" x1="${C}" y1="14" x2="${C}" y2="386"/>`;
     s += `<text class="lbl" x="384" y="${C - 8}" text-anchor="end">x</text><text class="lbl" x="${C + 8}" y="22">y</text>`;
     s += `<circle class="unit" cx="${C}" cy="${C}" r="${R}"/>`;
@@ -437,12 +499,12 @@ h3{font:600 14.5px/1.3 var(--f-ui);margin:20px 0 8px}
       const major = d % 30 === 0 || d % 45 === 0;
       const [x1, y1] = polar(R - (major ? 6 : 3), d), [x2, y2] = polar(R + (major ? 6 : 3), d);
       s += `<line class="tick" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
-      if (major) {
+      if (major && labels) {
         const [lx, ly] = polar(R + 21, d);
         s += `<text class="lbl" x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle">${state.unit === 'deg' ? d + '°' : piFrac(d)}</text>`;
       }
     }
-    s += `<text class="lbl" x="${C - 8}" y="${C + 14}" text-anchor="end">0</text>`;
+    if (labels) s += `<text class="lbl" x="${C - 8}" y="${C + 14}" text-anchor="end">0</text>`;
     return s;
   }
 
@@ -818,12 +880,16 @@ h3{font:600 14.5px/1.3 var(--f-ui);margin:20px 0 8px}
   }
 
   function render(force) {
-    const angle = state.mode === 'winkel';
+    const angle = state.mode === 'winkel', thm = state.mode === 'saetze';
     $('#modeAngle').setAttribute('aria-pressed', angle);
-    $('#modeInv').setAttribute('aria-pressed', !angle);
+    $('#modeInv').setAttribute('aria-pressed', state.mode === 'umkehr');
+    $('#modeThm').setAttribute('aria-pressed', thm);
     $('#unitDeg').setAttribute('aria-pressed', state.unit === 'deg');
     $('#unitRad').setAttribute('aria-pressed', state.unit === 'rad');
     $('#snap').checked = state.snap;
+    $('#mainView').hidden = thm;
+    $('#thmView').hidden = !thm;
+    if (thm) { renderThm(); return; }
     $('#ctlAngle').hidden = !angle;
     $('#ctlInv').hidden = angle;
     $('#fnChips').hidden = !angle;
@@ -855,9 +921,506 @@ h3{font:600 14.5px/1.3 var(--f-ui);margin:20px 0 8px}
     if (inv !== 'arctan') state.v = clamp(state.v, -1, 1);
   }
 
+  /* ---------- Sätze ---------- */
+  const TRI_PRESETS = {
+    spitz: { name: 'spitzwinklig', A: [-3, -2], B: [3.5, -1.5], C: [0.5, 2.8] },
+    recht: { name: 'rechtwinklig (γ = 90°)', A: [-2.5, -2], B: [2.5, -2], C: [0.7, 0.4] },
+    stumpf: { name: 'stumpfwinklig', A: [-3, -2], B: [3.5, -2], C: [-1, 0.2] },
+    gleich: { name: 'gleichseitig', A: [-2.5, -2], B: [2.5, -2], C: [0, -2 + 2.5 * Math.sqrt(3)] }
+  };
+  state.beta = 45;
+  state.tg = 'grund';
+  state.sel = { grund: 'pyth', add: 'sinsum', dbl: 'sin2', tri: 'sinus' };
+  const loadTri = k => { const p = TRI_PRESETS[k]; state.tri = { A: [...p.A], B: [...p.B], C: [...p.C] }; };
+  loadTri('spitz');
+
+  const nf3 = new Intl.NumberFormat('de-DE', { maximumFractionDigits: 3 });
+  const Nn = x => isFinite(x) ? num(x) : 'n. def.';
+  const Pn = x => isFinite(x) && x < -5e-11 ? `(${num(x)})` : Nn(x);
+  const L = x => num(x, nf3);
+  const close = (x, y, tol = 1e-9) => isFinite(x) && isFinite(y) && Math.abs(x - y) <= tol * Math.max(1, Math.abs(x), Math.abs(y));
+  const chain = (lt, lv, rt, rv) => isFinite(lv) ? `${lt} = ${Nn(lv)} ${close(lv, rv) ? '=' : '≠'} ${rt}` : `${lt} ist nicht definiert`;
+  const ia = '<i>α</i>', ib = '<i>β</i>', ig = '<i>γ</i>';
+  const sn = d => trig('sin', d), cn = d => trig('cos', d), tn = d => trig('tan', d);
+  const Aa = () => angStr(state.theta), Bb = () => angStr(state.beta);
+  const ang = d => angStr(cleanDeg(d));
+  const up = t => `<tspan class="up">${t}</tspan>`;
+
+  /* Figurbausteine am Einheitskreis */
+  const cp = d => pt(cn(d), sn(d));
+  const radT = (d, col) => { const [x, y] = cp(d); return `<line class="radius${col === 'ink' ? '' : ' s-' + col}" x1="${C}" y1="${C}" x2="${x}" y2="${y}"/>`; };
+  const dotT = (d, col) => { const [x, y] = cp(d); return `<circle class="dot f-${col}" cx="${x}" cy="${y}" r="6.5"/>`; };
+  const labT = (d, html, col) => { const [x, y] = polar(R + 21, d); return mlab(x, y, html, 'middle', col === 'ink' ? '' : 'c-' + col); };
+  const sinT = d => { const [x, y] = cp(d); return `<line class="s-sin thick" x1="${x}" y1="${C}" x2="${x}" y2="${y}"/>`; };
+  const cosT = d => { const [x] = cp(d); return `<line class="s-cos thick" x1="${C}" y1="${C}" x2="${x}" y2="${C}"/>`; };
+  const arcT = (from, to, r, col) => Math.abs(to - from) < 0.5 ? '' : `<path class="arcpath s-${col}" d="${arcPts(r, from, to, 6)}" marker-end="url(#arrowT-${col})"/>`;
+  const triT = d => { const [x, y] = cp(d); return `<polygon class="fillres" points="${C},${C} ${x},${C} ${x},${y}"/>`; };
+  function tangentT(d, big) {
+    const t = tn(d);
+    let s = `<line class="guide" x1="${C + R}" y1="0" x2="${C + R}" y2="400"/>`;
+    if (!isFinite(t)) return s;
+    const [tx, ty] = pt(1, t);
+    if (big) s += `<polygon class="fillink" points="${C},${C} ${C + R},${C} ${tx},${ty}"/>`;
+    s += `<line class="guide s-tan" x1="${C}" y1="${C}" x2="${tx}" y2="${ty}"/><line class="s-tan thick" x1="${C + R}" y1="${C}" x2="${tx}" y2="${ty}"/><circle class="dot f-tan" cx="${tx}" cy="${ty}" r="4.5"/>`;
+    if (Math.abs(t) * R > 20) s += mlab(C + R + 8, clamp((C + ty) / 2, 16, 384), `${up('tan')} α`, 'start', 'c-tan');
+    return s;
+  }
+
+  function addFig(r, lab, which, chord) {
+    const a = state.theta, b = state.beta;
+    let s = which === 'tan' ? tangentT(r) : which === 'sin' ? sinT(r) : cosT(r);
+    if (chord) {
+      const [ax, ay] = cp(a), [bx, by] = cp(b), [rx, ry] = cp(r), [ox, oy] = cp(0);
+      s += `<line class="s-res" style="stroke-width:1.75;stroke-dasharray:4 3" x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}"/><line class="s-res" style="stroke-width:1.75;stroke-dasharray:4 3" x1="${rx}" y1="${ry}" x2="${ox}" y2="${oy}"/><circle class="dot f-ink" cx="${ox}" cy="${oy}" r="3.5"/>`;
+    }
+    return s + radT(b, 'beta') + radT(a, 'ink') + radT(r, 'res') + arcT(0, a, 28, 'ink') + arcT(a, r, 44, 'beta') +
+      dotT(b, 'beta') + dotT(a, 'ink') + dotT(r, 'res') + labT(b, 'β', 'beta') + labT(a, 'α', 'ink') + labT(r, lab, 'res');
+  }
+  function sumFig(which) {
+    const a = state.theta, b = state.beta, h = (a + b) / 2;
+    const [ax, ay] = cp(a), [bx, by] = cp(b), [mx, my] = pt((cn(a) + cn(b)) / 2, (sn(a) + sn(b)) / 2);
+    const [hx, hy] = polar(R * 1.35, h), [kx, ky] = polar(R * 1.35, h + 180);
+    let s = `<line class="guide s-res" x1="${kx}" y1="${ky}" x2="${hx}" y2="${hy}"/>`;
+    s += `<line class="s-ink" style="stroke-width:1.5" x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}"/>`;
+    s += which === 'sin' ? `<line class="s-sin thick" x1="${mx}" y1="${C}" x2="${mx}" y2="${my}"/>` : `<line class="s-cos thick" x1="${C}" y1="${my}" x2="${mx}" y2="${my}"/>`;
+    return s + radT(a, 'ink') + radT(b, 'beta') + arcT(0, a, 28, 'ink') + arcT(0, b, 40, 'beta') + dotT(a, 'ink') + dotT(b, 'beta') +
+      `<circle class="dot f-res" cx="${mx}" cy="${my}" r="5.5"/>` + mlab(mx + 10, my - 12, up('M'), 'start', 'c-res') +
+      labT(a, 'α', 'ink') + labT(b, 'β', 'beta') + labT(h, `(α + β)${up('/2')}`, 'res');
+  }
+  function dblFig(which) {
+    const a = state.theta, q = 2 * a;
+    const s = which === 'tan' ? tangentT(q) : which === 'sin' ? sinT(q) : cosT(q);
+    return s + radT(a, 'ink') + radT(q, 'res') + arcT(0, a, 28, 'ink') + arcT(a, q, 42, 'res') + dotT(a, 'ink') + dotT(q, 'res') +
+      labT(a, 'α', 'ink') + labT(q, `${up('2')}α`, 'res');
+  }
+  function potFig(which) {
+    const a = state.theta, q = 2 * a, [fx] = pt(cn(q), 0), [ex] = pt(which === 'sin' ? 1 : -1, 0), [qx, qy] = cp(q);
+    let s = `<line class="guide" x1="${qx}" y1="${qy}" x2="${qx}" y2="${C + 14}"/>`;
+    s += `<line class="s-res thick" x1="${fx}" y1="${C + 14}" x2="${ex}" y2="${C + 14}"/>`;
+    s += mlab((fx + ex) / 2, C + 32, `${up(which === 'sin' ? '1 − cos 2' : '1 + cos 2')}α`, 'middle', 'c-res');
+    s += which === 'sin' ? sinT(a) : cosT(a);
+    return s + radT(q, 'res') + radT(a, 'ink') + arcT(0, a, 28, 'ink') + dotT(q, 'res') + dotT(a, 'ink') + labT(a, 'α', 'ink') + labT(q, `${up('2')}α`, 'res');
+  }
+  function halfFig(tanMode) {
+    const a = state.theta, h = a / 2, c = cn(a), s_ = sn(a);
+    const [px, py] = cp(a), [wx, wy] = pt(-1, 0), [fx] = pt(c, 0);
+    let s = '';
+    const ok = Math.abs(1 + c) > 1e-9;
+    if (tanMode && ok) {
+      s += `<polygon class="fillres" points="${wx},${wy} ${fx},${C} ${px},${py}"/>`;
+      s += `<line class="s-cos thick" x1="${wx}" y1="${C}" x2="${fx}" y2="${C}"/>` + sinT(a);
+      s += mlab((wx + fx) / 2, C + (s_ >= 0 ? 18 : -13), `${up('1 + cos')} α`, 'middle', 'c-cos');
+      if (Math.abs(s_) * R > 24) s += mlab(px + (c >= 0 ? 9 : -9), (C + py) / 2, `${up('sin')} α`, c >= 0 ? 'start' : 'end', 'c-sin');
+    }
+    if (!tanMode) s += sinT(h) + cosT(h);
+    if (ok) {
+      const w = Math.atan2(s_, 1 + c) / D2R;
+      s += `<line class="s-res" style="stroke-width:2" x1="${wx}" y1="${wy}" x2="${px}" y2="${py}"/>`;
+      let d = '';
+      for (let i = 0; i <= 24; i++) { const t = w * i / 24 * D2R; d += (i ? 'L' : 'M') + f2(wx + 34 * Math.cos(t)) + ' ' + f2(wy - 34 * Math.sin(t)); }
+      s += `<path class="arcpath s-res" d="${d}"/>`;
+      s += mlab(wx + 52 * Math.cos(w / 2 * D2R), wy - 52 * Math.sin(w / 2 * D2R), `α${up('/2')}`, 'middle', 'c-res');
+    }
+    return s + radT(h, 'beta') + radT(a, 'ink') + arcT(0, a, 26, 'ink') + arcT(0, h, 40, 'beta') +
+      `<circle class="dot f-res" cx="${wx}" cy="${wy}" r="5"/>` + dotT(a, 'ink') + dotT(h, 'beta') + labT(a, 'α', 'ink') + labT(h, `α${up('/2')}`, 'beta');
+  }
+
+  const FIG = {
+    pyth() {
+      const d = state.theta, [px, py] = cp(d), mx = (C + px) / 2, my = (C + py) / 2;
+      return triT(d) + cosT(d) + sinT(d) + radT(d, 'ink') + arcT(0, d, 28, 'ink') +
+        mlab(mx - sn(d) * 13, my - cn(d) * 13, up('1')) + dotT(d, 'ink') + labT(d, 'α', 'ink');
+    },
+    tanq() { const d = state.theta; return tangentT(d, true) + triT(d) + cosT(d) + sinT(d) + radT(d, 'ink') + arcT(0, d, 28, 'ink') + dotT(d, 'ink') + labT(d, 'α', 'ink'); },
+    tan2() {
+      const d = state.theta, t = tn(d);
+      let s = FIG.tanq();
+      if (isFinite(t)) {
+        const [tx, ty] = pt(1, t);
+        s += mlab(C + R / 2, C + (t >= 0 ? 18 : -13), up('1'));
+        if (Math.abs(t) < 1.45) s += mlab((C + tx) / 2 - sn(d) * 16 * Math.sign(cn(d) || 1), (C + ty) / 2 - Math.abs(cn(d)) * 16, `${up('1 / |cos')} α${up('|')}`, 'middle', 'c-tan');
+      }
+      return s;
+    },
+    neg() {
+      const d = state.theta;
+      return `<line class="mirror" x1="14" y1="${C}" x2="386" y2="${C}"/>` + sinT(d) + sinT(-d) + cosT(d) + radT(d, 'ink') + radT(-d, 'res') +
+        arcT(0, d, 28, 'ink') + arcT(0, -d, 40, 'res') + dotT(d, 'ink') + dotT(-d, 'res') + labT(d, 'α', 'ink') + labT(-d, '−α', 'res');
+    },
+    supp() {
+      const d = state.theta, q = 180 - d;
+      return `<line class="mirror" x1="${C}" y1="14" x2="${C}" y2="386"/>` + sinT(d) + sinT(q) + cosT(d) + cosT(q) + radT(d, 'ink') + radT(q, 'res') +
+        arcT(0, d, 28, 'ink') + arcT(0, q, 40, 'res') + dotT(d, 'ink') + dotT(q, 'res') + labT(d, 'α', 'ink') + labT(q, `${up(angStr(180) + ' −')} α`, 'res');
+    },
+    comp() {
+      const d = state.theta, q = 90 - d, [x1, y1] = pt(-1.45, -1.45), [x2, y2] = pt(1.45, 1.45);
+      return `<line class="mirror" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>` + triT(d) + triT(q) + sinT(d) + cosT(d) + sinT(q) + cosT(q) +
+        radT(d, 'ink') + radT(q, 'res') + arcT(0, d, 28, 'ink') + arcT(0, q, 40, 'res') + dotT(d, 'ink') + dotT(q, 'res') +
+        labT(d, 'α', 'ink') + labT(q, `${up(angStr(90) + ' −')} α`, 'res');
+    },
+    per() {
+      const d = state.theta, q = d + 180, [ax, ay] = polar(R * 1.5, d), [bx, by] = polar(R * 1.5, q);
+      return tangentT(d) + `<line class="guide s-res" x1="${bx}" y1="${by}" x2="${ax}" y2="${ay}"/>` + radT(d, 'ink') + radT(q, 'res') +
+        `<path class="arcpath s-res" d="${arcPts(40, 0, d + 360, 12)}" marker-end="url(#arrowT-res)"/>` + arcT(0, d, 26, 'ink') +
+        dotT(d, 'ink') + dotT(q, 'res') + labT(d, 'α', 'ink') + labT(q, `α ${up('+ ' + angStr(180))}`, 'res');
+    },
+    shift() {
+      const d = state.theta, q = d + 90, p1 = polar(14, d), p3 = polar(14, q), p2 = polar(14 * Math.SQRT2, d + 45);
+      return triT(d) + triT(q) + cosT(d) + sinT(q) + radT(d, 'ink') + radT(q, 'res') +
+        `<polyline class="arcpath" points="${p1} ${p2} ${p3}"/>` + dotT(d, 'ink') + dotT(q, 'res') + labT(d, 'α', 'ink') + labT(q, `α ${up('+ ' + angStr(90))}`, 'res');
+    },
+    sinsum: () => addFig(state.theta + state.beta, 'α + β', 'sin'),
+    sindiff: () => addFig(state.theta - state.beta, 'α − β', 'sin'),
+    cossum: () => addFig(state.theta + state.beta, 'α + β', 'cos'),
+    cosdiff: () => addFig(state.theta - state.beta, 'α − β', 'cos', true),
+    tansum: () => addFig(state.theta + state.beta, 'α + β', 'tan'),
+    sumsin: () => sumFig('sin'),
+    sumcos: () => sumFig('cos'),
+    sin2: () => dblFig('sin'),
+    cos2: () => dblFig('cos'),
+    tandbl: () => dblFig('tan'),
+    potsin: () => potFig('sin'),
+    potcos: () => potFig('cos'),
+    half: () => halfFig(false),
+    halftan: () => halfFig(true)
+  };
+
+  /* Dreieck */
+  const TS = 36, TX = 200, TY = 205;
+  const tp = p => [f2(TX + p[0] * TS), f2(TY - p[1] * TS)];
+  function triCalc() {
+    const { A, B, C: K } = state.tri;
+    const dist = (P, Q) => Math.hypot(P[0] - Q[0], P[1] - Q[1]);
+    const angAt = (P, Q, S) => {
+      const v = [Q[0] - P[0], Q[1] - P[1]], w = [S[0] - P[0], S[1] - P[1]];
+      const n = Math.hypot(...v) * Math.hypot(...w);
+      return n ? cleanDeg(Math.acos(clamp((v[0] * w[0] + v[1] * w[1]) / n, -1, 1)) / D2R) : 0;
+    };
+    const a = dist(B, K), b = dist(K, A), c = dist(A, B);
+    const area = Math.abs((B[0] - A[0]) * (K[1] - A[1]) - (K[0] - A[0]) * (B[1] - A[1])) / 2;
+    const D = 2 * (A[0] * (B[1] - K[1]) + B[0] * (K[1] - A[1]) + K[0] * (A[1] - B[1]));
+    const q = P => P[0] * P[0] + P[1] * P[1];
+    const M = D ? [(q(A) * (B[1] - K[1]) + q(B) * (K[1] - A[1]) + q(K) * (A[1] - B[1])) / D, (q(A) * (K[0] - B[0]) + q(B) * (A[0] - K[0]) + q(K) * (B[0] - A[0])) / D] : [0, 0];
+    return { a, b, c, al: angAt(A, B, K), be: angAt(B, K, A), ga: angAt(K, A, B), area, r: area ? a * b * c / (4 * area) : Infinity, M, degen: area < 0.05 };
+  }
+  const isRight = T => Math.abs(T.ga - 90) < 0.05;
+  const degenCalc = () => ({ lines: ['Die drei Ecken liegen (fast) auf einer Geraden. Zieh eine Ecke weg, damit ein echtes Dreieck entsteht.'], ok: null, badge: 'kein Dreieck' });
+  const foot = (P, Q, S) => { const v = [S[0] - Q[0], S[1] - Q[1]], t = ((P[0] - Q[0]) * v[0] + (P[1] - Q[1]) * v[1]) / (v[0] * v[0] + v[1] * v[1]); return { F: [Q[0] + t * v[0], Q[1] + t * v[1]], t }; };
+
+  function angleMark(V, U, W, g, hl) {
+    const a1 = Math.atan2(U[1] - V[1], U[0] - V[0]) / D2R, a2 = Math.atan2(W[1] - V[1], W[0] - V[0]) / D2R;
+    const dl = mod(a2 - a1 + 180, 360) - 180, angle = Math.abs(dl);
+    const [vx, vy] = tp(V), at = (r, a) => [f2(vx + r * Math.cos(a * D2R)), f2(vy - r * Math.sin(a * D2R))];
+    const cls = hl ? 'arcpath s-res' : 'arcpath';
+    let s;
+    if (Math.abs(angle - 90) < 0.05) {
+      const p1 = at(13, a1), p3 = at(13, a1 + dl), p2 = [f2(p1[0] + p3[0] - vx), f2(p1[1] + p3[1] - vy)];
+      s = `<polyline class="${cls}" points="${p1} ${p2} ${p3}"/>`;
+    } else {
+      let d = '';
+      for (let i = 0; i <= 24; i++) { const [x, y] = at(22, a1 + dl * i / 24); d += (i ? 'L' : 'M') + x + ' ' + y; }
+      s = `<path class="${cls}" d="${d}"/>`;
+    }
+    const [lx, ly] = at(angle < 35 ? 46 : 36, a1 + dl / 2);
+    return s + mlab(lx, ly, g, 'middle', hl ? 'c-res' : '');
+  }
+
+  function triFig() {
+    const T = triCalc(), { A, B, C: K } = state.tri, sel = state.sel.tri;
+    const pA = tp(A), pB = tp(B), pK = tp(K), G = [(A[0] + B[0] + K[0]) / 3, (A[1] + B[1] + K[1]) / 3], pG = tp(G);
+    const out = (P, dist) => { const [x, y] = tp(P); let dx = x - pG[0], dy = y - pG[1]; const l = Math.hypot(dx, dy) || 1; return [x + dx / l * dist, y + dy / l * dist]; };
+    let s = `<defs><clipPath id="clipT"><rect x="0" y="0" width="400" height="400"/></clipPath></defs>`;
+    for (let x = -5; x <= 5; x++) for (let y = -5; y <= 5; y++) { const [gx, gy] = tp([x, y]); s += `<circle class="gdot" cx="${gx}" cy="${gy}" r="1.3"/>`; }
+    s += '<g clip-path="url(#clipT)">';
+    if (sel === 'sinus' && !T.degen) {
+      const [mx, my] = tp(T.M);
+      s += `<circle class="mirror" cx="${mx}" cy="${my}" r="${f2(T.r * TS)}"/>`;
+      s += `<line class="s-res" style="stroke-width:1.75" x1="${mx}" y1="${my}" x2="${pA[0]}" y2="${pA[1]}"/><circle class="dot f-res" cx="${mx}" cy="${my}" r="4.5"/>`;
+      s += mlab(mx + 9, my + 14, up('M'), 'start', 'c-res') + mlab((mx + pA[0]) / 2, (my + pA[1]) / 2 - 10, 'r', 'middle', 'c-res');
+    }
+    s += `<polygon class="tri" points="${pA} ${pB} ${pK}"/>`;
+    if (!T.degen && (sel === 'kosinus' || (sel === 'recht' && isRight(T)))) s += `<line class="tri-hl" x1="${pA[0]}" y1="${pA[1]}" x2="${pB[0]}" y2="${pB[1]}"/>`;
+    if (!T.degen && sel === 'flaeche') {
+      const { F, t } = foot(A, B, K), pF = tp(F);
+      if (t < 0 || t > 1) { const E = t < 0 ? pB : pK; s += `<line class="guide" x1="${E[0]}" y1="${E[1]}" x2="${pF[0]}" y2="${pF[1]}"/>`; }
+      s += `<line class="s-res thick" x1="${pA[0]}" y1="${pA[1]}" x2="${pF[0]}" y2="${pF[1]}"/>`;
+      s += angleMark(F, A, K[0] === F[0] && K[1] === F[1] ? B : K, '', true);
+      s += mlab((pA[0] + pF[0]) / 2 + 8, (pA[1] + pF[1]) / 2, `h ${up('= b · sin')} γ`, 'start', 'c-res');
+    }
+    if (!T.degen && sel === 'projektion') {
+      const { F, t } = foot(K, A, B), pF = tp(F);
+      s += `<line class="guide" x1="${pK[0]}" y1="${pK[1]}" x2="${pF[0]}" y2="${pF[1]}"/>`;
+      if (t < 0 || t > 1) { const E = t < 0 ? pA : pB; s += `<line class="guide" x1="${E[0]}" y1="${E[1]}" x2="${pF[0]}" y2="${pF[1]}"/>`; }
+      s += `<line class="s-beta thick" x1="${pA[0]}" y1="${pA[1] + 7}" x2="${pF[0]}" y2="${pF[1] + 7}"/><line class="s-res thick" x1="${pF[0]}" y1="${pF[1] + 13}" x2="${pB[0]}" y2="${pB[1] + 13}"/>`;
+      s += mlab((pA[0] + pF[0]) / 2, (pA[1] + pF[1]) / 2 + 26, `b ${up('· cos')} α`, 'middle', 'c-beta');
+      s += mlab((pF[0] + pB[0]) / 2, (pF[1] + pB[1]) / 2 + 40, `a ${up('· cos')} β`, 'middle', 'c-res');
+    }
+    s += '</g>';
+    const hlG = sel === 'kosinus' || sel === 'flaeche' || (sel === 'recht' && isRight(T));
+    const hlA = sel === 'recht' && isRight(T);
+    s += angleMark(A, B, K, 'α', hlA || sel === 'projektion') + angleMark(B, K, A, 'β', sel === 'projektion') + angleMark(K, A, B, 'γ', hlG);
+    const side = (P, Q, n, v, hl) => { const [x, y] = out([(P[0] + Q[0]) / 2, (P[1] + Q[1]) / 2], 24); return mlab(x, y, `${n} ${up('= ' + L(v))}`, 'middle', hl ? 'c-res' : ''); };
+    s += side(B, K, 'a', T.a, false) + side(K, A, 'b', T.b, false) + side(A, B, 'c', T.c, sel === 'kosinus' || (sel === 'recht' && isRight(T)));
+    for (const [n, P] of [['A', A], ['B', B], ['C', K]]) {
+      const [x, y] = tp(P), [lx, ly] = out(P, 20);
+      s += `<circle class="hit" cx="${x}" cy="${y}" r="20"/><circle class="dot-ink" cx="${x}" cy="${y}" r="6.5"/>` + mlab(lx, ly, up(n));
+    }
+    if (T.degen) s += `<text class="lbl ink" x="200" y="22" text-anchor="middle">Die Ecken liegen fast auf einer Geraden.</text>`;
+    return s;
+  }
+
+  /* Inhalte */
+  const swDotC = c => `<svg viewBox="0 0 24 12" aria-hidden="true"><circle cx="12" cy="6" r="5" class="dot f-${c}"/></svg>`;
+  const legendKey = (sw, txt) => `<span class="k">${sw}<span>${txt}</span></span>`;
+  const TG = {
+    grund: {
+      title: 'Grundbeziehungen', fig: 'Einheitskreis · <span class="nt">r</span> = 1',
+      intro: 'Diese Beziehungen folgen direkt aus dem Einheitskreis: aus dem Satz des Pythagoras, dem Strahlensatz und aus Spiegelungen. Tippe einen Satz an, um ihn in der Figur zu sehen und mit dem aktuellen Winkel nachzurechnen.',
+      legend: () => legendKey(swDotC('ink'), 'Winkel <span class="m"><i>α</i></span>') + legendKey(swDotC('res'), 'gespiegelter oder verschobener Winkel') + legendKey(swLine('mirror'), 'Symmetrieachse') + legendKey(swLine('s-sin thick'), 'Sinus') + legendKey(swLine('s-cos thick'), 'Kosinus'),
+      items: [
+        { id: 'pyth', name: 'Trigonometrischer Pythagoras', f: () => `sin²${ia} + cos²${ia} = 1`,
+          calc() { const d = state.theta, s = sn(d), c = cn(d); return { lines: [`sin²(${Aa()}) + cos²(${Aa()}) = ${Pn(s)}² + ${Pn(c)}²`, `= ${Nn(s * s)} + ${Nn(c * c)} = ${Nn(s * s + c * c)}`], ok: close(s * s + c * c, 1) }; },
+          use: 'Im Einheitskreis bilden cos α, sin α und der Radius 1 ein rechtwinkliges Dreieck. Damit lässt sich aus dem Sinus der Kosinus berechnen: cos α = ±√(1 − sin²α). Das Vorzeichen hängt vom Quadranten ab.' },
+        { id: 'tanq', name: 'Tangens als Quotient', f: () => `tan ${ia} = sin ${ia} / cos ${ia}`,
+          calc() { const d = state.theta, s = sn(d), c = cn(d), t = tn(d); if (!isFinite(t)) return { lines: [`cos(${Aa()}) = 0, der Tangens ist hier nicht definiert.`], ok: null }; return { lines: [`tan(${Aa()}) = ${Nn(t)}`, `sin(${Aa()}) / cos(${Aa()}) = ${Nn(s)} / ${Pn(c)} = ${Nn(s / c)}`], ok: close(t, s / c) }; },
+          use: 'Strahlensatz: Das kleine Dreieck mit den Katheten cos α und sin α ist ähnlich zum Dreieck an der Tangente mit den Katheten 1 und tan α.' },
+        { id: 'tan2', name: 'Tangens und Kosinus', f: () => `1 + tan²${ia} = 1 / cos²${ia}`,
+          calc() { const d = state.theta, c = cn(d), t = tn(d); if (!isFinite(t)) return { lines: [`cos(${Aa()}) = 0, beide Seiten sind nicht definiert.`], ok: null }; return { lines: [`1 + tan²(${Aa()}) = 1 + ${Nn(t * t)} = ${Nn(1 + t * t)}`, `1 / cos²(${Aa()}) = 1 / ${Nn(c * c)} = ${Nn(1 / (c * c))}`], ok: close(1 + t * t, 1 / (c * c)) }; },
+          use: 'Das ist der Satz des Pythagoras im großen Dreieck an der Tangente: Katheten 1 und tan α, Hypotenuse 1/|cos α|. Man erhält die Formel auch, wenn man sin²α + cos²α = 1 durch cos²α teilt.' },
+        { id: 'neg', name: 'Negativer Winkel', f: () => `sin(−${ia}) = −sin ${ia}<br>cos(−${ia}) = cos ${ia}`,
+          calc() { const d = state.theta; return { lines: [chain(`sin(${ang(-d)})`, sn(-d), `−sin(${Aa()})`, -sn(d)), chain(`cos(${ang(-d)})`, cn(-d), `cos(${Aa()})`, cn(d))], ok: close(sn(-d), -sn(d)) && close(cn(-d), cn(d)) }; },
+          use: 'Spiegelung an der x-Achse. Der Sinus ist eine ungerade Funktion, der Kosinus eine gerade. Negative Winkel lassen sich so auf positive zurückführen.' },
+        { id: 'supp', name: 'Supplementwinkel', f: () => `sin(${angStr(180)} − ${ia}) = sin ${ia}<br>cos(${angStr(180)} − ${ia}) = −cos ${ia}`,
+          calc() { const d = state.theta, q = 180 - d; return { lines: [chain(`sin(${ang(q)})`, sn(q), `sin(${Aa()})`, sn(d)), chain(`cos(${ang(q)})`, cn(q), `−cos(${Aa()})`, -cn(d))], ok: close(sn(q), sn(d)) && close(cn(q), -cn(d)) }; },
+          use: () => `Spiegelung an der y-Achse. Deshalb hat sin α = 1/2 zwei Lösungen zwischen 0° und 360°, nämlich ${angStr(30)} und ${angStr(150)}.` },
+        { id: 'comp', name: 'Komplementwinkel', f: () => `sin(${angStr(90)} − ${ia}) = cos ${ia}<br>cos(${angStr(90)} − ${ia}) = sin ${ia}`,
+          calc() { const d = state.theta, q = 90 - d; return { lines: [chain(`sin(${ang(q)})`, sn(q), `cos(${Aa()})`, cn(d)), chain(`cos(${ang(q)})`, cn(q), `sin(${Aa()})`, sn(d))], ok: close(sn(q), cn(d)) && close(cn(q), sn(d)) }; },
+          use: 'Spiegelung an der Geraden y = x. Im rechtwinkligen Dreieck ergänzen sich die beiden spitzen Winkel zu 90°, der Sinus des einen ist der Kosinus des anderen. Daher der Name: Ko-Sinus ist der Sinus des Komplementwinkels.' },
+        { id: 'per', name: 'Periodizität', f: () => `sin(${ia} + ${angStr(360)}) = sin ${ia}<br>cos(${ia} + ${angStr(360)}) = cos ${ia}<br>tan(${ia} + ${angStr(180)}) = tan ${ia}`,
+          calc() { const d = state.theta, t = tn(d); return { lines: [chain(`sin(${ang(d + 360)})`, sn(d + 360), `sin(${Aa()})`, sn(d)), chain(`cos(${ang(d + 360)})`, cn(d + 360), `cos(${Aa()})`, cn(d)), chain(`tan(${ang(d + 180)})`, tn(d + 180), `tan(${Aa()})`, t)], ok: isFinite(t) ? close(tn(d + 180), t) && close(sn(d + 360), sn(d)) : null, badge: isFinite(t) ? '' : 'tan n. def.' }; },
+          use: 'Nach einer vollen Umdrehung ist man wieder am selben Punkt. Beim Tangens reicht eine halbe, weil der gegenüberliegende Punkt dieselbe Gerade durch den Ursprung liefert und damit denselben Schnittpunkt mit der Tangente.' },
+        { id: 'shift', name: 'Drehung um 90°', f: () => `sin(${ia} + ${angStr(90)}) = cos ${ia}<br>cos(${ia} + ${angStr(90)}) = −sin ${ia}`,
+          calc() { const d = state.theta, q = d + 90; return { lines: [chain(`sin(${ang(q)})`, sn(q), `cos(${Aa()})`, cn(d)), chain(`cos(${ang(q)})`, cn(q), `−sin(${Aa()})`, -sn(d))], ok: close(sn(q), cn(d)) && close(cn(q), -sn(d)) }; },
+          use: 'Dreht man den Punkt um 90° weiter, wird aus der waagerechten Strecke eine senkrechte. Deshalb ist der Kosinusgraph der um 90° nach links verschobene Sinusgraph.' }
+      ]
+    },
+    add: {
+      title: 'Additionstheoreme', fig: 'Einheitskreis · <span class="nt">α</span> und <span class="nt">β</span>',
+      intro: 'Sie sagen, wie man Sinus und Kosinus einer Summe oder Differenz aus den Werten der einzelnen Winkel berechnet. Beide Winkel lassen sich am Kreis ziehen: Der Punkt, der näher am Zeiger liegt, bewegt sich.',
+      legend: () => legendKey(swDotC('ink'), 'Winkel <span class="m"><i>α</i></span>') + legendKey(swDotC('beta'), 'Winkel <span class="m"><i>β</i></span>') + legendKey(swDotC('res'), 'Ergebnis <span class="m"><i>α</i> ± <i>β</i></span>'),
+      items: [
+        { id: 'sinsum', name: 'Sinus einer Summe', f: () => `sin(${ia} + ${ib}) = sin ${ia} · cos ${ib} + cos ${ia} · sin ${ib}`,
+          calc() { const a = state.theta, b = state.beta, l = sn(a + b), r = sn(a) * cn(b) + cn(a) * sn(b); return { lines: [`sin(${Aa()} + ${Bb()}) = sin(${ang(a + b)}) = ${Nn(l)}`, `${Nn(sn(a))} · ${Pn(cn(b))} + ${Pn(cn(a))} · ${Pn(sn(b))} = ${Nn(r)}`], ok: close(l, r) }; },
+          use: 'Grundlage fast aller weiteren Formeln. Beispiel: sin 75° = sin(45° + 30°) = (√6 + √2)/4.' },
+        { id: 'sindiff', name: 'Sinus einer Differenz', f: () => `sin(${ia} − ${ib}) = sin ${ia} · cos ${ib} − cos ${ia} · sin ${ib}`,
+          calc() { const a = state.theta, b = state.beta, l = sn(a - b), r = sn(a) * cn(b) - cn(a) * sn(b); return { lines: [`sin(${Aa()} − ${Bb()}) = sin(${ang(a - b)}) = ${Nn(l)}`, `${Nn(sn(a))} · ${Pn(cn(b))} − ${Pn(cn(a))} · ${Pn(sn(b))} = ${Nn(r)}`], ok: close(l, r) }; },
+          use: 'Folgt aus der Summenformel mit −β statt β. Beispiel: sin 15° = sin(45° − 30°) = (√6 − √2)/4.' },
+        { id: 'cossum', name: 'Kosinus einer Summe', f: () => `cos(${ia} + ${ib}) = cos ${ia} · cos ${ib} − sin ${ia} · sin ${ib}`,
+          calc() { const a = state.theta, b = state.beta, l = cn(a + b), r = cn(a) * cn(b) - sn(a) * sn(b); return { lines: [`cos(${Aa()} + ${Bb()}) = cos(${ang(a + b)}) = ${Nn(l)}`, `${Nn(cn(a))} · ${Pn(cn(b))} − ${Pn(sn(a))} · ${Pn(sn(b))} = ${Nn(r)}`], ok: close(l, r) }; },
+          use: 'Achtung auf das Minuszeichen: Beim Kosinus der Summe wird subtrahiert. Mit β = α folgt daraus die Formel für cos 2α.' },
+        { id: 'cosdiff', name: 'Kosinus einer Differenz', f: () => `cos(${ia} − ${ib}) = cos ${ia} · cos ${ib} + sin ${ia} · sin ${ib}`,
+          calc() { const a = state.theta, b = state.beta, l = cn(a - b), r = cn(a) * cn(b) + sn(a) * sn(b); return { lines: [`cos(${Aa()} − ${Bb()}) = cos(${ang(a - b)}) = ${Nn(l)}`, `${Nn(cn(a))} · ${Pn(cn(b))} + ${Pn(sn(a))} · ${Pn(sn(b))} = ${Nn(r)}`], ok: close(l, r) }; },
+          use: 'Beweisidee in der Figur: Die Sehne zwischen den Punkten zu α und β ist genauso lang wie die Sehne zwischen α − β und 0°. Rechnet man beide Längen mit Koordinaten aus und setzt sie gleich, steht die Formel da.' },
+        { id: 'tansum', name: 'Tangens einer Summe', f: () => `tan(${ia} + ${ib}) = (tan ${ia} + tan ${ib}) / (1 − tan ${ia} · tan ${ib})`,
+          calc() {
+            const a = state.theta, b = state.beta, ta = tn(a), tb = tn(b);
+            if (!isFinite(ta) || !isFinite(tb)) return { lines: ['tan α oder tan β ist nicht definiert, die Formel lässt sich nicht anwenden.'], ok: null };
+            const den = 1 - ta * tb;
+            if (Math.abs(den) < 1e-12) return { lines: [`1 − ${Nn(ta)} · ${Pn(tb)} = 0`, `α + β = ${ang(a + b)}, dort hat der Tangens eine Polstelle.`], ok: null };
+            const l = tn(a + b), r = (ta + tb) / den;
+            return { lines: [`tan(${ang(a + b)}) = ${Nn(l)}`, `(${Nn(ta)} + ${Pn(tb)}) / (1 − ${Nn(ta)} · ${Pn(tb)}) = ${Nn(r)}`], ok: close(l, r) };
+          },
+          use: 'Entsteht, wenn man sin(α + β) durch cos(α + β) teilt und Zähler und Nenner durch cos α · cos β kürzt. Nicht definiert, wenn tan α · tan β = 1 ist.' },
+        { id: 'sumsin', name: 'Summe zweier Sinuswerte', f: () => `sin ${ia} + sin ${ib} = 2 · sin((${ia} + ${ib})/2) · cos((${ia} − ${ib})/2)`,
+          calc() { const a = state.theta, b = state.beta, h = (a + b) / 2, k = (a - b) / 2, l = sn(a) + sn(b), r = 2 * sn(h) * cn(k); return { lines: [`${Nn(sn(a))} + ${Pn(sn(b))} = ${Nn(l)}`, `2 · sin(${ang(h)}) · cos(${ang(k)}) = 2 · ${Pn(sn(h))} · ${Pn(cn(k))} = ${Nn(r)}`], ok: close(l, r) }; },
+          use: 'Summe in Produkt. Der Mittelpunkt M der Sehne liegt auf dem Strahl zum Winkel (α + β)/2, im Abstand |cos((α − β)/2)| vom Ursprung. Seine y-Koordinate ist (sin α + sin β)/2.' },
+        { id: 'sumcos', name: 'Summe zweier Kosinuswerte', f: () => `cos ${ia} + cos ${ib} = 2 · cos((${ia} + ${ib})/2) · cos((${ia} − ${ib})/2)`,
+          calc() { const a = state.theta, b = state.beta, h = (a + b) / 2, k = (a - b) / 2, l = cn(a) + cn(b), r = 2 * cn(h) * cn(k); return { lines: [`${Nn(cn(a))} + ${Pn(cn(b))} = ${Nn(l)}`, `2 · cos(${ang(h)}) · cos(${ang(k)}) = 2 · ${Pn(cn(h))} · ${Pn(cn(k))} = ${Nn(r)}`], ok: close(l, r) }; },
+          use: 'Gleiche Figur wie beim Sinus, diesmal ist die x-Koordinate von M gleich (cos α + cos β)/2. Solche Formeln braucht man bei der Überlagerung von Schwingungen.' }
+      ]
+    },
+    dbl: {
+      title: 'Doppel- und Halbwinkel', fig: 'Einheitskreis · <span class="nt">α</span>, 2<span class="nt">α</span>, <span class="nt">α</span>/2',
+      intro: 'Setzt man in den Additionstheoremen β = α, entstehen die Doppelwinkelformeln. Umgestellt ergeben sie die Formeln für den halben Winkel und zur Potenzreduktion.',
+      legend: () => legendKey(swDotC('ink'), 'Winkel <span class="m"><i>α</i></span>') + legendKey(swDotC('res'), 'doppelter Winkel <span class="m">2<i>α</i></span>') + legendKey(swDotC('beta'), 'halber Winkel <span class="m"><i>α</i>/2</span>'),
+      items: [
+        { id: 'sin2', name: 'Sinus des doppelten Winkels', f: () => `sin(2${ia}) = 2 · sin ${ia} · cos ${ia}`,
+          calc() { const a = state.theta, l = sn(2 * a), r = 2 * sn(a) * cn(a); return { lines: [`sin(${ang(2 * a)}) = ${Nn(l)}`, `2 · ${Pn(sn(a))} · ${Pn(cn(a))} = ${Nn(r)}`], ok: close(l, r) }; },
+          use: 'Sonderfall von sin(α + β) mit β = α.' },
+        { id: 'cos2', name: 'Kosinus des doppelten Winkels', f: () => `cos(2${ia}) = cos²${ia} − sin²${ia}<br>= 1 − 2 sin²${ia} = 2 cos²${ia} − 1`,
+          calc() { const a = state.theta, s = sn(a), c = cn(a), l = cn(2 * a), r1 = c * c - s * s, r2 = 1 - 2 * s * s, r3 = 2 * c * c - 1; return { lines: [`cos(${ang(2 * a)}) = ${Nn(l)}`, `${Nn(c * c)} − ${Nn(s * s)} = ${Nn(r1)}`, `1 − 2 · ${Nn(s * s)} = ${Nn(r2)}`, `2 · ${Nn(c * c)} − 1 = ${Nn(r3)}`], ok: close(l, r1) && close(l, r2) && close(l, r3) }; },
+          use: 'Die drei Formen gehen mit sin²α + cos²α = 1 ineinander über. Man nimmt die, in der nur die bekannte Größe vorkommt.' },
+        { id: 'tandbl', name: 'Tangens des doppelten Winkels', f: () => `tan(2${ia}) = 2 tan ${ia} / (1 − tan²${ia})`,
+          calc() { const a = state.theta, t = tn(a); if (!isFinite(t) || Math.abs(1 - t * t) < 1e-12) return { lines: [`Für ${Aa()} ist die rechte Seite nicht definiert (tan α = ±1 oder cos α = 0).`], ok: null }; const l = tn(2 * a), r = 2 * t / (1 - t * t); return { lines: [`tan(${ang(2 * a)}) = ${Nn(l)}`, `2 · ${Pn(t)} / (1 − ${Nn(t * t)}) = ${Nn(r)}`], ok: close(l, r) }; },
+          use: 'Sonderfall von tan(α + β). Nicht definiert, wenn tan α = ±1 oder cos α = 0 ist.' },
+        { id: 'potsin', name: 'Potenzreduktion für sin²', f: () => `sin²${ia} = (1 − cos(2${ia})) / 2`,
+          calc() { const a = state.theta, l = sn(a) ** 2, r = (1 - cn(2 * a)) / 2; return { lines: [`sin²(${Aa()}) = ${Nn(l)}`, `(1 − ${Pn(cn(2 * a))}) / 2 = ${Nn(r)}`], ok: close(l, r) }; },
+          use: 'Umgestellte Form von cos 2α = 1 − 2 sin²α. Ersetzt ein Quadrat durch einen Kosinus, das braucht man zum Beispiel beim Integrieren von sin².' },
+        { id: 'potcos', name: 'Potenzreduktion für cos²', f: () => `cos²${ia} = (1 + cos(2${ia})) / 2`,
+          calc() { const a = state.theta, l = cn(a) ** 2, r = (1 + cn(2 * a)) / 2; return { lines: [`cos²(${Aa()}) = ${Nn(l)}`, `(1 + ${Pn(cn(2 * a))}) / 2 = ${Nn(r)}`], ok: close(l, r) }; },
+          use: 'Umgestellte Form von cos 2α = 2 cos²α − 1. Der Mittelwert von cos² über eine Periode ist deshalb 1/2.' },
+        { id: 'half', name: 'Halber Winkel', f: () => `sin(${ia}/2) = ±√((1 − cos ${ia}) / 2)<br>cos(${ia}/2) = ±√((1 + cos ${ia}) / 2)`,
+          calc() {
+            const a = state.theta, h = cleanDeg(a / 2), c = cn(a), ss = sn(h), cc = cn(h);
+            const rs = Math.sqrt(Math.max(0, (1 - c) / 2)), rc = Math.sqrt(Math.max(0, (1 + c) / 2));
+            const gs = ss < -1e-12 ? -1 : 1, gc = cc < -1e-12 ? -1 : 1, q = quadrant(cleanDeg(mod(h, 360))).name;
+            return { lines: [`${ia}/2 = ${angStr(h)} liegt ${q === 'auf einer Achse' ? 'auf einer Achse' : 'in Quadrant ' + q}`, `sin(${angStr(h)}) = ${Nn(ss)},  ${gs < 0 ? '−' : '+'}√((1 − ${Pn(c)}) / 2) = ${Nn(gs * rs)}`, `cos(${angStr(h)}) = ${Nn(cc)},  ${gc < 0 ? '−' : '+'}√((1 + ${Pn(c)}) / 2) = ${Nn(gc * rc)}`], ok: close(ss, gs * rs) && close(cc, gc * rc) };
+          },
+          use: 'Folgt aus der Potenzreduktion mit α/2 statt α. Die Wurzel liefert nur den Betrag, das Vorzeichen bestimmt der Quadrant von α/2.' },
+        { id: 'halftan', name: 'Tangens des halben Winkels', f: () => `tan(${ia}/2) = sin ${ia} / (1 + cos ${ia})`,
+          calc() { const a = state.theta, h = a / 2, c = cn(a); if (Math.abs(1 + c) < 1e-12) return { lines: [`cos(${Aa()}) = −1, der Nenner wird 0.`], ok: null }; const l = tn(h), r = sn(a) / (1 + c); return { lines: [`tan(${ang(h)}) = ${Nn(l)}`, `${Nn(sn(a))} / (1 + ${Pn(c)}) = ${Nn(r)}`], ok: close(l, r) }; },
+          use: 'Umfangswinkelsatz: Der Winkel am Punkt (−1 | 0) ist halb so groß wie der Mittelpunktswinkel α. Im markierten Dreieck liegt ihm die Seite sin α gegenüber, anliegend ist 1 + cos α.' }
+      ]
+    },
+    tri: {
+      title: 'Sinus- und Kosinussatz', fig: 'Dreieck <span class="nt">ABC</span>',
+      intro: 'Diese Sätze verbinden Seiten und Winkel in beliebigen Dreiecken, nicht nur in rechtwinkligen. Ecken ziehen oder eine Vorlage wählen. Seite a liegt der Ecke A gegenüber, der Winkel α sitzt in A.',
+      legend: () => legendKey(swLine('tri-hl', 'style="stroke-width:4"'), 'hervorgehobene Größe') + legendKey(swLine('mirror'), 'Umkreis beim Sinussatz'),
+      items: [
+        { id: 'winkel', name: 'Winkelsumme', f: () => `${ia} + ${ib} + ${ig} = ${angStr(180)}`,
+          calc() { const T = triCalc(); if (T.degen) return degenCalc(); return { lines: [`${angStr(T.al)} + ${angStr(T.be)} + ${angStr(T.ga)} = ${ang(T.al + T.be + T.ga)}`], ok: close(T.al + T.be + T.ga, 180, 1e-7) }; },
+          use: 'Gilt in jedem ebenen Dreieck. Zwei Winkel genügen, der dritte folgt.' },
+        { id: 'sinus', name: 'Sinussatz', f: () => `a / sin ${ia} = b / sin ${ib} = c / sin ${ig} = 2<i>r</i>`,
+          calc() {
+            const T = triCalc(); if (T.degen) return degenCalc();
+            const q = [T.a / sn(T.al), T.b / sn(T.be), T.c / sn(T.ga)];
+            return { lines: [`a / sin ${ia} = ${L(T.a)} / ${Nn(sn(T.al))} = ${L(q[0])}`, `b / sin ${ib} = ${L(T.b)} / ${Nn(sn(T.be))} = ${L(q[1])}`, `c / sin ${ig} = ${L(T.c)} / ${Nn(sn(T.ga))} = ${L(q[2])}`, `2<i>r</i> = 2 · ${L(T.r)} = ${L(2 * T.r)}`], ok: q.every(x => close(x, 2 * T.r, 1e-7)) };
+          },
+          use: 'Anwenden, wenn eine Seite und zwei Winkel bekannt sind (WSW, SWW) oder zwei Seiten und der Winkel gegenüber der größeren (SsW). r ist der Radius des Umkreises, gestrichelt eingezeichnet.' },
+        { id: 'kosinus', name: 'Kosinussatz', f: () => `c² = a² + b² − 2ab · cos ${ig}`,
+          calc() {
+            const T = triCalc(); if (T.degen) return degenCalc();
+            const r = T.a ** 2 + T.b ** 2 - 2 * T.a * T.b * cn(T.ga);
+            const lines = [`c² = ${L(T.c)}² = ${L(T.c ** 2)}`, `a² + b² − 2ab · cos ${ig} = ${L(T.a ** 2)} + ${L(T.b ** 2)} − 2 · ${L(T.a)} · ${L(T.b)} · ${Pn(cn(T.ga))}`, `= ${L(r)}`];
+            if (isRight(T)) lines.push(`cos ${ig} = 0, übrig bleibt c² = a² + b²: der Satz des Pythagoras.`);
+            return { lines, ok: close(T.c ** 2, r, 1e-7) };
+          },
+          use: 'Anwenden bei drei bekannten Seiten (SSS) oder zwei Seiten mit dem eingeschlossenen Winkel (SWS). Er verallgemeinert den Satz des Pythagoras: Der Term −2ab · cos γ korrigiert für nicht rechte Winkel.' },
+        { id: 'flaeche', name: 'Flächeninhalt', f: () => `<i>A</i> = ½ · a · b · sin ${ig}`,
+          calc() { const T = triCalc(); if (T.degen) return degenCalc(); const r = 0.5 * T.a * T.b * sn(T.ga); return { lines: [`½ · ${L(T.a)} · ${L(T.b)} · ${Nn(sn(T.ga))} = ${L(r)}`, `h = b · sin ${ig} = ${L(T.b)} · ${Nn(sn(T.ga))} = ${L(T.b * sn(T.ga))}`, `Kontrolle mit Koordinaten: <i>A</i> = ${L(T.area)}`], ok: close(r, T.area, 1e-7) }; },
+          use: 'Die Höhe auf die Seite a ist h = b · sin γ. Eingesetzt in „Grundseite mal Höhe durch zwei“ ergibt sich die Formel.' },
+        { id: 'projektion', name: 'Projektionssatz', f: () => `c = a · cos ${ib} + b · cos ${ia}`,
+          calc() { const T = triCalc(); if (T.degen) return degenCalc(); const r = T.a * cn(T.be) + T.b * cn(T.al); return { lines: [`${L(T.a)} · ${Pn(cn(T.be))} + ${L(T.b)} · ${Pn(cn(T.al))} = ${L(r)}`, `c = ${L(T.c)}`], ok: close(r, T.c, 1e-7) }; },
+          use: 'Der Höhenfußpunkt von C teilt die Seite c in zwei Abschnitte, b · cos α und a · cos β. Bei einem stumpfen Winkel wird ein Abschnitt negativ, der Fußpunkt liegt dann außerhalb von c.' },
+        { id: 'recht', name: 'Im rechtwinkligen Dreieck', f: () => `sin ${ia} = a / c,   cos ${ia} = b / c,   tan ${ia} = a / b`,
+          calc() {
+            const T = triCalc(); if (T.degen) return degenCalc();
+            if (!isRight(T)) return { lines: [`${ig} = ${angStr(T.ga)}. Diese Verhältnisse gelten nur mit einem rechten Winkel bei C.`, `<button type="button" class="linkbtn" style="margin:0" data-tri-preset="recht">Rechtwinkliges Dreieck laden</button>`], ok: null, badge: 'γ ≠ 90°' };
+            return { lines: [`a / c = ${L(T.a)} / ${L(T.c)} = ${Nn(T.a / T.c)},  sin(${angStr(T.al)}) = ${Nn(sn(T.al))}`, `b / c = ${L(T.b)} / ${L(T.c)} = ${Nn(T.b / T.c)},  cos(${angStr(T.al)}) = ${Nn(cn(T.al))}`, `a / b = ${L(T.a)} / ${L(T.b)} = ${Nn(T.a / T.b)},  tan(${angStr(T.al)}) = ${Nn(tn(T.al))}`], ok: close(T.a / T.c, sn(T.al), 1e-7) && close(T.b / T.c, cn(T.al), 1e-7) };
+          },
+          use: 'Gegenkathete durch Hypotenuse, Ankathete durch Hypotenuse, Gegenkathete durch Ankathete. Am Einheitskreis ist die Hypotenuse 1, deshalb sind dort sin α und cos α direkt die Kathetenlängen.' }
+      ]
+    }
+  };
+
+  /* Steuerung */
+  const TH_PRESETS = [0, 30, 45, 60, 90, 120, 150, 210, 300];
+  const sliderRow = (lbl, id) => `<div class="field"><label for="${id}" class="m" style="font-size:19px"><i>${lbl}</i></label><input id="${id}" type="range" min="-360" max="360" step="1" style="flex:1;min-width:150px"><output class="unitlbl" id="${id}o" for="${id}" style="min-width:8ch;text-align:right"></output></div>`;
+  let builtThm = null;
+
+  function buildThm() {
+    const g = state.tg, G = TG[g];
+    $('#thmCtl').innerHTML = g === 'tri'
+      ? `<p class="sub">Vorlagen</p><div class="chips">${Object.entries(TRI_PRESETS).map(([k, p]) => `<button type="button" class="chip" data-tri-preset="${k}">${p.name}</button>`).join('')}</div><dl class="facts" id="triFacts"></dl><p class="hint">Ecken in der Figur ziehen. Mit „Einrasten“ springen sie auf ein Raster mit Abstand 0,5.</p>`
+      : sliderRow('α', 'thA') + (g === 'add' ? sliderRow('β', 'thB') : '') +
+        `<p class="sub">Besondere Winkel für <span class="nt">α</span></p><div class="chips" id="thPresets">${TH_PRESETS.map(d => `<button type="button" class="chip mt" data-deg="${d}">${angStr(d)}</button>`).join('')}</div><p class="hint">Punkte in der Figur ziehen oder Regler schieben. Alle Sätze rechnen live mit den eingestellten Winkeln.</p>`;
+    $('#thmList').innerHTML = G.items.map(it => `<article class="thm" tabindex="0" role="button" aria-pressed="false" data-id="${it.id}"><div class="th-top"><h4>${it.name}</h4><span class="badge" data-badge></span></div><p class="formula">${it.f()}</p><div class="calc" data-calc></div><p class="use">${typeof it.use === 'function' ? it.use() : it.use}</p></article>`).join('');
+  }
+
+  function renderThm() {
+    const g = state.tg, G = TG[g], sel = state.sel[g];
+    for (const b of $('#thmTabs').children) b.setAttribute('aria-pressed', b.dataset.tg === g);
+    const key = g + '|' + state.unit;
+    if (builtThm !== key) { builtThm = key; buildThm(); }
+    $('#hThmFig').innerHTML = G.fig;
+    $('#hThmList').textContent = G.title;
+    $('#thmIntro').textContent = G.intro;
+    if (g === 'tri') {
+      const T = triCalc();
+      $('#triFacts').innerHTML = [['Seite a', L(T.a)], ['Seite b', L(T.b)], ['Seite c', L(T.c)], ['Winkel α', angStr(T.al)], ['Winkel β', angStr(T.be)], ['Winkel γ', angStr(T.ga)], ['Fläche', L(T.area)], ['Umkreisradius r', T.degen ? '–' : L(T.r)]]
+        .map(([k, v]) => `<div class="fact"><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+    } else {
+      for (const [id, v] of [['thA', state.theta], ['thB', state.beta]]) {
+        const r = document.getElementById(id);
+        if (!r) continue;
+        r.step = state.snap ? 15 : 1;
+        r.value = clamp(v, -360, 360);
+        document.getElementById(id + 'o').textContent = angStr(v);
+      }
+      for (const b of $('#thPresets').children) b.setAttribute('aria-pressed', Math.abs(+b.dataset.deg - state.theta) < 1e-9);
+    }
+    for (const el of $('#thmList').children) {
+      const it = G.items.find(i => i.id === el.dataset.id), on = it.id === sel, r = it.calc();
+      el.setAttribute('aria-pressed', on);
+      const b = el.querySelector('[data-badge]');
+      b.className = 'badge ' + (r.ok === true ? 'ok' : 'warn');
+      b.textContent = r.badge || (r.ok === true ? '✓ stimmt' : r.ok === null ? 'nicht definiert' : 'Rundung');
+      if (on) el.querySelector('[data-calc]').innerHTML = r.lines.map(l => `<div>${l}</div>`).join('');
+    }
+    $('#thmFig').innerHTML = g === 'tri' ? triFig() : circleBase('T', false) + `<g clip-path="url(#clipT)">${FIG[sel]()}</g>`;
+    $('#thmLegend').innerHTML = G.legend();
+  }
+
+  $('#thmTabs').addEventListener('click', e => { const b = e.target.closest('[data-tg]'); if (b) { state.tg = b.dataset.tg; render(); } });
+  $('#thmCtl').addEventListener('input', e => {
+    if (e.target.id !== 'thA' && e.target.id !== 'thB') return;
+    let d = +e.target.value;
+    if (state.snap) d = Math.round(d / 15) * 15;
+    if (e.target.id === 'thA') state.theta = d; else state.beta = d;
+    render();
+  });
+  $('#thmCtl').addEventListener('click', e => {
+    const p = e.target.closest('[data-deg]');
+    if (p) { state.theta = +p.dataset.deg; render(); return; }
+    const t = e.target.closest('[data-tri-preset]');
+    if (t) { loadTri(t.dataset.triPreset); render(); }
+  });
+  const selectThm = el => { state.sel[state.tg] = el.dataset.id; render(); };
+  $('#thmList').addEventListener('click', e => {
+    const t = e.target.closest('[data-tri-preset]');
+    if (t) { loadTri(t.dataset.triPreset); render(); return; }
+    const el = e.target.closest('.thm');
+    if (el && el.getAttribute('aria-pressed') !== 'true') selectThm(el);
+  });
+  $('#thmList').addEventListener('keydown', e => {
+    if (e.target.classList.contains('thm') && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); selectThm(e.target); }
+  });
+
+  let dragWhat = null;
+  bindDrag($('#thmFig'), (q, start) => {
+    if (state.tg === 'tri') {
+      const u = [(q.x - TX) / TS, (TY - q.y) / TS];
+      if (start) {
+        dragWhat = null;
+        let best = 1.1;
+        for (const k of ['A', 'B', 'C']) { const d = Math.hypot(state.tri[k][0] - u[0], state.tri[k][1] - u[1]); if (d < best) { best = d; dragWhat = k; } }
+      }
+      if (!dragWhat) return;
+      let x = clamp(u[0], -5, 5), y = clamp(u[1], -4.8, 5.2);
+      if (state.snap) { x = Math.round(x * 2) / 2; y = Math.round(y * 2) / 2; }
+      state.tri[dragWhat] = [x, y];
+      render();
+      return;
+    }
+    const x = (q.x - C) / R, y = (C - q.y) / R;
+    if (Math.hypot(x, y) < 0.06) return;
+    let a = mod(Math.atan2(y, x) / D2R, 360);
+    if (start) {
+      dragWhat = 'a';
+      if (state.tg === 'add') {
+        const da = Math.abs(mod(a - state.theta + 180, 360) - 180), db = Math.abs(mod(a - state.beta + 180, 360) - 180);
+        if (db < da) dragWhat = 'b';
+      }
+    }
+    a = state.snap ? mod(Math.round(a / 15) * 15, 360) : mod(Math.round(a), 360);
+    if (dragWhat === 'b') state.beta = a; else state.theta = a;
+    render();
+  });
+
   /* Header */
   $('#modeAngle').addEventListener('click', () => setMode('winkel'));
   $('#modeInv').addEventListener('click', () => setMode('umkehr'));
+  $('#modeThm').addEventListener('click', () => setMode('saetze'));
   $('#unitDeg').addEventListener('click', () => { state.unit = 'deg'; save(); render(true); });
   $('#unitRad').addEventListener('click', () => { state.unit = 'rad'; save(); render(true); });
   $('#snap').addEventListener('change', e => { state.snap = e.target.checked; save(); render(); });
@@ -918,7 +1481,7 @@ h3{font:600 14.5px/1.3 var(--f-ui);margin:20px 0 8px}
     svg.addEventListener('pointerdown', e => {
       active = true;
       try { svg.setPointerCapture(e.pointerId); } catch (err) {}
-      handler(svgPoint(svg, e));
+      handler(svgPoint(svg, e), true);
     });
     svg.addEventListener('pointermove', e => { if (active) handler(svgPoint(svg, e)); });
     const end = () => { active = false; };
@@ -957,11 +1520,10 @@ h3{font:600 14.5px/1.3 var(--f-ui);margin:20px 0 8px}
   });
 
   let lastNarrow = null;
-  window.addEventListener('resize', () => { const n = isNarrow(); if (n !== lastNarrow) { lastNarrow = n; drawGraph(); } });
+  window.addEventListener('resize', () => { if (state.mode === 'saetze') return; const n = isNarrow(); if (n !== lastNarrow) { lastNarrow = n; drawGraph(); } });
 
   render(true);
-  lastNarrow = isNarrow();
-  if (lastNarrow) drawGraph();
+  if (state.mode !== 'saetze') { lastNarrow = isNarrow(); if (lastNarrow) drawGraph(); }
 })();
 </script>
 </body>
